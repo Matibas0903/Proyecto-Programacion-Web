@@ -64,7 +64,7 @@
             </div>
 
             <!-- ÁREA PRINCIPAL -->
-            <div class="col-7 p-4">
+            <div id="areaPrincipal" class="col-7 p-4">
                 
                 <div class="container mt-4">
                     <div class="card mb-4">
@@ -100,47 +100,52 @@
             </div>
 
             
-            <!-- SIDEBAR DERECHO -->
-        <div id="panelDer" class="col-3 p-3 border-start vh-100">
-            <div class="d-flex">
-                <button type="button" class="btn-close ms-auto" aria-label="Close"></button>
-            </div>
-            <h5>
-                <i class="bi bi-question-square-fill"></i>
-                Tipo de pregunta
-            </h5>
-                <div class="mb-5">
-                    <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
-                        <option class="dropdown-item" value>Tipo de pregunta</option>
-                        <option class="dropdown-item" value="1">Opcion multiple</option>
-                        <option class="dropdown-item" value="2">Opcion unica</option>
-                        <option class="dropdown-item" value="3">Verdadero o falso</option>
-                    </select>
-                </div>
-                <h5>
-                <i class="bi bi-stopwatch-fill"></i>
-                    Tiempo de respuesta
-                </h5>
-                <div class="mb-5">
-                    <select class="form-select" name="selectTiempoRespuesta" id="selectTiempoRespuesta">
-                        <option class="dropdown-item" value>Tipo de respuesta</option>
-                        <option class="dropdown-item" value="1">10 segundos</option>
-                        <option class="dropdown-item" value="2">15 segundos</option>
-                        <option class="dropdown-item" value="3">20 segundos</option>
-                    </select>
-                </div>
-                <h5>
-                <i class="bi bi-award-fill"></i>
-                    Tipo de puntos
-                </h5>
-                <div class="mb-5">
-                    <select class="form-select" name="selectTipoPuntos" id="selectTipoPuntos">
-                        <option class="dropdown-item" value>Puntos</option>
-                        <option class="dropdown-item" value="1">Puntos normales</option>
-                        <option class="dropdown-item" value="2">Puntos dobles</option>
-                    </select>
-                </div>
-        </div>
+                    
+                        <!-- SIDEBAR DERECHO -->
+                    <div id="panelDer" class="col-3 p-3 border-start vh-100">
+                        <div class="d-flex">
+                            <h5>Configuración</h5>
+                            
+                        </div>
+                        <h5>
+                            <i class="bi bi-question-square-fill"></i>
+                            Tipo de pregunta
+                        </h5>
+                            <div class="mb-5">
+                                <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
+                                    <option class="dropdown-item" value>Tipo de pregunta</option>
+                                    <option class="dropdown-item" value="1">Opcion multiple</option>
+                                    <option class="dropdown-item" value="2">Opcion unica</option>
+                                    <option class="dropdown-item" value="3">Verdadero o falso</option>
+                                </select>
+                            </div>
+                            <h5>
+                            <i class="bi bi-stopwatch-fill"></i>
+                                Tiempo de respuesta
+                            </h5>
+                            <div class="mb-5">
+                                <select class="form-select" name="selectTiempoRespuesta" id="selectTiempoRespuesta">
+                                    <option class="dropdown-item" value>Tipo de respuesta</option>
+                                    <option class="dropdown-item" value="1">10 segundos</option>
+                                    <option class="dropdown-item" value="2">15 segundos</option>
+                                    <option class="dropdown-item" value="3">20 segundos</option>
+                                </select>
+                            </div>
+                            <h5>
+                            <i class="bi bi-award-fill"></i>
+                                Tipo de puntos
+                            </h5>
+                            <div class="mb-5">
+                                <select class="form-select" name="selectTipoPuntos" id="selectTipoPuntos">
+                                    <option class="dropdown-item" value>Puntos</option>
+                                    <option class="dropdown-item" value="1">Puntos normales</option>
+                                    <option class="dropdown-item" value="2">Puntos dobles</option>
+                                </select>
+                            </div>
+                    </div>
+                    <!-- Botón flecha para abrir/cerrar -->
+                    <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
+                
     </div>
 </body>
 </html>
