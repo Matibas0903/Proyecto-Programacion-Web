@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./administrador.css">
+</head>
+<body>
+  <!-- navbar -->
+  <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Nombre web</a>
+      <div class="dropdown-center ms-auto">
+        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
+          <img src="./images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#">Editar usuario</a></li>
+          <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
+          A su pantalla ponganle # y class active -->
+          <li><a class="dropdown-item active" href="#">Panel de administrador</a></li>
+          <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
+          <li><a class="dropdown-item" href="#">Ver estadísticas</a></li>
+          <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-3">
+    <!--header -->
+    <div class="row">
+        <div class="col-12 col-md-6 my-3">
+            <form id="formId" class="needs-validation" novalidate>
+                <div class="input-group input-group-lg">
+                  <button class="input-group-text icon_container c_orange button_search" id="basic-addon1"><i class="bi bi-search"></i></button>
+                  <input type="text" id="nombreCuest" class="form-control border_cuest" placeholder="Buscar cuestionario" maxlength="50" required>
+                  <div class="invalid-feedback" id="nameInvalid">
+                    Ingresa un nombre de cuestionario no mayor a 50 caracteres
+                  </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--cuerpo -->
+    <div class="row my-3">
+      <div class="col-12 col-md-6 align-self-start">
+        <div class="card border_cuest bg_cuest my-3">
+          <!-- Usuario -->
+          <div class="card-body row">
+            <div class="col-3 align-self-center">
+              <img src="./images/perrito-avatar.jpg" alt="imagen usuario" class="img_usuario" id="img_usuario">
+            </div>
+            <div class="col-9 align-self-center">
+              <h2 class="mb-0" id="name_usuario">USUARIO</h2>
+            </div> 
+          </div> 
+        </div>
+
+        <!-- Cuestionarios -->
+        <div class="card border_cuest card_orange my-2" id="contenedor_cuestionarios">
+          <div class="card-body">
+            <div id="lista_cuestionarios"></div>
+            <div class="d-flex justify-content-center">
+              <button class="button_mas card_orange border_cuest py-2 px-3 d-none" id="mas_cuestionarios">Ver más</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-12 col-md-6 align-self-start">
+        <h2>PLANTILLAS</h2>
+        <!-- Plantillas -->
+        <div class="card border_cuest card_yellow my-2">
+          <div class="card-body">
+            <div id="lista_plantillas"></div>
+            <div class="d-flex justify-content-center">
+              <button class="button_mas card_yellow border_cuest py-2 px-3 d-none" id="mas_plantillas">Ver más</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- botones -->
+    <div class="row my-3">
+      <div class="col 12 col-md-6 d-flex my-2">
+        <button class="button_principal border_cuest py-2" id="button_crear">Crear cuestionario</button>
+      </div>
+      <div class="col-12 col-md-6 d-flex my-2">
+        <button class="button_principal border_cuest py-2" id="button_unirme">Unirme a cuestionario</button>
+      </div>
+    </div>
+
+    <!-- cuestionarios encontrados -->
+    <div>
+      <h2 class="text-center" id="list_title"></h2>
+      <div id="listado_total"></div>
+    </div>
+  </div>
+
+  <!-- modal compartir -->
+   <div class="modal" tabindex="-1" id="modalCompartir">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitulo"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p class="text-center">Copia y comparte el enlace</p>
+              <br>
+              <h2 class="text-center modal_enlace" id="enlace"></h2>
+            <p></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- modal habilitar -->
+   <div class="modal" tabindex="-1" id="modalHabilitar">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="tituloHab"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <p class="text-center" id="texto_hab"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary" id="habilitar_btn">Si</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal confirmacion -->
+     <div class="modal" tabindex="-1" id="modalConfirmacion">
+       <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title" id="tituloHab"></h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+             <p id="text_confirmacion" class="text-center">Operación exitosa!!!</p>
+           </div>
+         </div>
+       </div>
+     </div>
+
+     <!-- Modal +participante -->
+     <div class="modal" tabindex="-1" id="modalParticipantes">
+       <div class="modal-dialog modal-dialog-centered">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title">Agregar Participante</h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+              <form id="formParticipante" class="needs-validation" novalidate>
+                  <div class="input-group input-group-lg">
+                    <button class="input-group-text icon_container c_orange button_search" id="button-part"><i class="bi bi-search"></i></button>
+                    <input type="text" id="nombrePart" class="form-control border_cuest" placeholder="Buscar participante" maxlength="20" required>
+                    <div class="invalid-feedback" id="namePartInvalid">
+                      Ingresa un nombre de participante no mayor a 20 caracteres
+                    </div>
+                  </div>
+                  <div id="participantes_container" class="my-3 d-none">
+                    <h2 class="text-center">PARTICIPANTES</h2>
+                    <div id="lista_participantes" class="m-1"></div>
+                    <p class="text-center fs-4 d-none" id="no_participantes">No se encontraron participantes</p>
+                  </div>
+              </form>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+           </div>
+         </div>
+       </div>
+     </div>
+
+</body>
+<script src="./administrador.js"></script>
+</html>
