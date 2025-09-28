@@ -1,0 +1,35 @@
+div.plantillas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}
+
+div.plantilla-item{
+  margin: 5px;
+  border: 1px solid #191919;
+  width: 180px;
+}
+
+div.plantilla-item:hover {
+  border: 2px solid #f7705c;
+}
+
+div.plantilla-item img {
+  width: 100%;
+  height: auto;
+}
+
+.btn-naranja
+{
+    background-color: #f7705c;
+    border: 1px solid #191919;
+}
+.btn-naranja:hover
+{
+    background-color: #edb51a;
+    border: 2px solid #f7705c;
+}
+body
+{
+    background-color: #f4d4ca;
+}
