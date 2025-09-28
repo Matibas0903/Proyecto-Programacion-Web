@@ -3,7 +3,7 @@
 }
 #navBarCrearPreg{
     background-color: #ffd0ae;
-    z-index: 1070;
+    z-index: 4;
 }
 
 body{
@@ -41,6 +41,7 @@ body{
 #btnAñadirDiapositiva{
     background-color: #d8eced;
 }
+
 #panelDer {
     position: fixed;
     top: 10;
@@ -67,7 +68,7 @@ body{
     transform: translateY(-50%);
     width: 30px;
     height: 60px;
-    border-radius: 4px 0 0 4px;
+    border-radius: 15px;
     background-color: #007bff;
     color: #fff;
     border: none;
@@ -80,6 +81,20 @@ body{
     transition: right 0.3s ease, transform 0.3s ease;
 }
 
+#panelTemas
+{
+    visibility: hidden;
+    right: 0;
+    position: fixed;
+    top: 10;
+    height: 100vh;
+    background-color: #fff;
+    border-left: 1px solid #ddd;
+    padding: 20px;
+    transition: right 0.3s ease;
+    z-index: 1080;
+}
+
 
 /* Cambiar posición cuando el sidebar se abre */
 #panelDer.active + #btnPanelDer {
@@ -90,3 +105,13 @@ body{
 #btnPanelDer.open {
     transform: translateY(-50%) rotate(180deg);
 }
+
+#tema3
+{
+width:100px;
+height:100px; 
+background-color:#fff1be; 
+border:2px solid black;
+}
+
+
