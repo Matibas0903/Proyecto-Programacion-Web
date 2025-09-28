@@ -1,0 +1,95 @@
+body, .bg_cuest {
+    background-color: #fdecd7;
+}
+
+.card_orange {
+    background-color: #ef7131;
+    color: #fff6e9;
+}
+
+.c_orange {
+    color: #ef7131;
+}
+
+.img_usuario {
+    max-width: 70px;
+    max-height: 70px;
+    border-radius: 10px;
+}
+
+.border_cuest {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    border-radius: 20px;
+}
+
+.icon_container {
+    background-color: #80c4e9;
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    border-radius: 20px 0 0 20px;
+}
+
+/* modifique este estilo */
+.button_principal {
+    background-color: #4f9d86;
+    color: #fff6e9;
+    width: 50%;
+    font-weight: bold;
+    cursor: pointer;
+}
+.button_principal:hover {
+    background-color: #A3D6C7;
+}
+
+.button_search:hover {
+    background-color: #ef7131;
+    color: #80c4e9;
+}
+
+.modal_enlace {
+    color: #80c4e9;
+    font-weight: bold;
+}
+
+/* estilos navbar */
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}
+
+/* estilos de pantalla */
+.imagen_card {
+    max-height: 220px;
+}
+
+.card_titulo {
+    color: #333333;
+    font-weight: bold;
+}
+
+.card_cuest:hover {
+    border-top: 4px solid #80c4e9;
+    border-right: 4px solid #80c4e9;
+    border-left: 4px solid #80c4e9;
+    border-bottom: 8px solid #80c4e9;
+}
