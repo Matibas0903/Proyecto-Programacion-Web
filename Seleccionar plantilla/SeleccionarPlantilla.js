@@ -1,5 +1,6 @@
 window.onload = function()
 {
+
 let cantidadPreguntas = 0;
 
 abrirPanelDerecho();
@@ -10,6 +11,10 @@ mostrarConfiguracion();
 ponerNombre();
 validarTitulo();    
 añadirPregunta(cantidadPreguntas);
+
+inicializarPreguntasHardcodeadas();
+
+
 }
 
 function abrirPanelDerecho()
@@ -99,12 +104,16 @@ btnTemas.addEventListener('click', () => {
 
 function seleccionarTema()
 {
+     
     const btntema1 = document.getElementById("tema1");
     const btntema2 = document.getElementById("tema2");
     const btntema3 = document.getElementById("tema3");
     const fondo = document.getElementById("panelPrincipal");
-    const tema1 = "url(./Recursos/tema1.jpeg)";
-    const tema2 = "url(./Recursos/tema2.jpg)";
+    const tema1 = "url(./Recursos/temaHistoria.jpg)";
+    const tema2 = "url(./Recursos/temaHistoria2.jpg)";
+
+     fondo.style.backgroundImage = tema2;
+
     btntema1.addEventListener("click", ()=>
         {
             fondo.style.backgroundImage = tema1;
@@ -295,4 +304,101 @@ inputPregunta.addEventListener("input", ()=>
     })
 }
 
+function inicializarPreguntasHardcodeadas() {
+   const preguntas = [
+    { titulo: "¿En qué año comenzó la Segunda Guerra Mundial?", opciones: ["1914", "1939", "1945", "1929"] },
+    { titulo: "¿Quién fue el líder del movimiento de independencia de la India contra el Imperio Británico?", opciones: ["Mahatma Gandhi", "Nelson Mandela", "Simón Bolívar", "Martin Luther King Jr."] },
+    { titulo: "La caída del Imperio Romano de Occidente se considera generalmente en:", opciones: ["476 d.C.", "1453 d.C.", "1492 d.C.", "395 d.C."] }
+];
 
+
+    preguntas.forEach((p, index) => {
+        const preguntaId = `pregunta-${index + 1}`;
+
+        // Crear boton lateral
+        const divContenedor = document.getElementById("divPreguntas");
+        const preguntaDiv = document.createElement("div");
+        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
+        preguntaDiv.id = preguntaId;
+
+        const pTitulo = document.createElement("p");
+        pTitulo.classList.add("text-center", "text-muted", "mb-0");
+        pTitulo.textContent = p.titulo;
+        pTitulo.id = `tituloPregunta-${preguntaId}`;
+
+        const btnEliminar = document.createElement("button");
+        btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+        const icono = document.createElement("i");
+        icono.classList.add("bi", "bi-trash-fill");
+        btnEliminar.appendChild(icono);
+
+        btnEliminar.addEventListener("click", (e) => {
+            e.stopPropagation();
+            preguntaDiv.remove();
+            document.getElementById(`form-${preguntaId}`)?.remove();
+        });
+
+        preguntaDiv.addEventListener("click", () => {
+            document.querySelectorAll(".form-pregunta").forEach(f => f.style.display = "none");
+            const form = document.getElementById(`form-${preguntaId}`);
+            if (form) form.style.display = "block";
+        });
+
+        preguntaDiv.appendChild(pTitulo);
+        preguntaDiv.appendChild(btnEliminar);
+        divContenedor.appendChild(preguntaDiv);
+
+        // Crear formulario con opciones
+        crearPreguntaHardcodeada(preguntaId, p);
+    });
+}
+
+function crearPreguntaHardcodeada(preguntaId, pregunta) {
+    const panelPrincipal = document.getElementById("panelPrincipal");
+
+    const container = document.createElement("div");
+    container.classList.add("container", "mt-4", "form-pregunta");
+    container.id = `form-${preguntaId}`;
+    container.style.display = "none";
+
+    const card = document.createElement("div");
+    card.classList.add("card", "mb-4");
+
+    // Card body con input
+    const cardBody = document.createElement("div");
+    cardBody.classList.add("card-body", "text-center");
+
+    const inputPregunta = document.createElement("input");
+    inputPregunta.type = "text";
+    inputPregunta.classList.add("form-control", "text-center", "fw-bold");
+    inputPregunta.value = pregunta.titulo;
+
+    inputPregunta.addEventListener("input", () => {
+        const titulo = document.getElementById(`tituloPregunta-${preguntaId}`);
+        titulo.innerText = inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
+    });
+
+    cardBody.appendChild(inputPregunta);
+
+    // Opciones 2x2
+    const row = document.createElement("div");
+    row.classList.add("row", "g-3");
+
+    pregunta.opciones.forEach((opcion) => {
+        const col = document.createElement("div");
+        col.classList.add("col-6");
+
+        const btnOpcion = document.createElement("button");
+        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
+        btnOpcion.contentEditable = true;
+        btnOpcion.textContent = opcion;
+
+        col.appendChild(btnOpcion);
+        row.appendChild(col);
+    });
+
+    card.appendChild(cardBody);
+    card.appendChild(row);
+    container.appendChild(card);
+    panelPrincipal.appendChild(container);
+}

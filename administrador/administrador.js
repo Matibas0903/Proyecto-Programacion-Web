@@ -266,8 +266,7 @@ function unirmeCuestionario(){
 }
 
 function usarPlantilla(id){
-    //AGREGAR ENLACE A PANTALLA PLANTILLA
-    console.log("Usar plantilla con id: " + id);
+    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
 }
 function ver(type, id){
     if(type === 'cuestionario'){

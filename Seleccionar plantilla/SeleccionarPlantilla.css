@@ -56,7 +56,6 @@ body{
     z-index: 1050;
 }
 
-
 /* Cuando el sidebar está abierto */
 #panelDer.active {
     right: 0;
