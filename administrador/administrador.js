@@ -258,8 +258,7 @@ function onloadAdministrador(){
 window.onload = onloadAdministrador;
 
 function crearCuestionario(){
-    //AGREGAR ENLACE A PANTALLA CREAR CUESTIONARIO
-    console.log("Crear cuestionario");
+    window.location.href = "../Agregar pregunta/agregarPregunta.html";
 }
 
 function unirmeCuestionario(){

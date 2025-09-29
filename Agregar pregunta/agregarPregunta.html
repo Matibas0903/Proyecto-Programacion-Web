@@ -12,6 +12,29 @@
     <title>Agregar Pregunta</title>
 </head>
 <body>
+        <!-- navbar general -->
+    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Nombre web</a>
+        <div class="dropdown-center ms-auto">
+        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
+            <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Editar usuario</a></li>
+            <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
+            A su pantalla ponganle # y class active -->
+            <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
+            <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
+            <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+    <!-- navbar crear cuestionario -->
     <nav id="navBarCrearPreg" class="navbar navbar-expand-lg ">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Cuestionario</a>
@@ -126,14 +149,17 @@
                     </select>
                 </div>
                 <h5>
-                <i class="bi bi-award-fill"></i>
-                    Tipo de puntos
+                
+                    Categoria de la pregunta
                 </h5>
                 <div class="mb-5">
-                    <select class="form-select" name="selectTipoPuntos" id="selectTipoPuntos">
-                        <option class="dropdown-item" value>Puntos</option>
-                        <option class="dropdown-item" value="1">Puntos normales</option>
-                        <option class="dropdown-item" value="2">Puntos dobles</option>
+                    <select class="form-select" name="selectCategoria" id="selectCategoria">
+                        <option class="dropdown-item" value>Categorias</option>
+                        <option class="dropdown-item" value="1">Geografía</option>
+                        <option class="dropdown-item" value="2">Historia</option>
+                        <option class="dropdown-item" value="3">Programación</option>
+                        <option class="dropdown-item" value="4">Matemática</option>
+                        <option class="dropdown-item" value="5">Biología</option>
                     </select>
                 </div>
         </div>
@@ -145,8 +171,8 @@
             <div class="row">
                 <h5>Temas</h5>
                 <div>
-                        <img id="tema1" src="tema1.jpeg" width="100" height="100" type="button">
-                        <img id="tema2" src="tema2.jpg" width="100" height="100" type="button">
+                        <img id="tema1" src="./Recursos/tema1.jpeg" width="100" height="100" type="button">
+                        <img id="tema2" src="./Recursos/tema2.jpg" width="100" height="100" type="button">
                         <div id="tema3" width="100" height="100" type="button"></div>
                         
 
@@ -155,6 +181,23 @@
 
         </div>
 
+    </div>
+    <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Atención!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea salir sin guardar?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

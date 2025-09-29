@@ -13,7 +13,7 @@ cambios de estructura segun el tipo de pregunta
 abrirPanelDerecho();
 abrirPanelTemas();
 seleccionarTema();
-
+salirDeCreacion();
 }
 
 function abrirPanelDerecho()
@@ -107,8 +107,8 @@ function seleccionarTema()
     const btntema2 = document.getElementById("tema2");
     const btntema3 = document.getElementById("tema3");
     const fondo = document.getElementById("panelPrincipal");
-    const tema1 = "url(tema1.jpeg)";
-    const tema2 = "url(tema2.jpg)";
+    const tema1 = "url(./Recursos/tema1.jpeg)";
+    const tema2 = "url(./Recursos/tema2.jpg)";
     btntema1.addEventListener("click", ()=>
         {
             fondo.style.backgroundImage = tema1;
@@ -129,3 +129,11 @@ function mostrarAlertaGuardado()
 
 }
 
+function salirDeCreacion(){
+    const btnSalir = document.getElementById("btnSalir");
+    
+    btnSalir.addEventListener("click", function(){
+        const modalSalirSinGuardar = new bootstrap.Modal(document.getElementById("modalSalirSinGuardar"));
+        modalSalirSinGuardar.show();
+    })
+}
