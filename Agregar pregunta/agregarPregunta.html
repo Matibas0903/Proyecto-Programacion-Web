@@ -12,6 +12,29 @@
     <title>Agregar Pregunta</title>
 </head>
 <body>
+        <!-- navbar general -->
+    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Nombre web</a>
+        <div class="dropdown-center ms-auto">
+        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
+            <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Editar usuario</a></li>
+            <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
+            A su pantalla ponganle # y class active -->
+            <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
+            <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
+            <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
+            <li><a class="dropdown-item" href="#">Logout</a></li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+    <!-- navbar crear cuestionario -->
     <nav id="navBarCrearPreg" class="navbar navbar-expand-lg ">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Cuestionario</a>
@@ -27,7 +50,7 @@
             <div class="input-group">
                 <input class="form-control" type="text" name="inputIngresarTitulo" 
                     id="inputIngresarTitulo" placeholder="Ingresar título">
-                <button id="btnConfig" class="btn me-2" type="submit">
+                <button id="btnConfig" class="btn me-2" type="button">
                 Configuración
                 </button>
             </div>
@@ -55,16 +78,15 @@
             <div class="border rounded p-2 mb-3">
                 <p class="text-center text-muted">Pregunta</p>
                 <button class="btn"><i class="bi bi-trash-fill"></i></button>
-                
             </div>
             <button id="btnAñadirPregunta" class="btn w-100 mb-2">
-                <i class="bi bi-plus-square"></i>
+                <i class="bi bi-plus-square"></i> Añadir pregunta
             </button>
             <button id="btnAñadirDiapositiva" class="btn w-100">Añadir diapositiva</button>
             </div>
 
             <!-- ÁREA PRINCIPAL -->
-            <div class="col-7 p-4">
+            <div class="col-9 p-4 position-relative" id="panelPrincipal">
                 
                 <div class="container mt-4">
                     <div class="card mb-4">
@@ -99,12 +121,9 @@
                 </div>
             </div>
 
-            
             <!-- SIDEBAR DERECHO -->
-        <div id="panelDer" class="col-3 p-3 border-start vh-100">
-            <div class="d-flex">
-                <button type="button" class="btn-close ms-auto" aria-label="Close"></button>
-            </div>
+        <div id="panelDer"  class="col-3 p-3 border-start vh-100 " >
+            <div class="d-flex"></div>
             <h5>
                 <i class="bi bi-question-square-fill"></i>
                 Tipo de pregunta
@@ -123,23 +142,61 @@
                 </h5>
                 <div class="mb-5">
                     <select class="form-select" name="selectTiempoRespuesta" id="selectTiempoRespuesta">
-                        <option class="dropdown-item" value>Tipo de respuesta</option>
+                        <option class="dropdown-item" value>Tiempo de respuesta</option>
                         <option class="dropdown-item" value="1">10 segundos</option>
                         <option class="dropdown-item" value="2">15 segundos</option>
                         <option class="dropdown-item" value="3">20 segundos</option>
                     </select>
                 </div>
                 <h5>
-                <i class="bi bi-award-fill"></i>
-                    Tipo de puntos
+                
+                    Categoria de la pregunta
                 </h5>
                 <div class="mb-5">
-                    <select class="form-select" name="selectTipoPuntos" id="selectTipoPuntos">
-                        <option class="dropdown-item" value>Puntos</option>
-                        <option class="dropdown-item" value="1">Puntos normales</option>
-                        <option class="dropdown-item" value="2">Puntos dobles</option>
+                    <select class="form-select" name="selectCategoria" id="selectCategoria">
+                        <option class="dropdown-item" value>Categorias</option>
+                        <option class="dropdown-item" value="1">Geografía</option>
+                        <option class="dropdown-item" value="2">Historia</option>
+                        <option class="dropdown-item" value="3">Programación</option>
+                        <option class="dropdown-item" value="4">Matemática</option>
+                        <option class="dropdown-item" value="5">Biología</option>
                     </select>
                 </div>
+        </div>
+        <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
+
+        <div id="panelTemas"  class="col-3 p-2 border-start vh-100 " >
+            <div><button id="btnCerrarTemas" type="button" class="btn-close"></button></div>
+            <div class="d-flex"></div>
+            <div class="row">
+                <h5>Temas</h5>
+                <div>
+                        <img id="tema1" src="./Recursos/tema1.jpeg" width="100" height="100" type="button">
+                        <img id="tema2" src="./Recursos/tema2.jpg" width="100" height="100" type="button">
+                        <div id="tema3" width="100" height="100" type="button"></div>
+                        
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Atención!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea salir sin guardar?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
