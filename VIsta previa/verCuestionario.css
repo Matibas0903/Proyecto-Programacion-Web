@@ -1,0 +1,129 @@
+body{
+background-color: #fdecd7;
+
+align-items: center;
+
+}
+
+#contendedorPrincipal{
+  padding: 100px;
+}
+h1{
+    text-align: center;
+    color: #964f4f;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 40px;
+    text-shadow: 3px 3px 3px #ababab;
+    font-weight: 900;
+}
+
+/* estilos navbar */
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    padding: 0px;
+}
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+    padding: 0px;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}
+
+
+#lugar{
+  color: #023e0f;
+  font-weight: bold;
+}
+
+.pregunta-card { 
+    background-color: #ffd0ae; 
+    border-radius: 10px; 
+    box-shadow: 0 3px 3px rgba(0,0,0,0.3);
+ }
+.respuesta-btn{
+    background-color: #f06c2f; 
+    color: #fff; font-weight: bold; 
+    border-radius: 10px; 
+    padding: 15px; 
+    box-shadow: 0 5px 0 #b84a1d; 
+    transition: all 0.2s ease-in-out;
+}
+#rtaCorrecta{
+    background-color: green;
+    box-shadow: 0 5px 0 #052519; 
+}
+/* Carrusel ranking */
+
+#carousel-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 50px auto;
+  position: relative;
+  height: 350px;       
+  overflow: visible;   
+}
+
+
+.carrossel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carrossel-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  transition: all 0.6s ease;
+  z-index: 0;
+}
+
+/*Carrusel visto*/
+.carrossel-item.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+  z-index: 2;
+}
+
+/*Carrusel anterior*/
+.carrossel-item.prev {
+  opacity: 0.6;
+  transform: translate(calc(-50% - 220px), -50%) scale(0.9);
+  z-index: 1;
+}
+
+/*Carrusel siguiente*/
+.carrossel-item.next {
+  opacity: 0.6;
+  transform: translate(calc(-50% + 220px), -50%) scale(0.9);
+  z-index: 1;
+}
+
+
+#cardUsu {
+  background: #fff6e9;
+  color: #000;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  width: 240px;           
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+#cardUsu img {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+}
