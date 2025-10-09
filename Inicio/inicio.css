@@ -1,0 +1,21 @@
+ body {
+    background: #fff1be;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+ 
+#miCard {
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+}
+
+#miCard:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card{
+    border-bottom: 3px solid #7e7d7d;
+}

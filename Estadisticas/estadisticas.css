@@ -26,3 +26,10 @@ canvas{
     border-left: 2px solid #000000;
     border-bottom: 5px solid #000000;
 }
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}

@@ -182,7 +182,8 @@ function cuestionarioInvitado(cuestionarioIds) {
 
 function participarCuest(id) {
     console.log("participar cuestionario id: ", id);
-    //redirigir a pagina cuestionario
+    //Agregar enlace para redirigir a pagina cuestionario de usuario registrado
+    window.location.href = '../Cuestionario invitado/preguntasInvitado.html';
 }
 
 function listaCuestionarios(arrCuest = null, scroll = true) {

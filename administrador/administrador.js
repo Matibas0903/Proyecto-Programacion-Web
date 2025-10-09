@@ -270,7 +270,7 @@ function usarPlantilla(id){
 }
 function ver(type, id){
     if(type === 'cuestionario'){
-        //AGREGAR ENLACE A PANTALLA CUESTIONARIO
+        window.location.href = "../Vista previa/verCuestionario.html";
     }else if(type === 'plantilla'){
         //AGREGAR ENLACE A PANTALLA PLANTILLA
     }

@@ -46,7 +46,7 @@ body{
 #panelDer {
     position: fixed;
     top: 133.6px;
-    right: -300px;        /* fuera de pantalla inicialmente */
+    right: -300px;       
     width: 300px;
     height: calc(100vh - 133.6px);
     background-color: #fff;
@@ -56,16 +56,16 @@ body{
     z-index: 1050;
 }
 
-/* Cuando el sidebar está abierto */
+
 #panelDer.active {
     right: 0;
 }
 
-/* Botón flecha pegado al borde del sidebar */
+
 #btnPanelDer {
     position: fixed;
     top: 50%;
-    right: 0;                  /* se mueve junto al borde del sidebar */
+    right: 0;                
     transform: translateY(-50%);
     width: 30px;
     height: 60px;
@@ -87,8 +87,8 @@ body{
     visibility: hidden;
     right: 0;
     position: fixed;
-    top: 133.6px; /* debajo de los navbars */
-    height: calc(100vh - 133.6px); /* altura restante */
+    top: 133.6px;
+    height: calc(100vh - 133.6px);
     background-color: #fff;
     border-left: 1px solid #ddd;
     padding: 20px;
@@ -97,12 +97,12 @@ body{
 }
 
 
-/* Cambiar posición cuando el sidebar se abre */
+
 #panelDer.active + #btnPanelDer {
-    right: 300px;  /* ajusta si querés que quede pegado al sidebar */
+    right: 300px;  
 }
 
-/* Rotar flecha cuando está abierto */
+
 #btnPanelDer.open {
     transform: translateY(-50%) rotate(180deg);
 }
@@ -127,6 +127,13 @@ border:2px solid black;
     height: 50px;
     border-radius: 50%;
     border: 3px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
 }
 
 

@@ -1,0 +1,113 @@
+
+.card-preguntas {
+  max-width: 700px;
+  width: 100%;
+}
+
+
+.pregunta{
+  background-color: #fff4e6; 
+  border-radius: 12px;
+  padding: 30px;
+}
+
+.btnRespuestas {
+  background-color: #e86b24; 
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: background-color 0.2s;
+}
+.btnRespuestas:hover {
+  background-color: #d65f20;
+}
+
+/* Contador centrado y grande */
+#contador{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem; 
+  font-weight: bold; 
+  color: #5e351a; 
+  text-align: center;
+  z-index: 1000;
+}
+
+/* Estilos para botones correctos/incorrectos */
+.btnRespuestas.correcta {
+  background-color: #198754; 
+  color: white;
+}
+
+.btnRespuestas.incorrecta {
+  background-color: #dc3545; 
+  color: white;
+}
+
+body {
+    background: #fff1be;
+    margin: 0; 
+    height: 100vh;
+}
+
+.card.cardEs {
+    background-color: #fe9881;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    padding: 20px;
+}
+
+.btn.mibtn {
+    background-color: #4f9d86;
+    width: 100%;
+    color: #fff;
+    font-weight: bold;     
+    font-size: larger;
+}
+
+.btn.mibtn:hover {
+    background-color: #3a7060; 
+    border-color: #3a7060;
+}
+
+.btn-respuesta:hover {
+  transform: scale(1.05);
+}
+.resultado-img {
+  width: 100px;   
+  height: auto;
+  display: block;
+  margin: 0 auto; 
+}
+
+
+.card.resultado-card
+{
+  background-color: #fff6e9;
+  padding: 20px;
+}
+
+
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+    
+}
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}
