@@ -1,3 +1,5 @@
+let preguntasPlantilla = [];
+
 window.onload = function()
 {
 
@@ -304,19 +306,28 @@ inputPregunta.addEventListener("input", ()=>
     })
 }
 
-function inicializarPreguntasHardcodeadas() {
-   const preguntas = [
+function inicializarPreguntasHardcodeadas(){
+    preguntasPlantilla = [
     { titulo: "¿En qué año comenzó la Segunda Guerra Mundial?", opciones: ["1914", "1939", "1945", "1929"] },
     { titulo: "¿Quién fue el líder del movimiento de independencia de la India contra el Imperio Británico?", opciones: ["Mahatma Gandhi", "Nelson Mandela", "Simón Bolívar", "Martin Luther King Jr."] },
     { titulo: "La caída del Imperio Romano de Occidente se considera generalmente en:", opciones: ["476 d.C.", "1453 d.C.", "1492 d.C.", "395 d.C."] }
 ];
 
+    preguntasPlantilla.push({ titulo: "Nueva pregunta", opciones: ["A", "B", "C", "D"], correcta: 0 });
+    renderizarPreguntas(preguntasPlantilla);
+}
+
+function renderizarPreguntas(preguntas) {
+    const divContenedor = document.getElementById("divPreguntas");
+    const panelPrincipal = document.getElementById("panelPrincipal");
+
+    divContenedor.innerHTML="";
+    panelPrincipal.innerHTML="";
 
     preguntas.forEach((p, index) => {
         const preguntaId = `pregunta-${index + 1}`;
 
         // Crear boton lateral
-        const divContenedor = document.getElementById("divPreguntas");
         const preguntaDiv = document.createElement("div");
         preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
         preguntaDiv.id = preguntaId;
@@ -334,8 +345,8 @@ function inicializarPreguntasHardcodeadas() {
 
         btnEliminar.addEventListener("click", (e) => {
             e.stopPropagation();
-            preguntaDiv.remove();
-            document.getElementById(`form-${preguntaId}`)?.remove();
+            preguntasPlantilla.splice(index, 1);//eliminar del array
+            renderizarPreguntas();//volvemos a mostrar las preguntas
         });
 
         preguntaDiv.addEventListener("click", () => {
@@ -352,6 +363,8 @@ function inicializarPreguntasHardcodeadas() {
         crearPreguntaHardcodeada(preguntaId, p);
     });
 }
+
+
 
 function crearPreguntaHardcodeada(preguntaId, pregunta) {
     const panelPrincipal = document.getElementById("panelPrincipal");
@@ -376,6 +389,8 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
     inputPregunta.addEventListener("input", () => {
         const titulo = document.getElementById(`tituloPregunta-${preguntaId}`);
         titulo.innerText = inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
+        titulo.innerText = nuevoTexto;
+        preguntasPlantilla[index].titulo = nuevoTexto;//actualizar el arreglo de preguntas
     });
 
     cardBody.appendChild(inputPregunta);
@@ -384,7 +399,10 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
     const row = document.createElement("div");
     row.classList.add("row", "g-3");
 
-    pregunta.opciones.forEach((opcion) => {
+    // Guardar cuál es la correcta (si viene predefinida)
+    /*let correctaSeleccionada = pregunta.correcta ?? null;
+
+    pregunta.opciones.forEach((opcion, i) => {
         const col = document.createElement("div");
         col.classList.add("col-6");
 
@@ -392,6 +410,61 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
         btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = opcion;
+
+        // Si es la correcta, la marcamos visualmente
+        if (correctaSeleccionada === i) {
+            btnOpcion.classList.remove("btn-outline-primary");
+            btnOpcion.classList.add("btn-success");
+        }
+
+        //Evento de selección de opción correcta
+        btnOpcion.addEventListener("click", (e) => {
+            e.preventDefault(); // evita que el botón haga submit
+
+            // desmarcar todas las demás opciones
+            const todos = row.querySelectorAll("button");
+            todos.forEach(b => {
+                b.classList.remove("btn-success");
+                b.classList.add("btn-outline-primary");
+            });
+
+            // marcar esta como correcta
+            btnOpcion.classList.remove("btn-outline-primary");
+            btnOpcion.classList.add("btn-success");
+
+            // guardar el índice de la correcta
+            correctaSeleccionada = i;
+            pregunta.correcta = i; // lo guardamos directamente en el objeto pregunta
+        });
+
+        col.appendChild(btnOpcion);
+        row.appendChild(col);
+    });*/
+
+    pregunta.opciones.forEach((opcion, i) => {
+        const col = document.createElement("div");
+        col.classList.add("col-6");
+
+        const btnOpcion = document.createElement("button");
+        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
+        btnOpcion.contentEditable = true;
+        btnOpcion.textContent = opcion;
+
+        if(pregunta.correcta === i){
+            btnOpcion.classList.replace("btn-outline-primary", "btn-success");
+        }
+        //seleccionar la opcion correcta
+        btnOpcion.addEventListener("click", (e) => {
+            e.preventDefault();
+            const todos = row.querySelectorAll("button");
+            todos.forEach(b => b.classList.replace("btn-success", "btn-outline-primary"));
+            btnOpcion.classList.replace("btn-outline-primary", "btn-success");
+            preguntasPlantilla[index].correcta = i;
+        });
+        //modificar el texto de la opcion
+        btnOpcion.addEventListener("input", () => {
+            preguntasPlantilla[index].opciones[i] = btnOpcion.textContent;
+        });
 
         col.appendChild(btnOpcion);
         row.appendChild(col);

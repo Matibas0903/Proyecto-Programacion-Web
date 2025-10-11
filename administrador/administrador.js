@@ -177,6 +177,9 @@ function onloadAdministrador(){
                 <div class="col">
                   <button class="card_yellow no_border button_yellow" id="button_compartir">Compartir</button>
                 </div>
+                <div class="col">
+                  <button class="card_yellow no_border button_yellow" id="button_jugarPlantilla">Jugar plantilla</button>
+                </div>
               </div>
               <hr class="divider">
             `;
@@ -190,6 +193,9 @@ function onloadAdministrador(){
             });
             divPlantilla.querySelector("#button_compartir").addEventListener("click", () => {
                 compartir('plantilla', plantilla.id)
+            });
+            divPlantilla.querySelector("#button_jugarPlantilla").addEventListener("click", () => {
+                jugarPlantilla();
             });
         });
         if(plantillas.length > 3){
@@ -267,6 +273,9 @@ function unirmeCuestionario(){
 
 function usarPlantilla(id){
     window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
+}
+function jugarPlantilla(){
+    window.location.href = "../Jugar plantilla/jugarPlantilla.html";
 }
 function ver(type, id){
     if(type === 'cuestionario'){
