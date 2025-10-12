@@ -25,6 +25,13 @@ body, .bg_cuest {
     border-radius: 20px;
 }
 
+.border_select {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+
 .icon_container {
     background-color: #80c4e9;
     border-top: 2px solid #000000;
@@ -92,8 +99,6 @@ body, .bg_cuest {
 }
 
 .card_cuest:hover {
-    border-top: 4px solid #80c4e9;
-    border-right: 4px solid #80c4e9;
-    border-left: 4px solid #80c4e9;
-    border-bottom: 8px solid #80c4e9;
+    border-color: #80c4e9;
+    filter: brightness(0.9);
 }
