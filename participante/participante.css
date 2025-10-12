@@ -56,6 +56,10 @@ body, .bg_cuest {
     font-weight: bold;
 }
 
+.rating {
+    color: #f39c12;
+}
+
 /* estilos navbar */
 .navbar-cuestionarios {
     border-top: 2px solid #000000;
@@ -79,7 +83,7 @@ body, .bg_cuest {
 
 /* estilos de pantalla */
 .imagen_card {
-    max-height: 220px;
+    max-height: 200px;
 }
 
 .card_titulo {

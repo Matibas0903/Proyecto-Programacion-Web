@@ -113,19 +113,10 @@ function onloadAdministrador(){
               </div>
               <div class="row row-cols-auto">
                 <div class="col">
-                  <button class="card_orange no_border button_orange" id="button_ver">Ver</button>
+                  <button class="card_orange no_border button_orange" id="button_ver"><i class="bi bi-list-columns"></i> Gestionar</button>
                 </div>
                 <div class="col">
-                  <button class="card_orange no_border button_orange" id="button_editar">Editar</button>
-                </div>
-                <div class="col">
-                  <button class="card_orange no_border button_orange" id="button_compartir">Compartir</button>
-                </div>
-                <div class="col">
-                  <button class="card_orange no_border button_orange" id="button_habilitar">Habilitación</button>
-                </div>
-                <div class="col">
-                  <button class="card_orange no_border button_orange" id="button_participante">+Participante</button>
+                  <button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
                 </div>
               </div>
               <hr class="divider">
@@ -135,17 +126,8 @@ function onloadAdministrador(){
             divCuestionario.querySelector("#button_ver").addEventListener("click", () => {
                 ver('cuestionario', cuestionario.id)
             });
-            divCuestionario.querySelector("#button_editar").addEventListener("click", () => {
-                editar('cuestionario', cuestionario.id)
-            });
             divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
                 compartir('cuestionario', cuestionario.id)
-            });
-            divCuestionario.querySelector("#button_habilitar").addEventListener("click", () => {
-                abrirModalHabilitar(cuestionario.id)
-            });
-            divCuestionario.querySelector("#button_participante").addEventListener("click", () => {
-                abrirModalPart(cuestionario.id)
             });
         });
         if(cuestionarios.length > 3){
@@ -169,22 +151,16 @@ function onloadAdministrador(){
               </div>
               <div class="row row-cols-auto">
                 <div class="col">
-                  <button class="card_yellow no_border button_yellow" id="button_usar">Usar</button>
+                  <button class="card_yellow no_border button_yellow" id="button_usar"><i class="bi bi-check-circle-fill"></i> Usar</button>
                 </div>
                 <div class="col">
-                  <button class="card_yellow no_border button_yellow" id="button_ver">Ver</button>
-                </div>
-                <div class="col">
-                  <button class="card_yellow no_border button_yellow" id="button_compartir">Compartir</button>
+                  <button class="card_yellow no_border button_yellow" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
                 </div>
               </div>
               <hr class="divider">
             `;
             lista_plantillas.appendChild(divPlantilla);
 
-            divPlantilla.querySelector("#button_ver").addEventListener("click", () => {
-                ver('plantilla', plantilla.id)
-            });
             divPlantilla.querySelector("#button_usar").addEventListener("click", () => {
                 usarPlantilla(plantilla.id)
             });
@@ -228,31 +204,6 @@ function onloadAdministrador(){
         }
     })
 
-    //buscador participantes
-    const formularioParticipantes = document.getElementById("formParticipante");
-    formularioParticipantes.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const nombrePart = document.getElementById("nombrePart");
-        const participanteValid = nombrePart.value && nombrePart.value.length <= 20;
-        if (participanteValid){
-            nombrePart.classList.remove('is-invalid')
-            nombrePart.classList.add('is-valid')
-            const participantesFiltrados = usuariosTotales.filter(p => p.nombre.toLowerCase().includes(nombrePart.value.toLowerCase()));
-            if(participantesFiltrados.length){
-                document.getElementById("no_participantes").classList.add('d-none');
-                mostrarParticipantes(participantesFiltrados); 
-                document.getElementById("participantes_container").classList.remove('d-none');
-                formularioParticipantes.reset();
-            } else {
-                document.getElementById("lista_participantes").innerHTML = '';
-                document.getElementById("no_participantes").classList.remove('d-none');
-                document.getElementById("participantes_container").classList.remove('d-none');
-            }
-        } else {
-            nombrePart.classList.remove('is-valid')
-            nombrePart.classList.add('is-invalid')
-        }
-    })
 }
 
 window.onload = onloadAdministrador;
@@ -270,7 +221,7 @@ function usarPlantilla(id){
 }
 function ver(type, id){
     if(type === 'cuestionario'){
-        window.location.href = "../Vista previa/verCuestionario.html";
+        window.location.href = "../versiones/versiones.html";
     }else if(type === 'plantilla'){
         //AGREGAR ENLACE A PANTALLA PLANTILLA
     }
@@ -307,34 +258,6 @@ function compartir(type, id){
     }
 }
 
-function abrirModalHabilitar(id){
-    const cuestionario = cuestionarios.find(c => c.id === id);
-    const modal = new bootstrap.Modal(document.getElementById('modalHabilitar'));
-    document.getElementById("tituloHab").innerText = cuestionario.habilitado ? 'Deshabilitar Cuestionario' : 'Habilitar Cuestionario';
-    document.getElementById("texto_hab").innerText = `Deseas ${cuestionario.habilitado ? 'deshabilitar' : 'habilitar'} el cuestionario?`;
-    
-    const boton = document.getElementById("habilitar_btn");
-    const nuevoBoton = boton.cloneNode(true);
-    boton.parentNode.replaceChild(nuevoBoton, boton);
-
-    nuevoBoton.addEventListener("click", () => {
-        habilitarCuestionario(id);
-        modal.hide();
-    });
-    modal.show();
-}
-
-function habilitarCuestionario(id){
-    cuestionarios.forEach(cuestionario => {
-        if(cuestionario.id === id){
-            cuestionario.habilitado = !cuestionario.habilitado;
-        }
-    })
-    //Llamado a backend
-    const modal = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-    modal.show();
-}
-
 function verMasCuestionarios(arrCuest = null){
     const cuest = arrCuest ? arrCuest : cuestionarios;
     document.getElementById("list_title").innerHTML = 'CUESTIONARIOS';
@@ -351,19 +274,10 @@ function verMasCuestionarios(arrCuest = null){
           </div>
           <div class="row row-cols-auto">
             <div class="col">
-              <button class="card_orange no_border button_orange" id="button_ver">Ver</button>
+              <button class="card_orange no_border button_orange" id="button_ver"><i class="bi bi-list-columns"></i> Gestionar</button>
             </div>
             <div class="col">
-              <button class="card_orange no_border button_orange" id="button_editar">Editar</button>
-            </div>
-            <div class="col">
-              <button class="card_orange no_border button_orange" id="button_compartir">Compartir</button>
-            </div>
-            <div class="col">
-              <button class="card_orange no_border button_orange" id="button_habilitar">Habilitación</button>
-            </div>
-            <div class="col">
-              <button class="card_orange no_border button_orange" id="button_participante">+Participante</button>
+              <button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
             </div>
           </div>
          </div>
@@ -372,17 +286,8 @@ function verMasCuestionarios(arrCuest = null){
         divCuestionario.querySelector("#button_ver").addEventListener("click", () => {
             ver('cuestionario', cuestionario.id)
         });
-        divCuestionario.querySelector("#button_editar").addEventListener("click", () => {
-            editar('cuestionario', cuestionario.id)
-        });
         divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
             compartir('cuestionario', cuestionario.id)
-        });
-        divCuestionario.querySelector("#button_habilitar").addEventListener("click", () => {
-            abrirModalHabilitar(cuestionario.id)
-        });
-        divCuestionario.querySelector("#button_participante").addEventListener("click", () => {
-            abrirModalPart(cuestionario.id)
         });
     });
     contenedor.scrollIntoView();
@@ -403,21 +308,15 @@ function verMasPlantillas(){
             </div>
             <div class="row row-cols-auto">
               <div class="col">
-                <button class="card_yellow no_border button_yellow" id="button_usar">Usar</button>
+                <button class="card_yellow no_border button_yellow" id="button_usar"><i class="bi bi-check-circle-fill"></i> Usar</button>
               </div>
               <div class="col">
-                <button class="card_yellow no_border button_yellow" id="button_ver">Ver</button>
-              </div>
-              <div class="col">
-                <button class="card_yellow no_border button_yellow" id="button_compartir">Compartir</button>
+                <button class="card_yellow no_border button_yellow" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
               </div>
             </div>
          </div>
         `;
         contenedor.appendChild(divPlantilla);
-        divPlantilla.querySelector("#button_ver").addEventListener("click", () => {
-            ver('plantilla', plantilla.id)
-        });
         divPlantilla.querySelector("#button_usar").addEventListener("click", () => {
             usarPlantilla(plantilla.id)
         });
@@ -426,52 +325,4 @@ function verMasPlantillas(){
         });
     });
     contenedor.scrollIntoView();
-}
-
-function abrirModalPart(id){
-    document.getElementById("participantes_container").classList.add('d-none');
-    const modal = new bootstrap.Modal(document.getElementById('modalParticipantes'));
-    modal.show();
-    idCuestionarioActual = id;
-}
-
-function mostrarParticipantes(participantes){
-    //agregar logica para verificar que el participante no este ya agregado
-    const lista_participantes = document.getElementById("lista_participantes");
-    lista_participantes.innerHTML = '';
-    if(participantes.length){
-        participantes.forEach((participante) => {
-            const divParticipante = document.createElement("div");
-            divParticipante.classList.add("card", "border_cuest", "my-2", "button_principal");
-            divParticipante.id = 'addParticipante';
-            divParticipante.innerHTML = `
-              <div class="card-body row">
-                <div class="col-3 align-self-center">
-                  <img src=${participante.avatar} alt="imagen usuario" class="navbar_usuario">
-                </div>
-                <div class="col-9 align-self-center">
-                  <h3 class="mb-0">${participante.nombre}</h3>
-                </div> 
-              </div>
-            `;
-            lista_participantes.appendChild(divParticipante);
-            document.getElementById("addParticipante").addEventListener("click", () => {
-                agregarParticipante(participante.id);
-            });
-        })
-    }
-}
-
-function agregarParticipante(idUsuario){
-    //AGREGAR LLAMADO A BACKEND
-    const modalParticipantesEl = document.getElementById('modalParticipantes');
-    const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
-    if (modalParticipantes) {
-        modalParticipantes.hide();
-    }
-
-    const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-    modalConfirmacion.show();
-
-    console.log("Agregar usuario con id: " + idUsuario + " al cuestionario con id: " + idCuestionarioActual);
 }

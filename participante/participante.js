@@ -164,9 +164,13 @@ function cuestionarioInvitado(cuestionarioIds) {
                   <h5 class="card-title text-center card_titulo">${cuestionario.nombre}</h5>
               </div>
               <div class="card-body">
-                <p class="text-center"><strong>${cuestionario.preguntas}</strong> preguntas</p>
-                <p class="text-center">${cuestionario.tiempo ? `<strong>${cuestionario.tiempo}</strong> minutos` : '<strong>Tiempo libre</strong>'}</p>
-              </div>
+                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.preguntas}</p>
+                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.tiempo? cuestionario.tiempo + ' minutos' : 'Libre'}</p>
+                <div class="rating text-center">
+                    <i class="bi bi-star-fill"></i>
+                    Valoración: ★★★★☆
+                </div>
+            </div>
             `;
 
             card.addEventListener("click", () => participarCuest(cuestionario.id));
@@ -204,8 +208,12 @@ function listaCuestionarios(arrCuest = null, scroll = true) {
                   <h5 class="card-title text-center card_titulo">${cuestionario.nombre}</h5>
               </div>
               <div class="card-body">
-                <p class="text-center"><strong>${cuestionario.preguntas}</strong> preguntas</p>
-                <p class="text-center">${cuestionario.tiempo ? `<strong>${cuestionario.tiempo}</strong> minutos` : '<strong>Tiempo libre</strong>'}</p>
+                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.preguntas}</p>
+                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.tiempo? cuestionario.tiempo + ' minutos' : 'Libre'}</p>
+                <div class="rating text-center">
+                    <i class="bi bi-star-fill"></i>
+                    Valoración: ★★★★☆
+                </div>
               </div>
             `;
 
