@@ -1,0 +1,113 @@
+body, .bg_cuest {
+    background-color: #fdecd7;
+}
+
+.card_orange {
+    background-color: #ef7131;
+    color: #fff6e9;
+}
+button.card_orange.button_mas:hover {
+    background-color: #fff6e9;
+    color: #ef7131;
+}
+
+.c_orange {
+    color: #ef7131;
+}
+
+.card_yellow {
+    background-color: #edb51a;
+}
+button.card_yellow.button_mas:hover {
+    background-color: #000000;
+    color: #edb51a;
+}
+
+.no_border {
+    border: none;
+}
+
+.img_usuario {
+    max-width: 70px;
+    max-height: 70px;
+    border-radius: 10px;
+}
+
+.border_cuest {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    border-radius: 20px;
+}
+
+.icon_container {
+    background-color: #80c4e9;
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    border-radius: 20px 0 0 20px;
+}
+
+.id_cuestionario {
+    color: #A3D6C7;
+}
+.id_plantilla {
+    color: #333333;
+}
+
+.button_principal {
+    background-color: #4f9d86;
+    color: #fff6e9;
+    width: 100%;
+    font-size: 1.75rem;
+    cursor: pointer;
+}
+.button_principal:hover {
+    background-color: #A3D6C7;
+}
+
+.button_orange:hover {
+    color: #80c4e9;
+}
+
+.button_yellow:hover {
+    color: #ef7131;
+}
+
+.button_search:hover {
+    background-color: #ef7131;
+    color: #80c4e9;
+}
+
+.button_mas {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.modal_enlace {
+    color: #80c4e9;
+    font-weight: bold;
+}
+
+/* estilos navbar */
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}

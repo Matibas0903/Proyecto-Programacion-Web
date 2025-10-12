@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="agregarPregunta.css">
+    <script src="agregarPregunta.js" defer></script>
+    <title>Agregar Pregunta</title>
+</head>
+<body>
+        <!-- navbar general -->
+    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Nombre web</a>
+        <div class="dropdown-center ms-auto">
+        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
+            <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">Editar usuario</a></li>
+            <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
+            A su pantalla ponganle # y class active -->
+            <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
+            <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
+            <li><a class="dropdown-item" href="/Moderador/moderador.html">Panel de moderador</a></li>
+            <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
+            <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
+        </ul>
+        </div>
+    </div>
+    </nav>
+    <!-- navbar crear cuestionario -->
+    <nav id="navBarCrearPreg" class="navbar navbar-expand-lg ">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#" id="tituloCuestionario">Cuestionario</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                data-bs-target="#navbarNav" aria-controls="navbarNav" 
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Izquierda -->
+        <form class="d-flex">
+            <div class="input-group">
+                <input class="form-control" type="text" name="inputIngresarTitulo" 
+                    id="inputIngresarTitulo" placeholder="Ingresar título">
+                <button id="btnConfig" class="btn me-2" type="button">
+                Configuración
+                </button>
+            </div>
+        </form>
+
+        <!-- Derecha -->
+        <div class="d-flex ms-auto">
+            <button id="btnTemas" class="btn me-3">
+                <i class="bi bi-palette-fill"></i>
+                Temas</button>
+            <div class="me-3" aria-readonly="true">|</div>
+            <button id="btnGuardar" class="btn me-2" type="submit">Guardar</button>
+            <button id="btnSalir" class="btn me-2" type="submit">Salir</button>
+        </div>
+        </div>
+    </div>
+</nav>
+    <!--Barra lateral izquierda-->
+    <div  class="container-fluid">
+        <div class="row">
+            
+            <!-- PANEL IZQUIERDO -->
+          <div id="panelIzq" class="col-2 p-3 border-end vh-100">
+                <h6 class="fw-bold">1 Quiz</h6>
+            <div class="border rounded p-2 mb-3" id="divPreguntas">
+                
+            </div>
+            <button id="btnAñadirPregunta" class="btn w-100 mb-2">
+                <i class="bi bi-plus-square"></i> Añadir pregunta
+            </button>
+            </div>
+            <!-- ÁREA PRINCIPAL -->
+               
+            <div class="col-9 p-4 position-relative" id="panelPrincipal">
+                
+                <div class="container mt-4">
+                    <div class="card mb-4">
+                    
+                    
+                        <!-- Opciones en 2x2 -->
+                     <div id="btnsOpciones" class="row g-3">
+                       
+                        
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL DERECHO -->
+        <div id="panelDer"  class="col-3 p-3 border-start vh-100 " >
+            <div class="d-flex"></div>
+            <h5>
+                <i class="bi bi-question-square-fill"></i>
+                Tipo de pregunta
+            </h5>
+                <div class="mb-5">
+                    <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
+                        <option class="dropdown-item" value>Tipo de pregunta</option>
+                        <option class="dropdown-item" value="1">Opcion multiple</option>
+                        <option class="dropdown-item" value="2">Opcion unica</option>
+                        <option class="dropdown-item" value="3">Verdadero o falso</option>
+                    </select>
+                </div>
+                <h5>
+                <i class="bi bi-stopwatch-fill"></i>
+                    Tiempo de respuesta
+                </h5>
+                <div class="mb-5">
+                    <select class="form-select" name="selectTiempoRespuesta" id="selectTiempoRespuesta">
+                        <option class="dropdown-item" value>Tiempo de respuesta</option>
+                        <option class="dropdown-item" value="1">10 segundos</option>
+                        <option class="dropdown-item" value="2">15 segundos</option>
+                        <option class="dropdown-item" value="3">20 segundos</option>
+                    </select>
+                </div>
+                <h5>
+                
+                    Categoria de la pregunta
+                </h5>
+                <div class="mb-5">
+                    <select class="form-select" name="selectCategoria" id="selectCategoria">
+                        <option class="dropdown-item" value>Categorias</option>
+                        <option class="dropdown-item" value="1">Geografía</option>
+                        <option class="dropdown-item" value="2">Historia</option>
+                        <option class="dropdown-item" value="3">Programación</option>
+                        <option class="dropdown-item" value="4">Matemática</option>
+                        <option class="dropdown-item" value="5">Biología</option>
+                    </select>
+                </div>
+        </div>
+        <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
+
+        <div id="panelTemas"  class="col-3 p-2 border-start vh-100 " >
+            <div><button id="btnCerrarTemas" type="button" class="btn-close"></button></div>
+            <div class="d-flex"></div>
+            <div class="row">
+                <h5>Temas</h5>
+                <div>
+                        <img id="tema1" src="./Recursos/tema1.jpeg" width="100" height="100" type="button">
+                        <img id="tema2" src="./Recursos/tema2.jpg" width="100" height="100" type="button">
+                        <div id="tema3" width="100" height="100" type="button"></div>
+                        
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Atención!</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro que desea salir sin guardar?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+        <!-- Modal Configuracion -->
+    <div class="modal" id="modalConfiguracion">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+
+      <!-- config Header -->
+            <div class="modal-header">
+             <h4 class="modal-title"><i class="bi bi-gear"></i> Configuracion</h4>
+             <div class="ms-auto">
+                <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button>
+             </div>
+           
+            </div>
+
+      <!-- config body -->
+            <div class="modal-body">
+                <form>
+                    <div class="d-flex flex-column justify-content-center">
+                        <div class="card h-75 w-50 mb-3">
+                            <div class="card-body">
+                                <div class="m-3">
+                                                
+                                    <label for="lblTitulo" class="fw-bold fs-5 form-label" >Titulo</label>
+                                    <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
+                                    <input type="text" id="inputTitulo" class="form-control needs-validation"                                                    <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label" >Descripcion</label>
+                                                    
+                                    <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
+                                    <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
+                                    <textarea id="descripcion" class="form-textarea" maxlength="500" rows="3"></textarea>
+                                            
+                                </div>
+                            </div>
+                        </div>
+                                
+                        <div class="card h-75 w-50 mb-3">
+                            <div class="card-body">   
+                                <div class="m-3">
+                                                
+                                    <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label" >Visibilidad</label><br>
+                                    <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
+
+                                    <div class="form-check d-flex align-items-center mb-2">
+                                        <input type="radio" class="form-check-input" name="Visibilidad" id="radioPrivado">
+                                        <label for="radioPrivado" class="form-check-label fw-bold ms-2">Privado</label>
+                                        <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
+                                    </div>
+
+                                    <div class="form-check d-flex align-items-center mb-2">
+                                        <input type="radio" class="form-check-input" name="Visibilidad" id="radiopublico">
+                                        <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
+                                        <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
+                                    </div>
+                                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+    </div>
+
+
+</body>
+</html>
