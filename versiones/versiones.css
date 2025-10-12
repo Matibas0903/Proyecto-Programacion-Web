@@ -1,0 +1,119 @@
+body, .bg_cuest {
+    background-color: #fdecd7;
+}
+
+.img-cuestionario {
+    max-height: 10em;
+    border-radius: 20px;
+}
+
+.border_cuest {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    border-radius: 20px;
+}
+
+.button_principal {
+    background-color: #4f9d86;
+    color: #fff6e9;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.button_principal:hover {
+    background-color: #A3D6C7;
+}
+
+.bg-btn1 {
+    background-color: #4f9d86;
+}
+.bg-btn1:hover {
+    background-color: #4f9d86;
+    filter: brightness(0.9);
+}
+
+.bg-btn2 {
+    background-color: #edb51a;
+}
+.bg-btn2:hover {
+    background-color: #edb51a;
+    filter: brightness(0.9);
+}
+
+.bg-btn3 {
+    background-color: #f46958;
+}
+.bg-btn3:hover {
+    background-color: #f46958;
+    filter: brightness(0.9);
+}
+
+.bg-btn4 {
+    background-color: #80c4e9;
+}
+.bg-btn4:hover {
+    background-color: #80c4e9;
+    filter: brightness(0.9);
+}
+
+.version-habilitada {
+    background-color: #fff1be;
+}
+
+.modal_enlace {
+    color: #80c4e9;
+    font-weight: bold;
+}
+
+.c_orange {
+    color: #ef7131;
+}
+
+.button_search:hover {
+    background-color: #ef7131;
+    color: #80c4e9;
+}
+
+.icon_container {
+    background-color: #80c4e9;
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    border-radius: 20px 0 0 20px;
+}
+
+.moderador_avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+
+.rating {
+    color: #f39c12;
+}
+
+/* estilos navbar */
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}
