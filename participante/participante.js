@@ -140,7 +140,7 @@ function onloadParticipante(){
         }
     })
 
-    //FILTROS
+    //FILTROS CUESTIONARIOS
     const filtros = document.getElementById('form_filtros');
     filtros.addEventListener('submit', (e) => {
         e.preventDefault();
