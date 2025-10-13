@@ -1,0 +1,43 @@
+input {
+  border-style:outset;
+  border-radius: 25px;
+  
+}
+body {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    background-color:#fdecd7;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    margin-right: 50px;
+    margin-left: 50px;
+
+
+}
+h1{
+  text-align: center;
+  color: #964f4f;
+}
+.contenedor {
+    text-align: center; 
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    background-color: white;
+}
+#icono{
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.card{
+  background-color: #fff6e9;
+  padding: 2rem;
+}
+
+#validar{
+  background-color: #4f9d86;
+  text-align: center;
+}
