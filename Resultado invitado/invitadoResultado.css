@@ -1,0 +1,218 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f4e6cc;
+}
+
+.micontainer {
+  background-color: #fff7eb;
+  padding: 2.5rem;
+  max-width: 900px;
+  margin: 2rem auto;
+  border-radius: 10px;
+  border: solid #b3aba0ff;
+  border-width: 2px 2px 5px;
+}
+
+#contenedorDatos {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.imagen {
+  text-align: center;
+}
+
+.imagen img {
+  width:50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+.imagen p {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #333;
+}
+
+
+#res {
+  background-color: #a3d6c7;
+  border-radius: 15px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#res h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #2b2b2b;
+  margin-bottom: 1rem;
+}
+
+#respuestaC, #Puntuacion {
+  background-color: #fe9881;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.8rem;
+  border: solid #b96242;
+  border-width: 2px 2px 5px;
+}
+
+#btnCalificar {
+
+  background-color: #184638;
+  border: solid #1f2221;
+   color: white;
+  border-width: 1px 1px 3px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+ #btnCalificar:hover {
+  transform: scale(1.05);
+ }
+
+.estrella {
+color:#fe9881;
+cursor: pointer;
+transition: transform 0.2s, color 0.3s;
+}
+
+.estrella:hover {
+  transform: scale(1.2);
+  color: #f6fa0f;
+}
+.estrella.yellow
+{
+    color: gold;
+}
+
+#mensaje
+{
+  color: green;
+}
+
+
+
+/*s4egundo contendor*/
+p.fecha{
+  font-size: small;
+}
+
+
+#btnComentar
+{
+  background-color: #4f9d86;
+  border: solid #1e3830;
+  border-width: 1px 1px 3px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#btnComentar:hover
+{ 
+  transform: scale(1.05);
+}
+
+.miConmen
+{ 
+   border: solid #8d8b89ff;
+   border-width: 1px 1px 3px;
+   border-radius: 10px;
+   padding: 1rem;
+   margin-top: 10px;
+   background-color: #fffdf9;
+}
+
+/* --- Carrusel de Ranking --- */
+
+#rankingCarousel {
+  max-width: 320px;
+  margin: auto;
+}
+
+.carousel-inner {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-item {
+  display: none; /* oculta los ítems no activos */
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.carousel-item.active {
+  display: flex; /* muestra solo el activo */
+}
+
+/* Estilo de las cards dentro del carrusel */
+#cardUsu {
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 280px;
+}
+
+#cardUsu img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  margin: 10px auto;
+  border-radius: 50%;
+}
+
+/* Flechas del carrusel */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: #4f9d86; /* color verde */
+  border-radius: 50%;
+  padding: 10px;
+}
+
+/*nav-pill*/
+.nav-pills .nav-link.active{
+    background-color: #964f4f;
+    color: black;
+}
+
+.nav-pills .nav-link{
+    color: #4f9d86;
+}
+
+/*navbar*/
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+    
+}
+.navbar-cuestionarios {
+  border-width: 2px 2px 5px 2px; 
+  border-style: solid;
+  border-color: #000000;
+
+}
+.navbar-dropdown-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  outline: none;
+}
+
+.navbar-dropdown-btn:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.estrella.disabled {
+  pointer-events: none; 
+  cursor: default;      /* quita el cursor*/
+}

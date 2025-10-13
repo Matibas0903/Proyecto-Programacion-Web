@@ -81,10 +81,11 @@
             <button id="btnAñadirPregunta" class="btn w-100 mb-2">
                 <i class="bi bi-plus-square"></i> Añadir pregunta
             </button>
-            </div>
+        </div>
             <!-- ÁREA PRINCIPAL -->
                
-            <div class="col-12 col-lg-8 p-4 position-relative" id="panelPrincipal">
+            <div class="col-9 p-4 position-relative" id="panelPrincipal">
+                
                 <div class="container mt-4">
                     <div class="card mb-4">
                     
@@ -195,31 +196,29 @@
       <!-- config body -->
             <div class="modal-body">
                 <form>
-                    <div class="d-flex flex-column flex-lg-row justify-content-center gap-3">
-                           <div class="container mt-4">
-                            <div class="row">
-                                <div class="card flex-fill w-100 w-lg-50 mb-3 mb-lg-0">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex flex-column">
-                                                        
-                                            <label for="lblTitulo" class="fw-bold fs-5 form-label" >Titulo</label>
-                                            <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
-                                            <input type="text" id="inputTitulo" class="form-control needs-validation"                                                    <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label" >Descripcion</label>
-                                                            
-                                            <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
-                                            <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
-                                            <textarea id="descripcion" class="form-textarea" maxlength="500" rows="3"></textarea>
+                    <div class="d-flex flex-column justify-content-center">
+                        <div class="card h-75 w-50 mb-3">
+                            <div class="card-body">
+                                <div class="m-3">
+                                                
+                                    <label for="lblTitulo" class="fw-bold fs-5 form-label" >Titulo</label>
+                                    <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
+                                    <input type="text" id="inputTitulo" class="form-control needs-validation"                                                    <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label" >Descripcion</label>
                                                     
-                                        </div>
-                                    </div>
+                                    <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
+                                    <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
+                                    <textarea id="descripcion" class="form-textarea" maxlength="500" rows="3"></textarea>
+                                            
                                 </div>
-                                        
-                                <div class="card flex-fill w-10 0 w-lg-50 mb-3 mb-lg-0">
-                                    <div class="card-body p-4">   
-                                        <div class="d-flex flex-column">
-                                                        
-                                            <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label" >Visibilidad</label><br>
-                                            <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
+                            </div>
+                        </div>
+                                
+                        <div class="card h-75 w-50 mb-3">
+                            <div class="card-body">   
+                                <div class="m-3">
+                                                
+                                    <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label" >Visibilidad</label><br>
+                                    <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
 
                                             <div class="form-check d-flex align-items-center mb-2">
                                                 <input type="radio" class="form-check-input" name="Visibilidad" id="radioPrivado">
@@ -227,16 +226,14 @@
                                                 <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
                                             </div>
 
-                                            <div class="form-check d-flex align-items-center mb-2">
-                                                <input type="radio" class="form-check-input" name="Visibilidad" id="radiopublico">
-                                                <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
-                                                <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
-                                            </div>
-                                                            
-                                        </div>
+                                    <div class="form-check d-flex align-items-center mb-2">
+                                        <input type="radio" class="form-check-input" name="Visibilidad" id="radiopublico">
+                                        <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
+                                        <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
                                     </div>
-                                 </div>
-                             </div>    
+                                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </form>
