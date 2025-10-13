@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
+    <title>Participante</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
@@ -21,10 +21,9 @@
         <ul class="dropdown-menu dropdown-menu-end">
           <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Editar usuario</a></li>
+          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
           <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
           <li><a class="dropdown-item active" href="#">Panel de participante</a></li>
-          <li><a class="dropdown-item" href="/Moderador/moderador.html">Panel de moderador</a></li>
           <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
           <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
         </ul>
@@ -53,16 +52,36 @@
     </div>
     <!-- todos los cuestionarios -->
     <div class="row my-3">
-        <div class="col-12 col-md-6 align-self-start">
+        <div class="col-12 align-self-start">
           <div class="card border_cuest bg_cuest my-3">
             <!-- Usuario -->
             <div class="card-body row">
-              <div class="col-3 align-self-center">
-                <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="img_usuario" id="img_usuario">
-              </div>
-              <div class="col-9 align-self-center">
-                <h2 class="mb-0" id="name_usuario">USUARIO</h2>
-              </div> 
+              <form action="" class="row g-2" id="form_filtros">
+                <div class="col-12 col-md-4">
+                  <select class="form-select border_select" id="select-categoria">
+                    <option value="" selected>Categoría</option>
+                    <option value="historia">Historia</option>
+                    <option value="matemática">Matemática</option>
+                    <option value="programación">Programación</option>
+                    <option value="varios">Varios</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-4">
+                  <select class="form-select border_select" id="select-calificacion">
+                    <option value="" selected>Calificación</option>
+                    <option value="0" class="rating">☆☆☆☆☆</option>
+                    <option value="1" class="rating">★☆☆☆☆</option>
+                    <option value="2" class="rating">★★☆☆☆</option>
+                    <option value="3" class="rating">★★★☆☆</option>
+                    <option value="4" class="rating">★★★★☆</option>
+                    <option value="5" class="rating">★★★★★</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-4 d-flex justify-content-center">
+                  <button type="submit" class="button_principal border_cuest py-2" id="button_filtrar"><i class="bi bi-list"></i> Filtrar</button>
+                </div>
+                <p class="text-danger text-center d-none" id="filtro-error"><i class="bi bi-exclamation-circle-fill"></i> No se han seleccionado filtros</p>
+              </form>
             </div> 
           </div>
         </div>
