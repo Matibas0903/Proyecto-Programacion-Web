@@ -57,7 +57,7 @@
         </form>
 
         <!-- Derecha -->
-        <div class="d-flex ms-auto">
+        <div class="d-flex ms-auto justify-content-end">
             <button id="btnTemas" class="btn me-3">
                 <i class="bi bi-palette-fill"></i>
                 Temas</button>
@@ -81,10 +81,10 @@
             <button id="btnAñadirPregunta" class="btn w-100 mb-2">
                 <i class="bi bi-plus-square"></i> Añadir pregunta
             </button>
-            </div>
+        </div>
             <!-- ÁREA PRINCIPAL -->
                
-            <div class="col-9 p-4 position-relative" id="panelPrincipal">
+            <div class="col-sm-10 col-lg-8 p-4 position-relative" id="panelPrincipal">
                 
                 <div class="container mt-4">
                     <div class="card mb-4">
@@ -196,10 +196,12 @@
       <!-- config body -->
             <div class="modal-body">
                 <form>
-                    <div class="d-flex flex-column justify-content-center">
-                        <div class="card h-75 w-50 mb-3">
-                            <div class="card-body">
-                                <div class="m-3">
+                    <div class="d-flex flex-column flex-lg-row justify-content-center gap-3">
+                        <div class="container mt-4">
+                        <div class="row">
+                        <div class="card flex-fill w-100 w-lg-50 mb-3 mb-lg-0">
+                            <div class="card-body p-4">
+                                <div class="d-flex flex-column">
                                                 
                                     <label for="lblTitulo" class="fw-bold fs-5 form-label" >Titulo</label>
                                     <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
@@ -213,9 +215,9 @@
                             </div>
                         </div>
                                 
-                        <div class="card h-75 w-50 mb-3">
-                            <div class="card-body">   
-                                <div class="m-3">
+                        <div class="card flex-fill w-10 0 w-lg-50 mb-3 mb-lg-0">
+                            <div class="card-body p-4">   
+                                <div class="d-flex flex-column">
                                                 
                                     <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label" >Visibilidad</label><br>
                                     <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
@@ -234,6 +236,8 @@
                                                     
                                 </div>
                             </div>
+                        </div>
+                        </div>
                         </div>
                     </div>
                 </form>

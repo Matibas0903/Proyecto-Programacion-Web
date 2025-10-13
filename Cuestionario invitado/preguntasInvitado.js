@@ -80,22 +80,12 @@ function mostrarPreguntas() {
           if (preguntaNum < cards.length) {
             cards[preguntaNum].classList.remove("d-none");
           } else {
-            mostrarResultados(respuestasCorrectas);
+            setTimeout(() => {
+              window.location.href = "../Resultado invitado/invitadoResultado.html"
+            }, 300);
           }
         }, 1000);
       });
     });
   });
-}
-
-function mostrarResultados(correctas) {
-  const puntos = correctas * 15;
-  const cardResultados = document.getElementById("resultadoFinal");
-
-  let Respucorrectas=document.getElementById("cantidadCorrectas");
-  Respucorrectas.textContent = correctas;
-  const TotalPuntos=document.getElementById("puntosTotales");
-  TotalPuntos.textContent = puntos;
-
-  cardResultados.classList.remove("d-none");
 }

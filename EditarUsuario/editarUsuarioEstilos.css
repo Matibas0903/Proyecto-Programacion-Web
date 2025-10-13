@@ -1,17 +1,9 @@
-input {
-  border-style:outset;
-  border-radius: 25px;
-  
-}
+
 body {
-    display: flex;
+
     justify-content: center; 
     align-items: center;     
     background-color:#fdecd7;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    margin-right: 50px;
-    margin-left: 50px;
 
 
 }
@@ -40,4 +32,25 @@ h1{
 #validar{
   background-color: #4f9d86;
   text-align: center;
+}
+
+/* estilos navbar */
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
 }
