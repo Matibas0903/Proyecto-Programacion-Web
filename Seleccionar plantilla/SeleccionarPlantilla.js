@@ -209,7 +209,7 @@ function añadirPregunta(cantidadPreguntas) {
 
         // Botón lateral
         const preguntaDiv = document.createElement("div");
-        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
+        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn" ,"btn-light");
         preguntaDiv.id = preguntaId;
 
         const p = document.createElement("p");
@@ -257,11 +257,11 @@ function crearPregunta(preguntaId) {
     container.style.display = "none"; // inicialmente oculto
 
     const card = document.createElement("div");
-    card.classList.add("card", "mb-4");
+    card.classList.add("card", "mb-4","cardPregunta");/*le puse una clase para darle estilo*/
 
     // Card body con input
     const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center");
+    cardBody.classList.add("card-body", "text-center","cardBodyPregun"); /*le puse una clase para darle estilo*/
 
     const inputPregunta = document.createElement("input");
     inputPregunta.type = "text";
@@ -277,10 +277,10 @@ function crearPregunta(preguntaId) {
 
     for (let i = 1; i <= 4; i++) {
         const col = document.createElement("div");
-        col.classList.add("col-6");
+        col.classList.add("col-12", "col-md-6");  /*le agregue lo del responsive*/
 
         const btnOpcion = document.createElement("button");
-        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
+        btnOpcion.classList.add("btn","w-100","btnOpciones");/*le puse una clase para darle estilo y elimine la clase de btrap*/
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = `Opción ${i}`;
 
@@ -318,11 +318,11 @@ function inicializarPreguntasHardcodeadas() {
         // Crear boton lateral
         const divContenedor = document.getElementById("divPreguntas");
         const preguntaDiv = document.createElement("div");
-        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
+        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "bg-light");
         preguntaDiv.id = preguntaId;
 
         const pTitulo = document.createElement("p");
-        pTitulo.classList.add("text-center", "text-muted", "mb-0");
+        pTitulo.classList.add("text-center", "text-muted", "mb-0","fs-6", "fs-md-5", "fs-lg-4"); /*responsive al texto de los btn*/
         pTitulo.textContent = p.titulo;
         pTitulo.id = `tituloPregunta-${preguntaId}`;
 
@@ -362,11 +362,11 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
     container.style.display = "none";
 
     const card = document.createElement("div");
-    card.classList.add("card", "mb-4");
+    card.classList.add("card", "mb-4","cardPregunta"); //card que contiene las preguntas/respuestas
 
     // Card body con input
     const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center");
+    cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
 
     const inputPregunta = document.createElement("input");
     inputPregunta.type = "text";
@@ -386,10 +386,10 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
 
     pregunta.opciones.forEach((opcion) => {
         const col = document.createElement("div");
-        col.classList.add("col-6");
+        col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
 
         const btnOpcion = document.createElement("button");
-        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
+        btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = opcion;
 
