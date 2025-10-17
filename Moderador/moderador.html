@@ -45,7 +45,7 @@
             </div>
         </div>
 
-        <!-- Acciones: Búsqueda y filtros -->
+        <!-- Nuscador y agregar cuestionario -->
         <div class="row mb-4">
             <div class="col-12">
                 <div class="card carta-acciones">
@@ -83,12 +83,12 @@
                                 Jugadores: 15
                             </small>
                         </p>
-                        <span class="state activo">🟢 Activo</span>
+                        <span class="state activo"> Activo</span>
                         <div class="rating">
                             <i class="bi bi-star-fill"></i>
                             Valoración: ★★★★☆</div>
                         <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-moderar">
+                            <button class="btn btn-moderar" data-cuestionario="Historia">
                                 <i class="bi bi-incognito"></i>
                                 Moderar</button>
                             <button class="btn btn-detalles"
@@ -96,7 +96,7 @@
                                 data-admin="Enzo Cruz"
                                 data-fecha="15/10/2025"
                                 data-jugadores="15"
-                                data-estado="🟢Activo"
+                                data-estado="Activo"
                                 data-valoracion="★★★★☆"
                                 data-descripcion="Cuestionario sobre historia general">
                                 <i class="bi bi-list-columns"></i>
@@ -123,12 +123,12 @@
                                 Jugadores: 8
                             </small>
                         </p>
-                        <span class="state finalizado">⚫ Finalizado</span>
+                        <span class="state finalizado">Finalizado</span>
                         <div class="rating">
                             <i class="bi bi-star-fill"></i>
                             Valoración: ★★★☆☆</div>
                         <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-moderar">
+                            <button class="btn btn-moderar" data-cuestionario="Programacion">
                                 <i class="bi bi-incognito"></i>
                                 Moderar</button>
                             <button class="btn btn-detalles"
@@ -136,7 +136,7 @@
                                     data-admin="María López"
                                     data-fecha="20/09/2024"
                                     data-jugadores="8"
-                                    data-estado="⚫ Finalizado"
+                                    data-estado="Finalizado"
                                     data-valoracion="★★★☆☆"
                                     data-descripcion="Puede resolver problemas en javascript? Averiguemoslo!">
                                 <i class="bi bi-list-columns"></i>
@@ -163,12 +163,12 @@
                                 Jugadores: 0
                             </small>
                         </p>
-                        <span class="state esperando">🟡 Esperando</span>
+                        <span class="state esperando">Esperando</span>
                         <div class="rating">
                             <i class="bi bi-star-fill"></i>
                              Sin valoraciones</div>
                         <div class="d-flex flex-wrap gap-2">
-                            <button class="btn btn-moderar">
+                            <button class="btn btn-moderar" data-cuestionario="Geografia">
                                 <i class="bi bi-incognito"></i>
                                 Moderar</button>
                             <button class="btn btn-detalles"
@@ -176,7 +176,7 @@
                                             data-admin="Juan Pérez"
                                             data-fecha="25/10/2024"
                                             data-jugadores="0"
-                                            data-estado="🟡 Esperando"
+                                            data-estado="Esperando"
                                             data-valoracion="Sin valoraciones"
                                             data-descripcion="Pon a prueba tus conocimientos del mundo!">
                                 <i class="bi bi-list-columns"></i>
@@ -276,7 +276,7 @@
             </div>
         </div>
     </div>
-
+ <!--Modal de detalles-->
     <div class="modal fade" id="modalDetalles" tabindex="-1" aria-labelledby="modalDetallesLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -296,6 +296,30 @@
             </div>
         </div>
     </div>
+
+<!--Modal Moderar-->
+    <!-- Modal -->
+<div class="modal fade" id="modalModeracion" tabindex="-1" aria-labelledby="tituloModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="tituloModal">Comentarios</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+
+      <div class="modal-body" id="contenedorComentarios">
+        <!-- Los comentarios se insertarán acá por JS -->
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 
    

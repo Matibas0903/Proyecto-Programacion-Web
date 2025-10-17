@@ -1,6 +1,7 @@
 window.onload = function()
 {
-  const btnReportar = document.querySelectorAll(".btn-reportes");
+EnlazarComentariosACuestionarios();
+const btnReportar = document.querySelectorAll(".btn-reportes");
 
 btnReportar.forEach(boton => {
   boton.addEventListener("click", () => {
@@ -94,10 +95,10 @@ function ValidarSolicitudCuestionario() {
 
 function FiltrarPorBusqueda() {
 const input = document.getElementById('inputBusqueda');
-    if (!input) return; // Verificación de seguridad
+    if (!input) return;
     const searchTerm = input.value.toLowerCase().trim();
     const container = document.getElementById('custionarios');
-    if (!container) return; // Verificación de seguridad
+    if (!container) return; 
     const cardColumns = container.querySelectorAll('.col-md-4'); // Las columnas que contienen las cards (col-md-4 mb-4)
     cardColumns.forEach(col => {
         const card = col.querySelector('.carta-cuestionario');
@@ -106,7 +107,7 @@ const input = document.getElementById('inputBusqueda');
         if (!titleElement) return; // Saltar si no hay título
         const title = titleElement.textContent.toLowerCase().trim();
         if (searchTerm === '' || title.includes(searchTerm)) {
-            // Mostrar la columna si la búsqueda está vacía o coincide
+            // Mostrar la columna si la busqueda está vacia o coincide
             col.classList.remove('d-none');
         } else {
             // Ocultar la columna si no coincide
@@ -122,7 +123,7 @@ function llenarYmostrarDetalles()
 
     botonesDetalles.forEach(boton => {
         boton.addEventListener('click', () => {
-            // Obtener los datos del botón
+            // Obtener los datos del boton
             const titulo = boton.getAttribute('data-titulo');
             const estado = boton.getAttribute('data-estado');
             const descripcion = boton.getAttribute('data-descripcion');
@@ -139,7 +140,7 @@ function llenarYmostrarDetalles()
         });
     });
 }
-/* fracgmento de codigo html para los select de filtros, por ahora obviados
+/* fragmento de codigo html para los select de filtros, por ahora borrado
 "
                             <div class="col-md-3">
                                 <div class="input-group mb-3">
@@ -166,4 +167,65 @@ function llenarYmostrarDetalles()
                                             <option></option>
                                          </select>
                                </div>
-                            </div>" */
+                            </div>"
+ */
+function EnlazarComentariosACuestionarios() {
+    const comentariosHistoria = [ 
+        { usuario: "Invitado 1", texto: "No entiendo esta pregunta 😕" },
+        { usuario: "Matias", texto: "La respuesta está mal marcada!" },
+        { usuario: "invitado 5", texto: "Buenísima esta categoría 👏" } ];
+    const comentariosProgramacion = [  
+        { usuario: "Hannahbeel", texto: "Pregunta mal formulada 😠" },
+        { usuario: "Marco", texto: "Muy fácil, hagan algo más desafiante" },
+        { usuario: "Invitado 2", texto: "Excelente práctica, gracias!" }];
+    const comentariosGeografia = [  
+        { usuario: "Ara", texto: "Esto no es correcto, revisen!" },
+        { usuario: "Tezoro887", texto: "Muy bueno el cuestionario" } ];
+    
+    document.querySelectorAll(".btn-moderar").forEach(boton => {
+        boton.addEventListener("click", () => {
+            const tipo = boton.dataset.cuestionario;
+            if (tipo === "Historia") abrirModal("Historia", comentariosHistoria);
+            else if (tipo === "Programacion") abrirModal("Programación", comentariosProgramacion);
+            else if (tipo === "Geografia") abrirModal("Geografía", comentariosGeografia);
+        });
+    });
+}
+function abrirModal(cuestionario, comentarios) {
+    const modal = new bootstrap.Modal(document.getElementById('modalModeracion'));
+    const contenedor = document.getElementById("contenedorComentarios");
+
+    
+    contenedor.innerHTML = "";
+    
+    comentarios.forEach((c, index) => {
+        const div = document.createElement("div");
+        div.classList.add("comentario");
+        div.innerHTML = `
+            <p><strong>${c.usuario}:</strong> ${c.texto}</p>
+            <button class="btn btn-warning btn-sm" onclick="advertirComentario(${index})">Advertir</button>
+            <button class="btn btn-danger btn-sm" onclick="eliminarComentario(${index})">Eliminar</button>
+            <button class="btn btn-secondary btn-sm" onclick="expulsarComentario(${index})">Expulsar</button>
+        `;
+        contenedor.appendChild(div);
+    });
+    
+    modal.show();
+}
+// Funciones para las acciones
+function advertirComentario(index) {
+    alert(`Advertencia para comentario en índice ${index}`);
+    //agregar funcionalidad cuando este conectado con bbdd
+}
+function eliminarComentario(index) {
+    const contenedor = document.getElementById('contenedorComentarios');
+    const comentarioAEliminar = contenedor.children[index];  // Obtén el elemento en ese índice
+        
+    contenedor.removeChild(comentarioAEliminar);  // Elimina el nodo real
+    
+}
+function expulsarComentario(index) {
+    alert(`Expulsando usuario del comentario en índice ${index}`);
+     //agregar funcionalidad cuando este conectado con bbdd
+}
+                            

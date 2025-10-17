@@ -46,8 +46,8 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <!-- Izquierda -->
-        <form class="d-flex flex-wrap w-lg-auto">
-            <div class="input-group inputTitulo">
+        <form class="d-flex">
+            <div class="input-group">
                 <input class="form-control" type="text" name="inputIngresarTitulo" 
                     id="inputIngresarTitulo" placeholder="Ingresar título">
                 <button id="btnConfig" class="btn me-2" type="button">
@@ -73,7 +73,7 @@
         <div class="row">
             
             <!-- PANEL IZQUIERDO -->
-          <div id="panelIzq" class="col-2 col-lg-2 p-3 border-end vh-100 d-none d-lg-block">
+          <div id="panelIzq" class="col-2 p-3 border-end vh-100">
                 <h6 class="fw-bold">1 Quiz</h6>
             <div class="border rounded p-2 mb-3" id="divPreguntas">
                 
@@ -84,7 +84,7 @@
         </div>
             <!-- ÁREA PRINCIPAL -->
                
-            <div class="col-9 p-4 position-relative" id="panelPrincipal">
+            <div class="col-sm-10 col-lg-8 p-4 position-relative" id="panelPrincipal">
                 
                 <div class="container mt-4">
                     <div class="card mb-4">
@@ -196,10 +196,12 @@
       <!-- config body -->
             <div class="modal-body">
                 <form>
-                    <div class="d-flex flex-column justify-content-center">
-                        <div class="card h-75 w-50 mb-3">
-                            <div class="card-body">
-                                <div class="m-3">
+                    <div class="d-flex flex-column flex-lg-row justify-content-center gap-3">
+                        <div class="container mt-4">
+                        <div class="row">
+                        <div class="card flex-fill w-100 w-lg-50 mb-3 mb-lg-0">
+                            <div class="card-body p-4">
+                                <div class="d-flex flex-column">
                                                 
                                     <label for="lblTitulo" class="fw-bold fs-5 form-label" >Titulo</label>
                                     <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
@@ -213,18 +215,18 @@
                             </div>
                         </div>
                                 
-                        <div class="card h-75 w-50 mb-3">
-                            <div class="card-body">   
-                                <div class="m-3">
+                        <div class="card flex-fill w-10 0 w-lg-50 mb-3 mb-lg-0">
+                            <div class="card-body p-4">   
+                                <div class="d-flex flex-column">
                                                 
                                     <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label" >Visibilidad</label><br>
                                     <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
 
-                                            <div class="form-check d-flex align-items-center mb-2">
-                                                <input type="radio" class="form-check-input" name="Visibilidad" id="radioPrivado">
-                                                <label for="radioPrivado" class="form-check-label fw-bold ms-2">Privado</label>
-                                                <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
-                                            </div>
+                                    <div class="form-check d-flex align-items-center mb-2">
+                                        <input type="radio" class="form-check-input" name="Visibilidad" id="radioPrivado">
+                                        <label for="radioPrivado" class="form-check-label fw-bold ms-2">Privado</label>
+                                        <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
+                                    </div>
 
                                     <div class="form-check d-flex align-items-center mb-2">
                                         <input type="radio" class="form-check-input" name="Visibilidad" id="radiopublico">
@@ -234,6 +236,8 @@
                                                     
                                 </div>
                             </div>
+                        </div>
+                        </div>
                         </div>
                     </div>
                 </form>
