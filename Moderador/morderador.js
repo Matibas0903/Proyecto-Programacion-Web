@@ -177,7 +177,7 @@ function EnlazarComentariosACuestionarios() {
     const comentariosProgramacion = [  
         { usuario: "Hannahbeel", texto: "Pregunta mal formulada 😠" },
         { usuario: "Marco", texto: "Muy fácil, hagan algo más desafiante" },
-        { usuario: "Invitado 2", texto: "Excelente práctica, gracias!" }];
+        { usuario: "Cusi7", texto: "Excelente práctica, gracias!" }];
     const comentariosGeografia = [  
         { usuario: "Ara", texto: "Esto no es correcto, revisen!" },
         { usuario: "Tezoro887", texto: "Muy bueno el cuestionario" } ];
