@@ -226,7 +226,7 @@ function usarPlantilla(id){
     window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
 }
 function jugarPlantilla(){
-    window.location.href = "../Jugar plantilla/jugarPlantilla.html";
+    window.location.href = "../Lobby/lobby.html";
 }
 function ver(type, id){
     if(type === 'cuestionario'){
