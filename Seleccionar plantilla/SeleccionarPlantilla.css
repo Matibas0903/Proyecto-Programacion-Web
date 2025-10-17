@@ -232,4 +232,11 @@ border:2px solid black;
     background-color: #64887d;
 }
 
+.btnPregunta{
+
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;
+}
 
