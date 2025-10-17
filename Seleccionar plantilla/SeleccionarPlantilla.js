@@ -1,7 +1,7 @@
 window.onload = function()
 {
-
-let cantidadPreguntas = 0;
+inicializarPreguntasHardcodeadas();
+let cantidadPreguntas = 3;
 
 abrirPanelDerecho();
 abrirPanelTemas();
@@ -12,7 +12,6 @@ ponerNombre();
 validarTitulo();    
 añadirPregunta(cantidadPreguntas);
 
-inicializarPreguntasHardcodeadas();
 
 
 }
@@ -199,161 +198,42 @@ function ponerNombre()
         })
 }
 
-function añadirPregunta(cantidadPreguntas) {
-    const btnAñadirPregunta = document.getElementById("btnAñadirPregunta");
-    const divContenedor = document.getElementById("divPreguntas");
+function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
+    const div = document.createElement("div");
+    div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light", "btnPregunta");
+    div.id = preguntaId;
 
-    btnAñadirPregunta.addEventListener("click", () => {
-        cantidadPreguntas++;
-        const preguntaId = `pregunta-${cantidadPreguntas}`;
-
-        // Botón lateral
-        const preguntaDiv = document.createElement("div");
-        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
-        preguntaDiv.id = preguntaId;
-
-        const p = document.createElement("p");
-        p.classList.add("text-center", "text-muted", "mb-0");
-        p.textContent = `Pregunta`;
-        p.id = `tituloPregunta-${preguntaId}`;
-
-        const btnEliminar = document.createElement("button");
-        btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
-
-        const icono = document.createElement("i");
-        icono.classList.add("bi", "bi-trash-fill");
-        btnEliminar.appendChild(icono);
-
-        btnEliminar.addEventListener("click", (e) => {
-            e.stopPropagation(); // evitar que se muestre al eliminar
-            preguntaDiv.remove();
-            document.getElementById(`form-${preguntaId}`)?.remove(); // borrar el formulario también
-        });
-
-        // Al hacer clic en el botón lateral, mostrar el formulario correspondiente
-        preguntaDiv.addEventListener("click", () => {
-            // ocultar todos los formularios
-            document.querySelectorAll(".form-pregunta").forEach(f => f.style.display = "none");
-            const form = document.getElementById(`form-${preguntaId}`);
-            if (form) form.style.display = "block";
-        });
-
-        preguntaDiv.appendChild(p);
-        preguntaDiv.appendChild(btnEliminar);
-        divContenedor.appendChild(preguntaDiv);
-
-        // Crear el formulario asociado
-        crearPregunta(preguntaId);
-    });
-}
-
-// --------- Función nueva: bloque principal de la pregunta ----------
-function crearPregunta(preguntaId) {
-    const panelPrincipal = document.getElementById("panelPrincipal");
-
-    const container = document.createElement("div");
-    container.classList.add("container", "mt-4", "form-pregunta");
-    container.id = `form-${preguntaId}`;
-    container.style.display = "none"; // inicialmente oculto
-
-    const card = document.createElement("div");
-    card.classList.add("card", "mb-4");
-
-    // Card body con input
-    const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center");
-
-    const inputPregunta = document.createElement("input");
-    inputPregunta.type = "text";
-    inputPregunta.classList.add("form-control", "text-center", "fw-bold");
-    inputPregunta.placeholder = "Escribe aquí la pregunta...";
-    inputPregunta.id = `pregunta-${preguntaId}`;
-
-    cardBody.appendChild(inputPregunta);
-
-    // Opciones 2x2
-    const row = document.createElement("div");
-    row.classList.add("row", "g-3");
-
-    for (let i = 1; i <= 4; i++) {
-        const col = document.createElement("div");
-        col.classList.add("col-6");
-
-        const btnOpcion = document.createElement("button");
-        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
-        btnOpcion.contentEditable = true;
-        btnOpcion.textContent = `Opción ${i}`;
-
-        col.appendChild(btnOpcion);
-        row.appendChild(col);
-    }
-
-    card.appendChild(cardBody);
-    card.appendChild(row);
-    container.appendChild(card);
-    panelPrincipal.appendChild(container);
-
-inputPregunta.addEventListener("input", ()=>
-    {
-        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
-        tituloPregunta.innerText = inputPregunta.value;
-        if(tituloPregunta.innerText.trim() === "")
-                {
-                    tituloPregunta.innerText = "Pregunta";
-                }
-    })
-}
-
-function inicializarPreguntasHardcodeadas() {
-   const preguntas = [
-    { titulo: "¿En qué año comenzó la Segunda Guerra Mundial?", opciones: ["1914", "1939", "1945", "1929"] },
-    { titulo: "¿Quién fue el líder del movimiento de independencia de la India contra el Imperio Británico?", opciones: ["Mahatma Gandhi", "Nelson Mandela", "Simón Bolívar", "Martin Luther King Jr."] },
-    { titulo: "La caída del Imperio Romano de Occidente se considera generalmente en:", opciones: ["476 d.C.", "1453 d.C.", "1492 d.C.", "395 d.C."] }
-];
-
-
-    preguntas.forEach((p, index) => {
-        const preguntaId = `pregunta-${index + 1}`;
-
-        // Crear boton lateral
-        const divContenedor = document.getElementById("divPreguntas");
-        const preguntaDiv = document.createElement("div");
-        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
-        preguntaDiv.id = preguntaId;
 
         const pTitulo = document.createElement("p");
-        pTitulo.classList.add("text-center", "text-muted", "mb-0");
-        pTitulo.textContent = p.titulo;
+        pTitulo.classList.add("text-center", "text-muted", "mb-0","fs-6", "fs-md-5", "fs-lg-4"); /*responsive al texto de los btn*/
+        pTitulo.textContent = titulo;
         pTitulo.id = `tituloPregunta-${preguntaId}`;
 
-        const btnEliminar = document.createElement("button");
-        btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
-        const icono = document.createElement("i");
-        icono.classList.add("bi", "bi-trash-fill");
-        btnEliminar.appendChild(icono);
+    const btnEliminar = document.createElement("button");
+    btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+    const icono = document.createElement("i");
+    icono.classList.add("bi", "bi-trash-fill");
+    btnEliminar.appendChild(icono);
 
-        btnEliminar.addEventListener("click", (e) => {
-            e.stopPropagation();
-            preguntaDiv.remove();
-            document.getElementById(`form-${preguntaId}`)?.remove();
-        });
-
-        preguntaDiv.addEventListener("click", () => {
-            document.querySelectorAll(".form-pregunta").forEach(f => f.style.display = "none");
-            const form = document.getElementById(`form-${preguntaId}`);
-            if (form) form.style.display = "block";
-        });
-
-        preguntaDiv.appendChild(pTitulo);
-        preguntaDiv.appendChild(btnEliminar);
-        divContenedor.appendChild(preguntaDiv);
-
-        // Crear formulario con opciones
-        crearPreguntaHardcodeada(preguntaId, p);
+    btnEliminar.addEventListener("click", (e) => {
+        e.stopPropagation();
+        div.remove();
+        document.getElementById(`form-${preguntaId}`)?.remove();
     });
+
+    div.addEventListener("click", () => {
+        
+        document.querySelectorAll(".form-pregunta").forEach(f => f.style.display = "none");
+        const form = document.getElementById(`form-${preguntaId}`);
+        if (form) form.style.display = "block";
+    });
+
+    div.appendChild(pTitulo);
+    div.appendChild(btnEliminar);
+    return div;
 }
 
-function crearPreguntaHardcodeada(preguntaId, pregunta) {
+function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = []) {
     const panelPrincipal = document.getElementById("panelPrincipal");
 
     const container = document.createElement("div");
@@ -362,38 +242,52 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
     container.style.display = "none";
 
     const card = document.createElement("div");
-    card.classList.add("card", "mb-4");
+    card.classList.add("card", "mb-4","cardPregunta"); //card que contiene las preguntas/respuestas
 
-    // Card body con input
     const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center");
+    cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
 
     const inputPregunta = document.createElement("input");
     inputPregunta.type = "text";
     inputPregunta.classList.add("form-control", "text-center", "fw-bold");
-    inputPregunta.value = pregunta.titulo;
+    inputPregunta.value = titulo;
+    inputPregunta.placeholder = "Escribe aquí la pregunta...";
+    inputPregunta.id = `inputPregunta-${preguntaId}`;
 
     inputPregunta.addEventListener("input", () => {
-        const titulo = document.getElementById(`tituloPregunta-${preguntaId}`);
-        titulo.innerText = inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
+        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
+        tituloPregunta.innerText = inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
     });
 
     cardBody.appendChild(inputPregunta);
 
-    // Opciones 2x2
+    // Opciones
     const row = document.createElement("div");
     row.classList.add("row", "g-3");
 
-    pregunta.opciones.forEach((opcion) => {
+    const opcionesDef = opciones.length ? opciones : ["Opción 1", "Opción 2", "Opción 3", "Opción 4"];
+    opcionesDef.forEach((opciones) => {
         const col = document.createElement("div");
-        col.classList.add("col-6");
+        col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
 
         const btnOpcion = document.createElement("button");
-        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
+        btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
         btnOpcion.contentEditable = true;
-        btnOpcion.textContent = opcion;
+        btnOpcion.textContent = opciones;
 
-        col.appendChild(btnOpcion);
+        const cardRespuesta = document.createElement("div");
+        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
+        cardRespuesta.id = "OpcionRespuesta";
+
+
+        const radioCorrecta = document.createElement("input");
+        radioCorrecta.type="radio";
+        radioCorrecta.name= "radioCorrecto";
+        radioCorrecta.classList.add("form-check-input");
+
+        cardRespuesta.appendChild(radioCorrecta);
+        cardRespuesta.appendChild(btnOpcion);
+        col.appendChild(cardRespuesta);
         row.appendChild(col);
     });
 
@@ -401,4 +295,34 @@ function crearPreguntaHardcodeada(preguntaId, pregunta) {
     card.appendChild(row);
     container.appendChild(card);
     panelPrincipal.appendChild(container);
+}
+
+function añadirPregunta(cantidadPreguntas) {
+    const btn = document.getElementById("btnAñadirPregunta");
+    const contenedor = document.getElementById("divPreguntas");
+
+    btn.addEventListener("click", () => {
+        cantidadPreguntas++;
+        const id = `pregunta-${cantidadPreguntas}`;
+        contenedor.appendChild(crearBotonPregunta(id));
+        crearFormularioPregunta(id);
+        
+    });
+
+    return cantidadPreguntas;
+}
+
+function inicializarPreguntasHardcodeadas() {
+    const preguntas = [
+        { titulo: "¿En qué año comenzó la Segunda Guerra Mundial?", opciones: ["1914", "1939", "1945", "1929"] },
+        { titulo: "¿Quién fue el líder del movimiento de independencia de la India?", opciones: ["Mahatma Gandhi", "Nelson Mandela", "Simón Bolívar", "Martin Luther King Jr."] },
+        { titulo: "La caída del Imperio Romano de Occidente fue en:", opciones: ["476 d.C.", "1453 d.C.", "1492 d.C.", "395 d.C."] }
+    ];
+
+    const contenedor = document.getElementById("divPreguntas");
+    preguntas.forEach((p, i) => {
+        const id = `pregunta-${i + 1}`;
+        contenedor.appendChild(crearBotonPregunta(id, p.titulo));
+        crearFormularioPregunta(id, p.titulo, p.opciones);
+    });
 }
