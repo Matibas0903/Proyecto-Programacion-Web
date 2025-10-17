@@ -180,6 +180,8 @@ function onloadParticipante(){
 
     listaCuestionarios(null, false);
     document.getElementById("button_todos").addEventListener("click", () => listaCuestionarios());
+
+    moderarCuestionario();
 }
 
 window.onload = onloadParticipante;
@@ -271,4 +273,12 @@ function listaCuestionarios(arrCuest = null, scroll = true) {
             contenedor.scrollIntoView()
         };
     }
+}
+
+function moderarCuestionario(){
+    const btnModerar = document.getElementById("button-moderador");
+
+    btnModerar.addEventListener("click", function(){
+        window.location.href = "../Moderador/moderador.html";
+    });
 }
