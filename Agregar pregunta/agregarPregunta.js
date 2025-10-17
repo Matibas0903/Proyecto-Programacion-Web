@@ -200,7 +200,7 @@ function añadirPregunta(cantidadPreguntas) {
 
         // Botón lateral
         const preguntaDiv = document.createElement("div");
-        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
+        preguntaDiv.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light", "btnPregunta");
         preguntaDiv.id = preguntaId;
 
         const p = document.createElement("p");
@@ -249,11 +249,11 @@ function crearPregunta(preguntaId) {
     container.style.display = "none"; // inicialmente oculto
 
     const card = document.createElement("div");
-    card.classList.add("card", "mb-4");
+    card.classList.add("card", "mb-4", "cardPregunta");
 
     // Card body con input
     const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center");
+    cardBody.classList.add("card-body", "text-center","cardBodyPregun");
 
     const inputPregunta = document.createElement("input");
 //
@@ -261,7 +261,7 @@ function crearPregunta(preguntaId) {
 
 // --- buscador de imagen Unsplash ---
 const divBusqueda = document.createElement("div");
-divBusqueda.classList.add("mb-3");
+divBusqueda.classList.add("mb-3", "card-pregunta");
 
 const inputBusqueda = document.createElement("input");
 inputBusqueda.type = "text";
@@ -282,7 +282,7 @@ cardBody.appendChild(divBusqueda);
 //
 
     inputPregunta.type = "text";
-    inputPregunta.classList.add("form-control", "text-center", "fw-bold");
+    inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
     inputPregunta.placeholder = "Escribe aquí la pregunta...";
     inputPregunta.id = `pregunta-${preguntaId}`;
 
@@ -294,13 +294,13 @@ cardBody.appendChild(divBusqueda);
 
     for (let i = 1; i <= 4; i++) {
         const col = document.createElement("div");
-        col.classList.add("col-6");
+        col.classList.add("col-12", "col-md-6");
         const cardRespuesta = document.createElement("div");
         cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
         cardRespuesta.id = "OpcionRespuesta";
 
         const btnOpcion = document.createElement("button");
-        btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
+        btnOpcion.classList.add("btn", "w-100", "btnOpciones");
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = `Opción ${i}`;
         const radioCorrecta = document.createElement("input");

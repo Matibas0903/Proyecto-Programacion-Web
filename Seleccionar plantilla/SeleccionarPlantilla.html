@@ -13,9 +13,9 @@
 </head>
 <body>
         <!-- navbar general -->
-    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
+    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios navbar-general" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Nombre web</a>
+            <a class="navbar-brand" href="#">Tukii</a>
         <div class="dropdown-center ms-auto">
         <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
             <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
@@ -101,9 +101,10 @@
                 </div>
             </div>
 
-            <!-- SIDEBAR DERECHO -->
+            <!-- PANEL DERECHO -->
         <div id="panelDer"  class="col-3 p-3 border-start vh-100 " >
             <div class="d-flex"></div>
+            <div class="Contenedor-panel">
             <h5>
                 <i class="bi bi-question-square-fill"></i>
                 Tipo de pregunta
@@ -123,9 +124,10 @@
                 <div class="mb-5">
                     <select class="form-select" name="selectTiempoRespuesta" id="selectTiempoRespuesta">
                         <option class="dropdown-item" value>Tiempo de respuesta</option>
-                        <option class="dropdown-item" value="1">10 segundos</option>
-                        <option class="dropdown-item" value="2">15 segundos</option>
-                        <option class="dropdown-item" value="3">20 segundos</option>
+                        <option class="dropdown-item" value="1">Ilimitado</option>
+                        <option class="dropdown-item" value="1" disabled>10 segundos(Proximamente)</option>
+                        <option class="dropdown-item" value="2" disabled>15 segundos(Proximamente)</option>
+                        <option class="dropdown-item" value="3" disabled>20 segundos(Proximamente)</option>
                     </select>
                 </div>
                 <h5>
@@ -142,22 +144,24 @@
                         <option class="dropdown-item" value="5">Biología</option>
                     </select>
                 </div>
+            </div>
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
 
         <div id="panelTemas"  class="col-3 p-2 border-start vh-100 " >
-            <div><button id="btnCerrarTemas" type="button" class="btn-close"></button></div>
-            <div class="d-flex"></div>
-            <div class="row">
-                <h5>Temas</h5>  
-                <div>
-                        <img id="tema1" src="./Recursos/temaHistoria.jpg" width="100" height="100" type="button">
-                        <img id="tema2" src="./Recursos/temaHistoria2.jpg" width="100" height="100" type="button">
-                        <div id="tema3" width="100" height="100" type="button"></div>
-                        
+            <div class="contenedor-temas">
+                <div><button id="btnCerrarTemas" type="button" class="btn-close"></button></div>
+                <div class="d-flex"></div>
+                <div class="row">
+                    <h5>Temas</h5>  
+                    <div>
+                            <img id="tema1" src="./Recursos/temaHistoria.jpg" width="100" height="100" type="button">
+                            <img id="tema2" src="./Recursos/temaHistoria2.jpg" width="100" height="100" type="button">
+                            <div id="tema3" width="100" height="100" type="button"></div>
+                            
+                    </div>
                 </div>
             </div>
-
         </div>
 
     </div>

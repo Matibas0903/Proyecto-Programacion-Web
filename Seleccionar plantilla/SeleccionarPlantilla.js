@@ -248,8 +248,33 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
     cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
 
     const inputPregunta = document.createElement("input");
+
+    
+// --- buscador de imagen Unsplash ---
+const divBusqueda = document.createElement("div");
+divBusqueda.classList.add("mb-3", "card-pregunta");
+
+const inputBusqueda = document.createElement("input");
+inputBusqueda.type = "text";
+inputBusqueda.placeholder = "Buscar imagen (ej: guerra, ciencia...)";
+inputBusqueda.classList.add("form-control", "mb-2");
+
+const btnBuscar = document.createElement("button");
+btnBuscar.textContent = "Buscar imagen";
+btnBuscar.classList.add("btn", "btn-secondary", "mb-3");
+
+const contenedorImagenes = document.createElement("div");
+contenedorImagenes.classList.add("d-flex", "flex-wrap", "justify-content-center", "gap-2");
+
+divBusqueda.appendChild(inputBusqueda);
+divBusqueda.appendChild(btnBuscar);
+divBusqueda.appendChild(contenedorImagenes);
+cardBody.appendChild(divBusqueda);
+//
+
+
     inputPregunta.type = "text";
-    inputPregunta.classList.add("form-control", "text-center", "fw-bold");
+    inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
     inputPregunta.value = titulo;
     inputPregunta.placeholder = "Escribe aquí la pregunta...";
     inputPregunta.id = `inputPregunta-${preguntaId}`;
@@ -291,10 +316,44 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
         row.appendChild(col);
     });
 
+    // Escuchar busquedad 
+btnBuscar.addEventListener("click", async () => {
+  contenedorImagenes.innerHTML = "Cargando...";
+  const imagenes = await buscarImagenesUnsplash(inputBusqueda.value);
+  contenedorImagenes.innerHTML = "";
+
+  imagenes.forEach(img => {
+    const imgEl = document.createElement("img");
+    imgEl.src = img.urls.thumb;
+    imgEl.alt = img.alt_description;
+    imgEl.style.cursor = "pointer";
+    imgEl.style.borderRadius = "10px";
+    imgEl.width = 100;
+    imgEl.height = 100;
+
+    imgEl.addEventListener("click", () => {
+      mostrarImagenSeleccionada(cardBody, img.urls.small);
+    });
+
+    contenedorImagenes.appendChild(imgEl);
+  });
+});
+//
+
     card.appendChild(cardBody);
     card.appendChild(row);
     container.appendChild(card);
     panelPrincipal.appendChild(container);
+
+    inputPregunta.addEventListener("input", ()=>
+    {
+        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
+        tituloPregunta.innerText = inputPregunta.value;
+        if(tituloPregunta.innerText.trim() === "")
+                {
+                    tituloPregunta.innerText = "Pregunta";
+                }
+    })
 }
 
 function añadirPregunta(cantidadPreguntas) {
@@ -325,4 +384,39 @@ function inicializarPreguntasHardcodeadas() {
         contenedor.appendChild(crearBotonPregunta(id, p.titulo));
         crearFormularioPregunta(id, p.titulo, p.opciones);
     });
+}
+
+
+//API
+// ========== UNSPLASH API ==========
+const UNSPLASH_ACCESS_KEY = "lDb4UKPmw_gnTXieod-jR_pWtDpRszsGNSuPlOpyudc";
+
+async function buscarImagenesUnsplash(query) {
+  const url = `https://api.unsplash.com/search/photos?query=${query}&per_page=6&client_id=${UNSPLASH_ACCESS_KEY}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.results;
+}
+
+// Mostrar la imagen seleccionada en la tarjeta
+function mostrarImagenSeleccionada(cardBody, url) {
+  let imgPreview = cardBody.querySelector(".img-preview");
+  if (!imgPreview) {
+    imgPreview = document.createElement("img");
+    imgPreview.classList.add("img-preview", "mb-3");
+    imgPreview.style.maxWidth = "300px";
+    imgPreview.style.borderRadius = "10px";
+    cardBody.insertBefore(imgPreview, cardBody.firstChild);
+  }
+  imgPreview.src = url;
+}
+
+function leerRespuestaCorrecta()
+{
+    const respuestaCorrecta = document.querySelectorAll('input[name="radioCorrecto"]:checked');
+    if(!respuestaCorrecta) return null;
+
+    const cardSeleccionada = radioSeleccionado.closest(".card-body"); //obtiene la card que contiene el boton y el radio, y lo devuelve
+    return cardSeleccionada;
+
 }
