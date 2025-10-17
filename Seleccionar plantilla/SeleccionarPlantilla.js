@@ -203,10 +203,10 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
     div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light");
     div.id = preguntaId;
 
-    const pTitulo = document.createElement("p");
-    pTitulo.classList.add("text-center", "text-muted", "mb-0");
-    pTitulo.id = `tituloPregunta-${preguntaId}`;
-    pTitulo.textContent = titulo;
+        const pTitulo = document.createElement("p");
+        pTitulo.classList.add("text-center", "text-muted", "mb-0","fs-6", "fs-md-5", "fs-lg-4"); /*responsive al texto de los btn*/
+        pTitulo.textContent = p.titulo;
+        pTitulo.id = `tituloPregunta-${preguntaId}`;
 
     const btnEliminar = document.createElement("button");
     btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
@@ -241,10 +241,10 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
     container.style.display = "none";
 
     const card = document.createElement("div");
-    card.classList.add("card", "mb-4");
+    card.classList.add("card", "mb-4","cardPregunta"); //card que contiene las preguntas/respuestas
 
     const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center");
+    cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
 
     const inputPregunta = document.createElement("input");
     inputPregunta.type = "text";
@@ -267,6 +267,14 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
     const opcionesDef = opciones.length ? opciones : ["Opción 1", "Opción 2", "Opción 3", "Opción 4"];
     opcionesDef.forEach((texto) => {
         const col = document.createElement("div");
+        col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
+
+        const btnOpcion = document.createElement("button");
+        btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
+        btnOpcion.contentEditable = true;
+        btnOpcion.textContent = opcion;
+
+        col.appendChild(btnOpcion);
         col.classList.add("col-6");
         const cardRespuesta = document.createElement("div");
         cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
