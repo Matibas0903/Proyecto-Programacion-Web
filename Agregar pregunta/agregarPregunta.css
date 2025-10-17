@@ -1,5 +1,6 @@
 *{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   
 }
 #navBarCrearPreg{
     background-color: #ffd0ae;
@@ -7,10 +8,12 @@
     border-right: 2px solid #000000;
     border-left: 2px solid #000000;
     border-bottom: 5px solid #000000;
+   
 }
 
 body{
     background-color: #fff1be;
+     overflow-x: clip;
 }
 
 #panelPrincipal
@@ -99,22 +102,19 @@ body{
 }
 
 #panelDer {
-    position: fixed;
-    top: 0;
+    margin-top: 10px;
+    border: 2px solid #798380;
+    border-radius: 10px;
+    position: absolute;
+    top: 133.6px;
     right: -300px;       
     width: 300px;
-    height: 100vh;
     background-color: #ffded3;
-    border-left: 1px solid #ddd;
     transition: right 0.3s ease;
     z-index: 1050;
 }
 
-.Contenedor-panel{
-    
-    padding-top: 60%;   
 
-}
 
 #panelDer.active {
     right: 0;
@@ -122,7 +122,7 @@ body{
 
 
 #btnPanelDer {
-    position: fixed;
+    position: absolute;
     top: 50%;
     right: 0;                  
     transform: translateY(-50%);
@@ -145,21 +145,20 @@ body{
 
 #panelTemas
 {
+    margin-top: 10px;
+    border: 2px solid #798380;
+    border-radius: 10px;
     visibility: hidden;
     right: 0;
-    position: fixed;
-    top: 0;
-    height: 100vh;
-     background-color: #ffded3;
-    border-left: 1px solid #ddd;
+    position: absolute;
+    top:  133.6px;
+    width: 300px;
+    background-color: #ffded3;
     padding: 20px;
     transition: right 0.3s ease;
     z-index: 1080;
 }
-.contenedor-temas
-{
-    padding-top: 37%;
-}
+
 
 #panelDer.active + #btnPanelDer {
     right: 300px;  
@@ -268,4 +267,8 @@ width: 10px;
     border-radius: 8px;
     border: solid black;
     border-width: 1px 1px 3px 1px;   
+}
+.modal
+{
+    z-index: 3000;
 }
