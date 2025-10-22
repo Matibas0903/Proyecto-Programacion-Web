@@ -1,42 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultados del Cuestionario</title>
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
+  <?php
+      require('../includesPHP/head.php');
+    ?>
   <link rel="stylesheet" href="resultado.css">
   <script src="resultado.js" defer></script>
-
+    <title>Resultados del cuestionario</title>
 </head>
 <body>
 
-     <!-- navbar -->
-    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Tukii</a>
-        <div class="dropdown-center ms-auto">
-            <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-                <img src="../Resultado/Recursos/usuario1.png" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Editar usuario</a></li>
-                <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
-                <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
-                <li><a class="dropdown-item active" href="#">Ver estadísticas</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
-            </div>
-        </div>
-    </nav>
+    <?php
+        require('../includesPHP/navGeneral.php');
+    ?>
 
      <div class="container micontainer mt-5">
         <div class="row align-items-center" id="contenedorDatos">

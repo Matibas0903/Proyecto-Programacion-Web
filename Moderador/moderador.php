@@ -1,38 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Moderador - Mis Cuestionarios</title>
-    
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+    <?php
+      require('../includesPHP/head.php');
+    ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"><link rel="stylesheet" href="moderador.css">
     <script src="morderador.js" defer></script>
+    <title>Panel de Moderador - Mis Cuestionarios</title>
 </head>
 <body>
-<!-- navbar -->
-  <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nombre web</a>
-      <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-          <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Editar usuario</a></li>
-          <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
-          <li><a class="dropdown-item" href="/participante/participante.html">Panel de participante</a></li>
-          <li><a class="dropdown-item active" href="/Moderador/moderador.html">Panel de moderador</a></li>
-          <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-          <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    <?php
+        require('../includesPHP/navGeneral.php');
+    ?>
     <!-- Contenido principal -->
     <div class="container-fluid main-content">
         <div class="row">
