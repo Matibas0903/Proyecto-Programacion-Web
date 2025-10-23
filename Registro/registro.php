@@ -1,56 +1,49 @@
 <?php
-  require('../Base de datos/conexion.php');
+require("../BaseDeDatos/conexion.php");
 
-  
-  $nombre = $mail = $contraseña = $fechaNacimiento = "";
-  $nombreError = $mailError = $contraseñaError = $fechaNacimientoError = "";
+$nombre = $mail = $contraseña = $fechaNacimiento = "";
+$nombreError = $mailError = $contraseñaError = $fechaNacimientoError = "";
+$registroExitoso = "";
 
-  if($_SERVER ["REQUEST_METHOD"] == "POST"){   
-    if(empty($_POST["inputNombre"]))  //si el input  nombre esta vacio
-    {
-        $nombreError= "Ingresar Nombre";
-    }
-    else {
-        $nombre= trim($_POST["inputNombre"]);      // quita los esapcios
-        $nombre = htmlspecialchars($nombre);    // Convierte caracteres especiales a HTML
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        //validaos que solo tenga letras y espacio
-        if(!preg_match("/^[a-zA-Z ]+$/" , $nombre))
-        {
-            $nombreError = "solo se permiten letras y esapcios";
+   
+    if (empty($_POST["inputNombre"])) {
+        $nombreError = "Ingrese nombre";
+    } else {
+        $nombre = trim($_POST["inputNombre"]);
+        $nombre = htmlspecialchars($nombre);
+
+        if (!preg_match("/^[a-zA-Z ]+$/", $nombre)) {
+            $nombreError = "Solo se permiten letras y espacios";
         }
     }
 
-    //valido  mail ingresado
-    if(empty($_POST["inputMail"]))
-    {
-        $mailError = "Ingrese mail";
-        
-    }
-    else
-    {
+   
+    if (empty($_POST["inputMail"])) {
+        $mailError = "Ingrese correo electrónico";
+    } else {
         $mail = trim($_POST["inputMail"]);
         $mail = htmlspecialchars($mail);
 
-        if(!filter_var($mail , FILTER_VALIDATE_EMAIL))
-        {
+        if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
             $mailError ="Solo se permiten mails del tipo : usuario@gmail.com";
         }
     }
 
-    //validar contraseña
-    if(empty($_POST["inputContraseña"])){
-      $contraseñaError = "Ingrese contraseña";
-    }else{
-      $contraseña = trim($_POST["inputContraseña"]);
-      $contraseña = htmlspecialchars($contraseña);
+  
+    if (empty($_POST["inputContraseña"])) {
+        $contraseñaError = "Ingrese contraseña";
+    } else {
+        $contraseña = trim($_POST["inputContraseña"]);
+        $contraseña = htmlspecialchars($contraseña);
 
-      if (!preg_match("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", $contraseña)) {
-        $contraseñaError = "Ingrese una contraseña correcta";
-      }
+        if (!preg_match("/^[A-Za-z0-9_]{6,8}$/", $contraseña)) {
+            $contraseñaError = "Ingrese una contraseña correcta";
+        }
     }
 
-    // Validar fecha de nacimiento
+    
     if (empty($_POST["inputFechaNacimiento"])) {
         $fechaNacimientoError = "Ingrese su fecha de nacimiento";
     } else {
@@ -61,26 +54,28 @@
         }
     }
 
-    // Validar datos básicos (opcional pero recomendable)
     if (empty($nombreError) && empty($mailError) && empty($contraseñaError) && empty($fechaNacimientoError)) {
         try {
             $hashPassword = password_hash($contraseña, PASSWORD_DEFAULT);
 
-            $stmt = $conn->prepare("INSERT INTO usuario (nombre, email, contraseña, fecha_nacimiento) 
-                                    VALUES (:nombre, :correo, :contraseña, :fechaNacimiento)");
+            $stmt = $conn->prepare("INSERT INTO usuario (nombre, email, contrasena, fecha_nacimiento) 
+                                    VALUES (:nombre, :correo, :contrasena, :fechaNacimiento)");
 
-            $stmt->bindParam(':nombre', $nombre);
-            $stmt->bindParam(':correo', $mail);
-            $stmt->bindParam(':contraseña', $hashPassword);
-            $stmt->bindParam(':fechaNacimiento', $fechaNacimiento);
+            $stmt->bindValue(':nombre', $nombre);
+            $stmt->bindValue(':correo', $mail);
+            $stmt->bindValue(':contrasena', $hashPassword);
+            $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
 
             $stmt->execute();
-            echo "Registro guardado correctamente.";
+            $registroExitoso = "Registro guardado correctamente.";
+            
+            // Limpiar campos
+            $nombre = $mail = $contraseña = $fechaNacimiento = "";
         } catch (PDOException $e) {
-            echo "Error al guardar el registro: " . $e->getMessage();
+            $mailError = "Error al guardar: " . $e->getMessage();
         }
-      }
-  }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -102,56 +97,57 @@
       <div class="card-body">
       <h1>Crea una cuenta nueva</h1>
       <h2>¿Ya estás registrado? <a href="../Login/login.html">Iniciá sesión aquí.</a></h2><br>
-
-      <form id="registroForm" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="form-floating">
+      <?php if($registroExitoso): ?>
+            <div class="alert alert-success"><?= $registroExitoso ?></div>
+        <?php endif; ?>
+      <form id="registroForm" method="POST" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="form-floating">
 
         <div class="mb-3">
         <label for="text" class="form-label">Nombre</label>
-        <input type="text" class="form-control" name="inputNombre" id="nombre" placeholder="Ingrese nombre completo">
-        <div class="invalid-feedback">Nombre inválido</label></div>
+        <input type="text" class="form-control <?= $nombreError ? 'is-invalid' : '' ?>" value="<?= $nombre ?>" name="inputNombre" id="nombre" placeholder="Ingrese nombre completo">
+        <div class="invalid-feedback" <?= $nombreError ?>>Nombre inválido</label></div>
         </div>
 
         <div class="mb-3">
         <label for="email" class="form-label">Correo electronico</label>
-        <input type="email" class="form-control" name="inputMail" id="email" placeholder="example@gmail.com">
-        <div class="invalid-feedback">Correo electronico invalido</div>
+        <input type="email" class="form-control  <?= $mailError ? 'is-invalid' : '' ?>" value="<?= $mail ?>" name="inputMail" id="email" placeholder="example@gmail.com">
+        <div class="invalid-feedback" <?= $mailError ?>>Correo electronico invalido</div>
         </div>
 
         <div class="mb-3">
         <label for="contrasena" class="form-label">Contraseña</label>
-        <input type="password" class="form-control" name="inputContraseña" id="contrasena" placeholder="Ingrese una contraseña ">
-        <div class="invalid-feedback">Contraseña Invalida</div>
+        <input type="password" class="form-control <?= $contraseñaError ? 'is-invalid' : '' ?>" name="inputContraseña" id="contrasena" placeholder="Ingrese una contraseña ">
+        <div class="invalid-feedback" <?= $contraseñaError ?>>Contraseña Invalida</div>
         </div>
 
         <div class="mb-3">
         <label for="fecha" class="form-label">Fecha de Nacimiento</label>
-        <input type="date" class="form-control" name="inputFechaNacimiento" id="fecha">
-        <div class="invalid-feedback">Fecha Invalida</div>
+        <input type="date" class="form-control <?= $fechaNacimientoError ? 'is-invalid' : '' ?>" value="<?= $fechaNacimiento ?>" name="inputFechaNacimiento" id="fecha">
+        <div class="invalid-feedback" <?= $fechaNacimientoError ?>>Fecha Invalida</div>
         </div>
 
         
         <button type="submit" id="validar" class="btn btn-light w-100">Registrarse</button><br>
 
-<!-- Modal-->
-<div class="modal fade" id="registroExitoso" tabindex="-1" aria-labelledby="registroExitosoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content text-center">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title" id="registroExitosoLabel">¡Registro exitoso!</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-        ¡Gracias por registrarte! Tu cuenta fue creada correctamente.
-      </div>
-      <div class="modal-footer">
-        <a href="../administrador/administrador.html" class="btn btn-success">Aceptar</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+        <!-- Modal-->
+        <div class="modal fade" id="registroExitoso" tabindex="-1" aria-labelledby="registroExitosoLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content text-center">
+              <div class="modal-header bg-success text-white">
+                <h5 class="modal-title" id="registroExitosoLabel">¡Registro exitoso!</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                ¡Gracias por registrarte! Tu cuenta fue creada correctamente.
+              </div>
+              <div class="modal-footer">
+                <a href="../administrador/administrador.html" class="btn btn-success">Aceptar</a>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
+      
   </div>
 </div>
 </div>

@@ -1,21 +1,27 @@
+window.onload = function(){
+  const botonValidar = document.getElementById('validar');
 
+  botonValidar.addEventListener('submit', validarForm);
+}
 
-const inputNombre = document.getElementById('nombre');
-const errorNombre = document.getElementById('errorNombre');
+function validarForm(e){
+   //Modal
+  if (!validarNombre() && !validarEmail() && !validarContrasena() && !validarFecha()) {
+    e.preventDefault();
+    }else{
+      const modal = new bootstrap.Modal(document.getElementById('registroExitoso'));
+      modal.show();   
+      document.getElementById('registroForm').reset();
 
-const inputEmail = document.getElementById('email');
-const errorEmail = document.getElementById('errorEmail');
-
-const inputContrasena = document.getElementById('contrasena');
-const errorContrasena = document.getElementById('errorContrasena');
-
-const inputFecha= document.getElementById('fecha');
-const errorFecha= document.getElementById('errorFecha');
-
-
-const botonValidar = document.getElementById('validar');
+      //Para que se borren los is-valid
+      [inputNombre, inputEmail, inputContrasena, inputFecha].forEach(input => {
+        input.classList.remove('is-valid');
+      });
+    }
+}
 
 function validarNombre(){
+    const inputNombre = document.getElementById('nombre');
     const valorNombre = inputNombre.value.trim();
 
     if (valorNombre.length < 5 || valorNombre.length > 14) {
@@ -29,6 +35,7 @@ function validarNombre(){
 };
 
 function validarEmail(){
+  const inputEmail = document.getElementById('email');
   const valorEmail= inputEmail.value.trim();
   const condicionEmail= /^[A-Za-z0-9._%+-]+@gmail\.com$/;
 
@@ -43,6 +50,7 @@ function validarEmail(){
 }
 
 function validarContrasena(){
+  const inputContrasena = document.getElementById('contrasena');
   const valorContrasena= inputContrasena.value.trim();
   const condicionContrasena= /^[A-Za-z0-9_]{6,8}$/;
 
@@ -57,6 +65,7 @@ function validarContrasena(){
 }
 
 function validarFecha(){
+    const inputFecha= document.getElementById('fecha');
     const valorFecha = inputFecha.value;
 
     if (!valorFecha) {
@@ -72,25 +81,4 @@ function validarFecha(){
 
 
 
-validar.addEventListener('click', () => {
-  const nombreValido= validarNombre();
-  const emailValido= validarEmail();
-  const contrasenaValida= validarContrasena();
-  const fechaValida= validarFecha();
 
-  //Modal
-  if (nombreValido && emailValido && contrasenaValida && fechaValida) {
-    const modal = new bootstrap.Modal(document.getElementById('registroExitoso'));
-    modal.show();
-    
-    
-   
-    document.getElementById('registroForm').reset();
-
-    //Para que se borren los is-valid
-    [inputNombre, inputEmail, inputContrasena, inputFecha].forEach(input => {
-      input.classList.remove('is-valid');
-    });
-  }
-
-})
