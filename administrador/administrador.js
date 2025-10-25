@@ -3,39 +3,9 @@ const administrador = {
     nombre: "Usuario Prueba",
     avatar: "./images/perrito-avatar.jpg"
 }
-//EJEMPLO LISTA DE CUESTIONARIOS, FALTA DEFINIR CAMPOS!!!
-let cuestionarios = [
-    {
-        nombre: "Cuestionario Historia",
-        id: 3,
-        codigo: "HIST123",
-        habilitado: true
-    },
-    {
-        nombre: "Cuestionario Cine",
-        id: 5,
-        codigo: "CINE456",
-        habilitado: false
-    },
-    {
-        nombre: "Cuestionario Clase Front-End",
-        id: 6,
-        codigo: "FRONT789",
-        habilitado: true
-    },
-    {
-        nombre: "Cuestionario Clase Programación 1",
-        id: 10,
-        codigo: "PROG101",
-        habilitado: false
-    },
-    {
-        nombre: "Cuestionario Matemática 2",
-        id: 2,
-        codigo: "MATE202",
-        habilitado: true
-    }
-]
+
+let cuestionarios = [];
+
 //EJEMPLO LISTA DE PLANTILLAS, FALTA DEFINIR CAMPOS!!!
 const plantillas = [
     {
@@ -90,15 +60,36 @@ const usuariosTotales = [
 //varible para manejar id seleccionado
 let idCuestionarioActual = null;
 
-function onloadAdministrador(){
+ async function onloadAdministrador(){
+    try {
+        const respuesta = await fetch('../BaseDeDatos/controladores/getCuestionariosAdministrador.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(respuesta){
+            const datos = await respuesta.json();
+            if(datos.status === 'success' && datos.data.length){
+                cuestionarios = datos.data;
+                console.log(cuestionarios);
+            }else{
+                document.getElementById("lista_cuestionarios").innerHTML = '<h4 class="text-center">Aun no tienes cuestionarios creados</h4>';
+                console.log('No se encontraron cuestionarios para este administrador.');
+            }
+        }
+    } catch (error) {
+        console.error('Error al cargar los cuestionarios:', error);
+    }
+
     //cargar datos usuario
-    if(administrador.avatar){
-        document.getElementById("img_usuario").src = administrador.avatar;
-        document.getElementById("navbarImg").src = administrador.avatar;
-    }
-    if(administrador.nombre){
-        document.getElementById("name_usuario").innerText = administrador.nombre;
-    }
+    // if(administrador.avatar){
+    //     document.getElementById("img_usuario").src = administrador.avatar;
+    //     document.getElementById("navbarImg").src = administrador.avatar;
+    // }
+    // if(administrador.nombre){
+    //     document.getElementById("name_usuario").innerText = administrador.nombre;
+    // }
     //cargar lista cuestionarios
     const lista_cuestionarios = document.getElementById("lista_cuestionarios");
     if(cuestionarios.length){
@@ -116,7 +107,10 @@ function onloadAdministrador(){
                   <button class="card_orange no_border button_orange" id="button_ver"><i class="bi bi-list-columns"></i> Gestionar</button>
                 </div>
                 <div class="col">
-                  <button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
+                  ${cuestionario.activo && cuestionario.cod_acceso? 
+                    '<button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>'
+                    : '<p>Sin versión activa</p>'
+                  } 
                 </div>
               </div>
               <hr class="divider">
@@ -126,9 +120,11 @@ function onloadAdministrador(){
             divCuestionario.querySelector("#button_ver").addEventListener("click", () => {
                 ver('cuestionario', cuestionario.id)
             });
-            divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
-                compartir('cuestionario', cuestionario.id)
-            });
+            if(cuestionario.activo && cuestionario.cod_acceso){
+                divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
+                    compartir('cuestionario', cuestionario.id)
+                });
+            }
         });
         if(cuestionarios.length > 3){
             const masCuestionarios = document.getElementById("mas_cuestionarios");
@@ -193,7 +189,6 @@ function onloadAdministrador(){
         const inputValid = nombreCuest.value && nombreCuest.value.length <= 50;
         if (inputValid){
             nombreCuest.classList.remove('is-invalid')
-            nombreCuest.classList.add('is-valid')
             const cuestFiltrados = cuestionarios.filter(c => c.nombre.toLowerCase().includes(nombreCuest.value.toLowerCase()));
             if(cuestFiltrados.length){
                 verMasCuestionarios(cuestFiltrados);
@@ -205,7 +200,6 @@ function onloadAdministrador(){
                 contenedor.scrollIntoView();
             }
         } else {
-            nombreCuest.classList.remove('is-valid')
             nombreCuest.classList.add('is-invalid')
         }
     })
@@ -215,11 +209,11 @@ function onloadAdministrador(){
 window.onload = onloadAdministrador;
 
 function crearCuestionario(){
-    window.location.href = "../Agregar pregunta/agregarPregunta.html";
+    window.location.href = "../Agregar pregunta/agregarPregunta.php";
 }
 
 function unirmeCuestionario(){
-    window.location.href = "../participante/participante.html";
+    window.location.href = "../participante/participante.php";
 }
 
 function usarPlantilla(id){
@@ -230,7 +224,7 @@ function jugarPlantilla(){
 }
 function ver(type, id){
     if(type === 'cuestionario'){
-        window.location.href = "../versiones/versiones.html";
+        window.location.href = "../versiones/versiones.php";
     }else if(type === 'plantilla'){
         //AGREGAR ENLACE A PANTALLA PLANTILLA
     }
@@ -249,7 +243,7 @@ function compartir(type, id){
     if(type === 'cuestionario'){
         cuestionarios.forEach(cuestionario => {
             if(cuestionario.id === id){
-                enlaceCuestionario = cuestionario.codigo;
+                enlaceCuestionario = cuestionario.cod_acceso;
             }
         })
     } else if(type === 'plantilla'){
@@ -286,7 +280,10 @@ function verMasCuestionarios(arrCuest = null){
               <button class="card_orange no_border button_orange" id="button_ver"><i class="bi bi-list-columns"></i> Gestionar</button>
             </div>
             <div class="col">
-              <button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
+              ${cuestionario.activo && cuestionario.cod_acceso? 
+                '<button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>'
+                : '<p>Sin versión activa</p>'
+              } 
             </div>
           </div>
          </div>
@@ -295,9 +292,11 @@ function verMasCuestionarios(arrCuest = null){
         divCuestionario.querySelector("#button_ver").addEventListener("click", () => {
             ver('cuestionario', cuestionario.id)
         });
-        divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
-            compartir('cuestionario', cuestionario.id)
-        });
+        if(cuestionario.activo && cuestionario.cod_acceso){
+            divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
+                compartir('cuestionario', cuestionario.id)
+            });
+        }
     });
     contenedor.scrollIntoView();
 }

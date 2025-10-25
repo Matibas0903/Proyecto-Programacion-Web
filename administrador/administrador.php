@@ -1,5 +1,29 @@
 <?php
-  require('../Base de datos/conexion.php');
+    session_start();
+
+    require('../BaseDeDatos/conexion.php');
+
+    $_SESSION['idUsuario'] = 1; // PARA TESTEAR
+
+    $usuario = null;
+    
+    //obtener datos usuario
+    try {
+      if(!isset($_SESSION['idUsuario'])){
+          throw new Exception('Usuario no autenticado');
+      }
+      $idUsuario = $_SESSION['idUsuario'];
+      $stmt = $conn->prepare("
+        SELECT nombre, email, avatar
+        FROM usuario
+        WHERE id = :idUsuario
+      ");
+      $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+      $stmt->execute();
+      $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,10 +60,21 @@
           <!-- Usuario -->
           <div class="card-body row">
             <div class="col-3 align-self-center">
-              <img src="./images/perrito-avatar.jpg" alt="imagen usuario" class="img_usuario" id="img_usuario">
+              <img src="<?php 
+                if($usuario['avatar']){echo $usuario['avatar'];} 
+                else { echo 'https://i.pinimg.com/1200x/99/54/b9/9954b9690260d251ad2f5358514ab747.jpg';}
+              ?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
             </div>
             <div class="col-9 align-self-center">
-              <h2 class="mb-0" id="name_usuario">USUARIO</h2>
+              <h2 class="mb-0" id="name_usuario">
+                <?php 
+                  if($usuario['nombre']) {
+                    echo $usuario['nombre'];
+                  } else {
+                    echo "";
+                  }
+                ?>
+              </h2>
             </div> 
           </div> 
         </div>
