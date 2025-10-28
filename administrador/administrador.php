@@ -9,7 +9,7 @@
     
     //obtener datos usuario
     try {
-      if(!isset($_SESSION['idUsuario'])){
+      if(!isset($_SESSION['idUsuario']) || !filter_var($_SESSION['idUsuario'], FILTER_VALIDATE_INT)){
           throw new Exception('Usuario no autenticado');
       }
       $idUsuario = $_SESSION['idUsuario'];

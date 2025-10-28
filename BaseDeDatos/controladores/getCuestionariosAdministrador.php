@@ -7,17 +7,16 @@
     //OBTENER ID USUARIO DE LA SESSION!!!!
 
     try {
-        if(!isset($_SESSION['idUsuario'])){
+        if(!isset($_SESSION['idUsuario']) || !filter_var($_SESSION['idUsuario'], FILTER_VALIDATE_INT)){
             throw new Exception('Usuario no autenticado');
         }
         $idUsuario = $_SESSION['idUsuario'];
-        error_log("ID Usuario: " . $idUsuario);
-
         $stmt = $conn->prepare("
             SELECT c.*, v.activo, v.cod_acceso 
             FROM cuestionario c
             LEFT JOIN version_cuestionario v 
                 ON c.id = v.id_cuestionario
+                AND v.activo = 1
             WHERE c.id_administrador = :idUsuario 
             ORDER BY fecha_creacion DESC
         ");
