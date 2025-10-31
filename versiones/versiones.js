@@ -206,11 +206,11 @@ function cargarVersiones(){
 }
 
 function ver(id){
-    window.location.href = "../Vista previa/verCuestionario.html";
+    window.location.href = "../Vista previa/verCuestionario.php";
 }
 
 function editar(id){
-    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
+    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.php";
 }
 
 function compartir(id){

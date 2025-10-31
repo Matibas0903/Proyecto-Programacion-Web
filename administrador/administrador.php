@@ -1,5 +1,12 @@
 <?php
-  require('../Base de datos/conexion.php');
+  session_start();
+
+  // Verificar si el usuario inició sesión
+  if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../Login/login.php");
+    exit;
+  }
+  require('../BaseDeDatos/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,10 +43,10 @@
           <!-- Usuario -->
           <div class="card-body row">
             <div class="col-3 align-self-center">
-              <img src="./images/perrito-avatar.jpg" alt="imagen usuario" class="img_usuario" id="img_usuario">
+              <img src="<?=$_SESSION['foto_perfil']?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
             </div>
             <div class="col-9 align-self-center">
-              <h2 class="mb-0" id="name_usuario">USUARIO</h2>
+              <h2 class="mb-0" id="name_usuario"><?=$_SESSION['nombre']?></h2>
             </div> 
           </div> 
         </div>

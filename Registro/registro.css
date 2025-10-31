@@ -41,3 +41,13 @@ h1{
   background-color: #4f9d86;
   text-align: center;
 }
+#cuentaExistenteLogin{
+  color: #4f9d86;
+  text-decoration: none;
+  font-weight: 600;
+  transition:color 0.3 ease;
+}
+#cuentaExistenteLogin:hover{
+  color: #0099cc;              
+  text-decoration: underline;
+}
