@@ -170,31 +170,29 @@ function cargarVersiones(){
                         <button type="button" id="button_editar" class="btn bg-btn2"><i class="bi bi-pencil-fill"></i> Editar</button>
                       </div>
                       ${
-                        version.activo ? '<div class="col"><button type="button" id="button_invitar" class="btn bg-btn3"><i class="bi bi-person-fill-add"></i> Invitar</button></div>' 
+                        version.activo ? '<div class="col"><button type="button" id="button_invitar" class="btn bg-btn3"><i class="bi bi-person-fill-add"></i> Invitar</button></div>' +
+                            '<div class="col"><button type="button" id="button_compartir" class="btn bg-btn4"><i class="bi bi-key-fill"></i> Compartir</button></div>'
                             : ''
                       }
-                      <div class="col">
-                        <button type="button" id="button_compartir" class="btn bg-btn4"><i class="bi bi-key-fill"></i> Compartir</button>
-                      </div>
                     </div>
                 </div> 
             </div>
             `;
         listaVersiones.appendChild(div);
         div.querySelector("#button_ver").addEventListener("click", () => {
-            ver(version.id)
+            ver(version.num_version)
         });
         div.querySelector("#button_editar").addEventListener("click", () => {
-            editar(version.id)
+            editar(version.num_version)
         });
         if(version.activo){
             div.querySelector("#button_invitar").addEventListener("click", () => {
-                seleccionarUsuario(version.id)
+                seleccionarUsuario(version.num_version)
+            });
+            div.querySelector("#button_compartir").addEventListener("click", () => {
+                compartir(version.num_version)
             });
         }
-        div.querySelector("#button_compartir").addEventListener("click", () => {
-            compartir(version.id)
-        });
     });
         
 }
@@ -210,27 +208,24 @@ function mostrarModerador(nombre, avatar=null){
     }
 }
 
-function ver(id){
+function ver(version){
     window.location.href = "../Vista previa/verCuestionario.html";
 }
 
-function editar(id){
+function editar(version){
     window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
 }
 
-function compartir(id){
-    let enlaceVersion = '';
-    versiones.forEach(version => {
-        if(version.id === id){
-            enlaceVersion = version.codigo;
+function compartir(numVersion){
+    for (let version of versiones) {
+        if (version.num_version == numVersion) {
+            const modalCompartir = new bootstrap.Modal(document.getElementById('modalCompartir'));
+            document.getElementById("modalTitulo").innerText = `${cuestionario.nombre} - Versión ${version.num_version}`;
+            document.getElementById("enlace").innerText = version.cod_acceso;
+            modalCompartir.show();
+        break;
         }
-    })
-    if(enlaceVersion){
-        const modalCompartir = new bootstrap.Modal(document.getElementById('modalCompartir'));
-        document.getElementById("modalTitulo").innerText = `Programación web - Versión ${id}`;
-        document.getElementById("enlace").innerText = enlaceVersion;
-        modalCompartir.show();
-    }
+    };
 }
 
 function seleccionarUsuario(id =null, user = 'participante'){
