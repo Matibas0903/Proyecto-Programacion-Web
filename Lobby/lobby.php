@@ -1,40 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <?php
+    require('../includesPHP/head.php');
+    ?>
     <link rel="stylesheet" href="lobby.css">
     <script src="lobby.js" defer></script>
     <title>Document</title>
 </head>
+
 <body>
-            <!-- navbar general -->
-    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../administrador/administrador.html">Tukii</a>
-        <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-            <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
-            <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
-            A su pantalla ponganle # y class active -->
-            <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
-            <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
-            <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-            <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
-        </ul>
-        </div>
-    </div>
-    </nav>
+    <?php
+    require('../includesPHP/navGeneral.php');
+    ?>
     <!--Barra lateral izquierda-->
-    <div  class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
             <div id="panelIzq" class="col-3 p-3 vh-100">
                 <h4 class="fw-bold">Jugadores</h4>
@@ -71,10 +52,10 @@
                     </table>
                 </div>
             </div>
-        
-    
 
-        <!--Contenedor principal-->
+
+
+            <!--Contenedor principal-->
             <div class="col-9 d-flex flex-column justify-content-center align-items-center vh-100">
                 <div>
                     <button class="btn" id="btnIniciarCuestionario">Iniciar cuestionario</button>
@@ -89,4 +70,5 @@
         </div>
     </div>
 </body>
+
 </html>

@@ -1,7 +1,7 @@
 //EJEMPLO USUARIO ADMINISTRADOR, FALTA DEFINIR CAMPOS!!!
 const administrador = {
-    nombre: "Usuario Prueba",
-    avatar: "./images/perrito-avatar.jpg"
+    nombre: "",
+    avatar: ""
 }
 //EJEMPLO LISTA DE CUESTIONARIOS, FALTA DEFINIR CAMPOS!!!
 let cuestionarios = [
@@ -72,8 +72,8 @@ const plantillas = [
 //EJEMPLO LISTA DE USUARIOS, FALTA DEFINIR CAMPOS!!!
 const usuariosTotales = [
     {
-        nombre: "Usuario Prueba",
-        avatar: "./images/perrito-avatar.jpg",
+        nombre: "",
+        avatar: "",
         id: 1
     },
     {
@@ -92,10 +92,10 @@ let idCuestionarioActual = null;
 
 function onloadAdministrador(){
     //cargar datos usuario
-    if(administrador.avatar){
+    /*if(administrador.avatar){
         document.getElementById("img_usuario").src = administrador.avatar;
         document.getElementById("navbarImg").src = administrador.avatar;
-    }
+    }*/
     if(administrador.nombre){
         document.getElementById("name_usuario").innerText = administrador.nombre;
     }
@@ -215,22 +215,22 @@ function onloadAdministrador(){
 window.onload = onloadAdministrador;
 
 function crearCuestionario(){
-    window.location.href = "../Agregar pregunta/agregarPregunta.html";
+    window.location.href = "../Agregar pregunta/agregarPregunta.php";
 }
 
 function unirmeCuestionario(){
-    window.location.href = "../participante/participante.html";
+    window.location.href = "../participante/participante.php";
 }
 
 function usarPlantilla(id){
-    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
+    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.php";
 }
 function jugarPlantilla(){
-    window.location.href = "../Lobby/lobby.html";
+    window.location.href = "../Lobby/lobby.php";
 }
 function ver(type, id){
     if(type === 'cuestionario'){
-        window.location.href = "../versiones/versiones.html";
+        window.location.href = "../versiones/versiones.php";
     }else if(type === 'plantilla'){
         //AGREGAR ENLACE A PANTALLA PLANTILLA
     }

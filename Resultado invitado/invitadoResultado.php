@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <?php
+    require('../includesPHP/head.php');
+    ?>
+    <link rel="stylesheet" href="invitadoResultado.css">
+    <script src="invitadoResultado.js" defer></script>
+    <title>Resultados del cuestionario - invitado</title>
+</head>
+
+<body>
+
+    <?php
+    require('../includesPHP/navInvitado.php');
+    ?>
+    <div class="container micontainer ">
+        <div class="row align-items-center contenedorDatos ">
+            <div class="col-12 col-md-6 imagen" id="imgUsuario">
+                <img src="Recursos/usuario2.png" alt="Usuario" class="img-fluid mx-auto d-block">
+                <p class="fw-bold mb-0">Usuario21</p>
+            </div>
+
+            <div class="col-12 col-md-6 " id="res">
+                <h2>Resultados</h2>
+                <div class="mb-2 p-2" id="respuestaC">Respuestas correctas: 0</div>
+                <div class="mb-3 p-2" id="Puntuacion">Puntuación total: 0</div>
+
+                <div class="calificar">
+                    <p class="fw-semibold mb-0">Calificar Cuestionario:</p>
+                    <div id="selectEstrellas" class="fs-1">
+                        <span class="estrella" data-value="1">&#9733;</span>
+                        <span class="estrella" data-value="2">&#9733;</span>
+                        <span class="estrella" data-value="3">&#9733;</span>
+                        <span class="estrella" data-value="4">&#9733;</span>
+                        <span class="estrella" data-value="5">&#9733;</span>
+                    </div>
+                    <div>
+                        <button class="btn" id="btnCalificar" type="button">Calificar</button>
+                    </div>
+                    <p id="mensaje" class="mt-2 fw-semibold miMensaje"></p>
+                    <p class="text-danger d-none" id="menErr">Seleccione por lo menos una estrella</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    </div>
+
+
+    <!--nav pills del menu-->
+    <div class="container micontainer ">
+        <ul class="nav nav-pills justify-content-center" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="pill" href="#comentarios">Comentarios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="pill" href="#ranking">Ver Ranking</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <div id="comentarios" class="container tab-pane active"><br>
+                <div class="row justify-content-center">
+                    <div class="col-12 col-md-8">
+                        <div class="mb-3">
+                            <textarea class="form-control" rows="3" placeholder="Escribe un comentario..."></textarea>
+                        </div>
+                        <button class="btn fw-semibold mb-3" id="btnComentar">Comentar</button>
+                        <div class="alert alert-danger d-none" id="mensajeIniciarSesion">
+                            <strong></strong> Necesitas iniciar sesion o registrarte para comentar...<a href="../inicio/inicio.html" class="alert-link">Iniciar sesion o Registrarse</a>.
+                        </div>
+
+                        <!-- Comentario existente -->
+                        <div class="miConmen">
+                            <h5 class="mb-1 fw-bold">Usuario1 ⭐⭐⭐</h5>
+                            <p class="fecha">18 de mayo del 2025</p>
+                            <p class="mb-0">La capital de Australia no es Sídney??</p>
+                        </div>
+                        <div class="miConmen">
+                            <h5 class="mb-1 fw-bold">Usuario2 </h5>
+                            <p class="fecha">18 de mayo del 2025</p>
+                            <p class="mb-0">Preguntas Muy faciles</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Ver ranking-->
+            <div id="ranking" class="container tab-pane fade"><br>
+                <div class="container py-5">
+                    <h2 class="text-center mb-4">🏆 Ranking de 🏆</h2>
+                    <div id="rankingCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+                        <div class="carousel-inner">
+                            <!-- Usuario 1 -->
+                            <div class="carousel-item active">
+                                <div class="card mx-auto" id="cardUsu">
+                                    <img src="Recursos/usuario1.png" class="card-img-top" alt="Valentina">
+                                    <div class="card-body">
+                                        <h5 class="card-title">#1 Lugar 🏆</h5>
+                                        <p class="card-text">Valentina</p>
+                                        <p class="card-text">Respuestas correctas: 10</p>
+                                        <p class="card-text">Puntaje: 321</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Usuario 2 -->
+                            <div class="carousel-item">
+                                <div class="card mx-auto" id="cardUsu">
+                                    <img src="Recursos/usuario2.png" class="card-img-top" alt="Invitado">
+                                    <div class="card-body">
+                                        <h5 class="card-title">#2 Lugar 🏆</h5>
+                                        <p class="card-text">Invitado</p>
+                                        <p class="card-text">Respuestas correctas: 7</p>
+                                        <p class="card-text">Puntaje: 234</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Usuario 3 -->
+                            <div class="carousel-item">
+                                <div class="card mx-auto" id="cardUsu">
+                                    <img src="./Recursos/usuario3.png" class="card-img-top" alt="Araceli">
+                                    <div class="card-body">
+                                        <h5 class="card-title">#3 Lugar 🏆</h5>
+                                        <p class="card-text">Araceli</p>
+                                        <p class="card-text">Respuestas correctas: 5</p>
+                                        <p class="card-text">Puntaje: 130</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Controles -->
+                        <button class="carousel-control-prev" type="button" data-bs-target="#rankingCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#rankingCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
