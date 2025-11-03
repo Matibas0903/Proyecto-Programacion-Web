@@ -1,5 +1,7 @@
 window.onload = function(){
-  const botonValidar = document.getElementById('validar');
+  vistaPrevia();
+  const botonValidar = document.getElementById("validar");
+  
 
   botonValidar.addEventListener('submit', validarForm);
 }
@@ -8,16 +10,20 @@ function validarForm(e){
    //Modal
   if (!validarNombre() && !validarEmail() && !validarContrasena() && !validarFecha()) {
     e.preventDefault();
-    }else{
-      const modal = new bootstrap.Modal(document.getElementById('registroExitoso'));
-      modal.show();   
-      document.getElementById('registroForm').reset();
-
-      //Para que se borren los is-valid
-      [inputNombre, inputEmail, inputContrasena, inputFecha].forEach(input => {
-        input.classList.remove('is-valid');
-      });
     }
+}
+
+// Vista previa dinámica de la imagen
+function vistaPrevia() {
+  const fotoSelect = document.getElementById("fotoSelect");
+  const preview = document.getElementById("vistaPreviaFoto");
+
+  if (!fotoSelect || !preview) return;
+
+  fotoSelect.addEventListener("change", (e) => {
+    const nuevaFoto = e.target.value;
+    preview.src = nuevaFoto;
+  });
 }
 
 function validarNombre(){
@@ -39,7 +45,7 @@ function validarEmail(){
   const valorEmail= inputEmail.value.trim();
   const condicionEmail= /^[A-Za-z0-9._%+-]+@gmail\.com$/;
 
- if (!condicionEmail.test(valorEmail)) {
+  if (!condicionEmail.test(valorEmail)) {
     inputEmail.classList.add('is-invalid');
     return false;
   } else {
@@ -54,7 +60,7 @@ function validarContrasena(){
   const valorContrasena= inputContrasena.value.trim();
   const condicionContrasena= /^[A-Za-z0-9_]{6,8}$/;
 
- if (!condicionContrasena.test(valorContrasena)) {
+  if (!condicionContrasena.test(valorContrasena)) {
     inputContrasena.classList.add('is-invalid');
     return false;
   } else {

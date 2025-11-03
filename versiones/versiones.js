@@ -1,9 +1,3 @@
-//EJEMPLO USUARIO ADMINISTRADOR, SOLO PARA MOSTRAR DATA!!!
-const administrador = {
-    nombre: "Usuario Prueba",
-    avatar: "../administrador/images/perrito-avatar.jpg"
-}
-
 let cuestionario = null;
 let versiones = [];
 //EJEMPLO LISTA DE USUARIOS, FALTA DEFINIR CAMPOS!!!
@@ -38,7 +32,7 @@ async function onloadPage(){
                     const responseUsuario = await fetch(`../BaseDeDatos/controladores/getUsuario.php?id=${cuestionario.id_moderador}`);
                     const resultUsuario = await responseUsuario.json();
                     if(resultUsuario.status === 'success' && resultUsuario.data.id){
-                        mostrarModerador(resultUsuario.data.nombre, resultUsuario.data.avatar);
+                        mostrarModerador(resultUsuario.data.nombre, resultUsuario.data.foto_perfil);
                     }
                 }
             } else {
@@ -53,9 +47,11 @@ async function onloadPage(){
                 //cargar versiones
                 if(versiones.length > 0){
                     cargarVersiones();
+                    document.getElementById("habilitar_container").classList.remove('d-none');
                 }
             }else {
                 versiones = [];
+                document.getElementById("habilitar_container").classList.add('d-none');
                 document.getElementById("version-list").innerHTML = '<h3 class="text-center">No hay versiones disponibles. Crea una nueva versión para comenzar.</h3>';
             }         
         } catch (error) {
@@ -78,28 +74,38 @@ async function onloadPage(){
         document.getElementById("button-habilitar").addEventListener("click", () => seleccionarVersion('habilitar'));
         document.getElementById("button-moderador").addEventListener("click", () => seleccionarUsuario(null, 'moderador'));
 
-
         //buscador participantes
         const formularioParticipantes = document.getElementById("formParticipante");
         formularioParticipantes.addEventListener("submit", (e) => {
             e.preventDefault();
+            const fechaVencimiento = document.getElementById("fecha_vencimiento").value;
+            const fechaValida = fechaVencimiento && fechaVencimiento >= new Date().toISOString().split('T')[0];
+            if(!fechaValida && document.getElementById("modalParticipantes").dataset.tipoUsuario ==='participante'){
+                document.getElementById("fecha_vencimiento").classList.add('is-invalid')
+            } else {
+                document.getElementById("fecha_vencimiento").classList.remove('is-invalid')
+            }
             const nombrePart = document.getElementById("nombrePart");
             const participanteValid = nombrePart.value && nombrePart.value.length <= 20;
-            if (participanteValid){
+            if (participanteValid && document.getElementById("modalParticipantes").dataset.tipoUsuario ==='participante'? fechaValida : true){
                 nombrePart.classList.remove('is-invalid')
                 const participantesFiltrados = usuariosTotales.filter(p => p.nombre.toLowerCase().includes(nombrePart.value.toLowerCase()));
                 if(participantesFiltrados.length){
                     document.getElementById("no_participantes").classList.add('d-none');
                     mostrarParticipantes(participantesFiltrados); 
                     document.getElementById("participantes_container").classList.remove('d-none');
-                    formularioParticipantes.reset();
+                    
                 } else {
                     document.getElementById("lista_participantes").innerHTML = '';
                     document.getElementById("no_participantes").classList.remove('d-none');
                     document.getElementById("participantes_container").classList.remove('d-none');
                 }
             } else {
-                nombrePart.classList.add('is-invalid')
+                if(!participanteValid){
+                    nombrePart.classList.add('is-invalid')
+                }else if(document.getElementById("modalParticipantes").dataset.tipoUsuario ==='participante' && !fechaValida){
+                    document.getElementById("fecha_vencimiento").classList.add('is-invalid')
+                }
             }
         })
 
@@ -111,11 +117,16 @@ async function onloadPage(){
             option.text = `Versión ${version.num_version}`;
             selectVersion.appendChild(option);
         })
+        const option = document.createElement("option");
+        option.id = 'ninguno_opcion';
+        option.value = '';
+        option.text = `Ninguna`;
+        selectVersion.appendChild(option);
         const formularioVersiones = document.getElementById("form-version");
         formularioVersiones.addEventListener("submit", (e) => {
             e.preventDefault();
             const selectVersion = document.getElementById("select-version").value;
-            if (selectVersion && actionVersionesModal){
+            if (actionVersionesModal){
                 if(actionVersionesModal === 'habilitar'){
                     activarVersion(selectVersion);
                 } else if(actionVersionesModal === 'nueva'){
@@ -126,14 +137,6 @@ async function onloadPage(){
         })
     }
 
-    //botones modal versiones
-    // document.getElementById("seleccionar_versiones");
-    document.getElementById("seleccionar_activar").addEventListener("click", () => {
-        const selectVersion = document.getElementById("select-version").value;
-        if(selectVersion){
-            activarVersion(selectVersion);
-        }
-    });
 }
 
 window.onload = onloadPage;
@@ -143,6 +146,11 @@ function cargarVersiones(){
     let listaVersiones = document.getElementById("version-list");
     listaVersiones.innerHTML = "";
     versionesOrdenadas.forEach(version => {
+        const calificacion = version.promedio_calificacion || 0;
+        let estrellas = "";
+        for (let i = 1; i <= 5; i++) {
+            estrellas += i <= calificacion ? "★" : "☆";
+        }
         let div = document.createElement("div");
         div.classList.add("col-12", "align-self-start");
         div.innerHTML = `
@@ -155,11 +163,11 @@ function cargarVersiones(){
                     <div>
                         <p><strong>Descripción: </strong> ${version.descripcion? version.descripcion : 'Sin descripción'}</p>
                         <p><i class="bi bi-calendar-date"></i> <strong>Fecha de creación:</strong> ${version.fecha_creacion}</p>
-                        <p><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${version.preguntas}</p>
+                        <p><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${version.cantidad_preguntas? version.cantidad_preguntas : '-'}</p>
                         <p><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${version.tiempo_total?version.tiempo_total + ' minutos' : 'Libre'}</p>
                         <p class="rating">
                             <i class="bi bi-star-fill"></i>
-                            Valoración: ★★★★☆
+                            Valoración: ${estrellas}
                         </p>
                     </div>
                     <div class="row row-cols-auto g-3">
@@ -209,11 +217,15 @@ function mostrarModerador(nombre, avatar=null){
 }
 
 function ver(version){
-    window.location.href = "../Vista previa/verCuestionario.html";
+    window.location.href = `../Vista previa/verCuestionario.php?cuestionario=${cuestionario.id}&version=${version}`;
 }
 
 function editar(version){
-    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.html";
+    if(!version){
+        window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.id}`;
+        return;
+    }
+    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.id}&version=${version}`;
 }
 
 function compartir(numVersion){
@@ -232,12 +244,22 @@ function seleccionarUsuario(id =null, user = 'participante'){
     document.getElementById("participantes_container").classList.add('d-none');
     document.getElementById("modal-user-title").innerHTML = user==='participante'? 'Agregar Participante': 'Seleccionar Moderador';
     document.getElementById("nombrePart").placeholder = `Buscar ${user==='participante'?'participante': 'Moderador'}`;
+    if(user === 'moderador'){
+        document.getElementById("fecha_vencimiento_container").classList.add('d-none');
+    } else {
+        const inputFecha = document.getElementById("fecha_vencimiento");
+        const fecha = new Date();
+        fecha.setMonth(fecha.getMonth() + 1);
+        document.getElementById("fecha_vencimiento_container").classList.remove('d-none');
+        inputFecha.min = fecha.toISOString().split('T')[0];
+        inputFecha.value = fecha.toISOString().split('T')[0];
+    }
 
     const modalUsuarios = document.getElementById('modalParticipantes');
     modalUsuarios.dataset.tipoUsuario = user;
+    modalUsuarios.dataset.idVersion = id;
     const modal = new bootstrap.Modal(modalUsuarios);
     modal.show();
-    idCuestionarioActual = id;
 }
 
 function mostrarParticipantes(participantes){
@@ -247,6 +269,7 @@ function mostrarParticipantes(participantes){
 
     const modalUsuarios = document.getElementById('modalParticipantes');
     const tipoUsuario = modalUsuarios.dataset.tipoUsuario;
+    const idVersion = modalUsuarios.dataset.idVersion;
     if(participantes.length){
         participantes.forEach((participante) => {
             const divParticipante = document.createElement("div");
@@ -255,7 +278,7 @@ function mostrarParticipantes(participantes){
             divParticipante.innerHTML = `
               <div class="card-body row">
                 <div class="col-3 align-self-center">
-                  <img src=${participante.avatar} alt="imagen usuario" class="navbar_usuario">
+                  <img src=${participante.foto_perfil} alt="imagen usuario" class="navbar_usuario">
                 </div>
                 <div class="col-9 align-self-center">
                   <h3 class="mb-0">${participante.nombre}</h3>
@@ -267,24 +290,58 @@ function mostrarParticipantes(participantes){
                 if(tipoUsuario === 'moderador'){
                     cambiarModerador(participante.id);
                 } else {
-                    agregarParticipante(participante.id);
+                    agregarParticipante(participante.id, idVersion);
                 }
             });
         })
     }
 }
 
-function agregarParticipante(idUsuario){
-    //AGREGAR LLAMADO A BACKEND
+async function agregarParticipante(idUsuario, idVersion){
+    const fechaVencimiento = document.getElementById("fecha_vencimiento").value;
+    const body = {
+        id_participante: idUsuario,
+        id_version: idVersion,
+        fecha_vencimiento: fechaVencimiento
+    };
     const modalParticipantesEl = document.getElementById('modalParticipantes');
     const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
-    if (modalParticipantes) {
-        modalParticipantes.hide();
+    if(idUsuario !== cuestionario.id_moderador && idUsuario !== cuestionario.id_administrador){
+        try {
+            const response = await fetch('../BaseDeDatos/controladores/postInvitacion.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            const result = await response.json();
+            if(result.status === 'success'){
+                if (modalParticipantes) {
+                    modalParticipantes.hide();
+                }
+
+                const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+                modalConfirmacion.show();
+            } else if(result.status === 'error'){
+                mostrarMensajeError(result.message || 'Error al agregar participante');
+                if (modalParticipantes) {
+                    modalParticipantes.hide();
+                }
+            }
+        } catch (error) {
+            mostrarMensajeError('Error al agregar participante');
+            if (modalParticipantes) {
+                modalParticipantes.hide();
+            }
+        } 
+    } else {
+        mostrarMensajeError('No se puede agregar al administrador o moderador como participante');
+        if (modalParticipantes) {
+            modalParticipantes.hide();
+        }
     }
-
-    const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-    modalConfirmacion.show();
-
+    document.getElementById("formParticipante").reset();
 }
 
 async function cambiarModerador(idUsuario){
@@ -303,7 +360,7 @@ async function cambiarModerador(idUsuario){
         const result = await response.json();
         if(result.status === 'success'){
             const usuario = usuariosTotales.find(usuario => usuario.id === idUsuario);
-            mostrarModerador(usuario.nombre, usuario.avatar);
+            mostrarModerador(usuario.nombre, usuario.foto_perfil);
             const modalParticipantesEl = document.getElementById('modalParticipantes');
             const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
             if (modalParticipantes) {
@@ -311,16 +368,35 @@ async function cambiarModerador(idUsuario){
             }
             const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
             modalConfirmacion.show();
+            cuestionario.id_moderador = idUsuario;
+        } else if(result.status === 'error'){
+            mostrarMensajeError(result.message || 'Error al cambiar el moderador');
+            if (modalParticipantes) {
+                modalParticipantes.hide();
+            }
         }
     } catch (error) {
-        
+        mostrarMensajeError('Error al cambiar el moderador');
+        if (modalParticipantes) {
+            modalParticipantes.hide();
+        }
     }
+    document.getElementById("formParticipante").reset();
 }
-
+  
 function seleccionarVersion(action){
+    const versionHabilitada = versiones.find(version => version.activo);
+    const opcion = document.getElementById("ninguno_opcion");
+    if(!versionHabilitada && action==='habilitar'){
+        opcion.classList.add('d-none');
+        opcion.selected = false;
+    } else {
+        opcion.classList.remove('d-none');
+    }
     document.getElementById("tituloVersiones").innerHTML = action==='habilitar'? 'Habilitar Versión': 'Nueva Versión';
     document.getElementById("texto_versiones").innerHTML = action==='habilitar'? 'Selecciona la version a habilitar': 'Selecciona una version de plantilla';
-    document.getElementById("seleccionar_versiones").innerHTML = action==='habilitar'? 'Habilitar': 'Crear nueva versión';
+    document.getElementById("seleccionar_versiones").innerHTML = action==='habilitar'? 'Continuar': 'Crear nueva versión';
+    opcion.innerHTML = action==='habilitar'? 'Deshabilitar todas': 'Ninguna (Crear desde cero)';
     const modal = new bootstrap.Modal(document.getElementById('modalVersiones'));
     modal.show();
     actionVersionesModal = action;
@@ -329,7 +405,7 @@ function seleccionarVersion(action){
 async function activarVersion(idVersion){
     const body = {
         idCuestionario: cuestionario.id,
-        numVersion: idVersion
+        numVersion: idVersion? idVersion : 'deshabilitar'
     }
     try {
         const response = await fetch('../BaseDeDatos/controladores/putVersionActiva.php', {
@@ -360,4 +436,12 @@ async function activarVersion(idVersion){
     } catch (error) {
         console.error('Error al activar la versión:', error);
     }
+}
+
+function mostrarMensajeError(mensaje){
+    const toastEl = document.getElementById('toast_mensaje_error');
+    const toastBody = document.getElementById('mensaje_error');
+    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
 }

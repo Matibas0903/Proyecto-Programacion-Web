@@ -176,11 +176,9 @@ function unirmeCuestionario(){
 }
 
 function usarPlantilla(id){
-    //ENVIO PARAMETRO DE CUESTIONARIO Y VERSION
     window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.php";
 }
 function jugarPlantilla(){
-    //ENVIO PARAMETRO DE CUESTIONARIO Y VERSION
     window.location.href = "../Lobby/lobby.php";
 }
 function ver(type, id){

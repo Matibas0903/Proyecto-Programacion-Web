@@ -5,13 +5,22 @@
 
     try {
         //obtenemos el parametro cuestionario
-        if (!isset($_GET['cuestionario']) || !filter_var($_GET['cuestionario'], FILTER_VALIDATE_INT)) {
+        if (!isset($_GET['cuestionario'])) {
             throw new Exception('ID de cuestionario inválido.');
         }
         $idCuestionario = (int) $_GET['cuestionario'];
         $stmt = $conn->prepare("
-            SELECT* 
-            FROM version_cuestionario
+            SELECT v.*,
+            COALESCE((   SELECT COUNT(*) 
+                FROM pregunta p 
+                WHERE p.id_version = v.id
+            ), 0) AS cantidad_preguntas,
+            COALESCE((   SELECT AVG(pa.calificacion_cuestionario) 
+                FROM participacion pa 
+                WHERE pa.id_version_cuestionario = v.id 
+                  AND pa.calificacion_cuestionario IS NOT NULL
+            ), 0) AS promedio_calificacion
+            FROM version_cuestionario v
             WHERE id_cuestionario = :idCuestionario
         ");
         $stmt->bindParam(':idCuestionario', $idCuestionario, PDO::PARAM_INT);
@@ -21,6 +30,15 @@
 
 
     } catch (PDOException $e) {
-        echo json_encode(["status"=>"error", "data"=>$e->getMessage()]);
+        echo json_encode([
+            "status" => "error",
+            "message" => "Error de base de datos",
+            "error" => $e->getMessage()
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => $e->getMessage()
+        ]);
     }
 ?>

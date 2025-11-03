@@ -1,29 +1,12 @@
 <?php
-    session_start();
+  session_start();
 
-    require('../BaseDeDatos/conexion.php');
-
-    $_SESSION['idUsuario'] = 1; // PARA TESTEAR
-
-    $usuario = null;
-    
-    //obtener datos usuario
-    try {
-      if(!isset($_SESSION['idUsuario']) || !filter_var($_SESSION['idUsuario'], FILTER_VALIDATE_INT)){
-          throw new Exception('Usuario no autenticado');
-      }
-      $idUsuario = $_SESSION['idUsuario'];
-      $stmt = $conn->prepare("
-        SELECT nombre, email, avatar
-        FROM usuario
-        WHERE id = :idUsuario
-      ");
-      $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
-      $stmt->execute();
-      $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
+  // Verificar si el usuario inició sesión
+  if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../Login/login.php");
+    exit;
+  }
+  require('../BaseDeDatos/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -60,21 +43,10 @@
           <!-- Usuario -->
           <div class="card-body row">
             <div class="col-3 align-self-center">
-              <img src="<?php 
-                if($usuario['avatar']){echo $usuario['avatar'];} 
-                else { echo 'https://i.pinimg.com/1200x/99/54/b9/9954b9690260d251ad2f5358514ab747.jpg';}
-              ?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
+              <img src="<?=$_SESSION['foto_perfil']?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
             </div>
             <div class="col-9 align-self-center">
-              <h2 class="mb-0" id="name_usuario">
-                <?php 
-                  if($usuario['nombre']) {
-                    echo $usuario['nombre'];
-                  } else {
-                    echo "";
-                  }
-                ?>
-              </h2>
+              <h2 class="mb-0" id="name_usuario"><?=$_SESSION['nombre']?></h2>
             </div> 
           </div> 
         </div>

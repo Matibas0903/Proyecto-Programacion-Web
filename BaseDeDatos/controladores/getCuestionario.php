@@ -8,13 +8,13 @@
 
     try {
         //obtenemos el parametro cuestionario
-        if (!isset($_GET['cuestionario']) || !filter_var($_GET['cuestionario'], FILTER_VALIDATE_INT)) {
+        if (!isset($_GET['cuestionario'])) {
             throw new Exception('ID de cuestionario inválido.');
         }
-        if(!isset($_SESSION['idUsuario']) || !filter_var($_SESSION['idUsuario'], FILTER_VALIDATE_INT)){
+        if(!isset($_SESSION['usuario_id'])){
             throw new Exception('Usuario no autenticado');
         }
-        $idUsuario = $_SESSION['idUsuario'];
+        $idUsuario = $_SESSION['usuario_id'];
         $idCuestionario = (int) $_GET['cuestionario'];
         $stmt = $conn->prepare("
             SELECT* 
@@ -29,6 +29,15 @@
 
 
     } catch (PDOException $e) {
-        echo json_encode(["status"=>"error", "data"=>$e->getMessage()]);
+        echo json_encode([
+            "status" => "error",
+            "message" => "Error de base de datos",
+            "error" => $e->getMessage()
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => $e->getMessage()
+        ]);
     }
 ?>

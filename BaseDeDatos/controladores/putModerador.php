@@ -28,6 +28,15 @@
             echo json_encode(["status"=>"fail", "message" => "No se pudo actualizar el moderador"]);
         }
     } catch (PDOException $e) {
-        echo json_encode(["status"=>"error", "data"=>$e->getMessage()]);
+        echo json_encode([
+            "status" => "error",
+            "message" => "Error de base de datos",
+            "error" => $e->getMessage()
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => $e->getMessage()
+        ]);
     }
 ?>

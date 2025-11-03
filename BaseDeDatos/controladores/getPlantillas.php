@@ -7,10 +7,10 @@
     //OBTENER ID USUARIO DE LA SESSION!!!!
 
     try {
-        if(!isset($_SESSION['idUsuario']) || !filter_var($_SESSION['idUsuario'], FILTER_VALIDATE_INT)){
+        if(!isset($_SESSION['usuario_id'])){
             throw new Exception('Usuario no autenticado');
         }
-        $idUsuario = $_SESSION['idUsuario'];
+        $idUsuario = $_SESSION['usuario_id'];
 
         $stmtP = $conn->prepare("
             SELECT c.*, v.num_version, v.activo, v.cod_acceso,
@@ -33,8 +33,14 @@
 
     } catch (PDOException $e) {
         echo json_encode([
-        "status" => "error",
-        "message" => $e->getMessage()
-    ]);
+            "status" => "error",
+            "message" => "Error de base de datos",
+            "error" => $e->getMessage()
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => $e->getMessage()
+        ]);
     }
 ?>

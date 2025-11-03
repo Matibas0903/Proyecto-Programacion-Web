@@ -32,7 +32,7 @@
             <div class="col-12 col-md-3">
                 <button class="button_principal border_cuest" id="button-nueva-version"><i class="bi bi-plus-circle-fill"></i> Nueva version</button>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-3" id="habilitar_container">
                 <button class="button_principal border_cuest" id="button-habilitar"><i class="bi bi-lock-fill"></i> Habilitar version</button>
             </div>
             <div class="col-12 col-md-3">
@@ -105,6 +105,11 @@
            </div>
            <div class="modal-body">
               <form id="formParticipante" class="needs-validation" novalidate>
+                  <div class="mb-3" id="fecha_vencimiento_container">
+                    <label for="fecha" class="form-label">Fecha de vencimiento de la invitación</label>
+                    <input type="date" class="form-control border_cuest" name="inputFechaNacimiento" id="fecha_vencimiento">
+                    <div class="invalid-feedback">La fecha debe ser superior a la fecha actual</div>
+                  </div>
                   <div class="input-group input-group-lg">
                     <button class="input-group-text icon_container c_orange button_search" id="button-part"><i class="bi bi-search"></i></button>
                     <input type="text" id="nombrePart" class="form-control border_cuest" placeholder="" maxlength="20" required>
@@ -148,6 +153,10 @@
         </div>
       </div>
     </div>
+
+    <?php
+      include('../mensajeError/mensajeError.php');
+    ?>
 
 </body>
 <script src="./versiones.js"></script>

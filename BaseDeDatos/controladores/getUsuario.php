@@ -5,12 +5,12 @@
 
     try {
         //obtenemos el parametro id de usuario
-        if (!isset($_GET['id']) || !filter_var($_GET['id'], FILTER_VALIDATE_INT)) {
+        if (!isset($_GET['id'])) {
             throw new Exception('ID de usuario inválido.');
         }
         $idUsuario = (int) $_GET['id'];
         $stmt = $conn->prepare("
-            SELECT id, nombre, email, avatar 
+            SELECT id, nombre, email, foto_perfil 
             FROM usuario
             WHERE id = :idUsuario
         ");
@@ -21,6 +21,15 @@
 
 
     } catch (PDOException $e) {
-        echo json_encode(["status"=>"error", "data"=>$e->getMessage()]);
+        echo json_encode([
+            "status" => "error",
+            "message" => "Error de base de datos",
+            "error" => $e->getMessage()
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            "status" => "error",
+            "message" => $e->getMessage()
+        ]);
     }
 ?>
