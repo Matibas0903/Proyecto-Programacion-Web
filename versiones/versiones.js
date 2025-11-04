@@ -6,6 +6,9 @@ let usuariosTotales = []
 let idCuestionarioActual = null;
 //varible para manejar action de modal versiones
 let actionVersionesModal = '';
+//paginado participantes
+let paginaActual = 1;
+const participantesPorPagina = 2;
 
 async function onloadPage(){
     const idCuestionario = new URLSearchParams(window.location.search).get('cuestionario');
@@ -36,6 +39,7 @@ async function onloadPage(){
                     }
                 }
             } else {
+                mostrarMensajeError(result.message || 'Error al obtener el cuestionario');
                 //redireccionamos a pantalla administrador si el cuestionario no existe o no pertenece al admin
                 window.location.href = "../administrador/administrador.php";
             } 
@@ -55,7 +59,7 @@ async function onloadPage(){
                 document.getElementById("version-list").innerHTML = '<h3 class="text-center">No hay versiones disponibles. Crea una nueva versión para comenzar.</h3>';
             }         
         } catch (error) {
-            console.error('Error al obtener el cuestionario:', error);
+            mostrarMensajeError('Error al obtener el cuestionario');
         }
 
         //Cargar usuarios
@@ -64,9 +68,11 @@ async function onloadPage(){
             const resultUsuarios = await responseUsuarios.json();
             if(resultUsuarios.status === 'success' && resultUsuarios.data.length){
                 usuariosTotales = resultUsuarios.data;
+            }else if(resultUsuarios.status === 'error'){
+                mostrarMensajeError(resultUsuarios.message || 'Error al obtener los usuarios');
             }
         } catch (error) {
-            console.error('Error al obtener los usuarios:', error);
+            mostrarMensajeError('Error al obtener los usuarios');
         }
 
         //Botones
@@ -86,8 +92,8 @@ async function onloadPage(){
                 document.getElementById("fecha_vencimiento").classList.remove('is-invalid')
             }
             const nombrePart = document.getElementById("nombrePart");
-            const participanteValid = nombrePart.value && nombrePart.value.length <= 20;
-            if (participanteValid && document.getElementById("modalParticipantes").dataset.tipoUsuario ==='participante'? fechaValida : true){
+            const participanteValid = nombrePart.value && nombrePart.value.length > 1 && nombrePart.value.length <= 20;
+            if (participanteValid && (document.getElementById("modalParticipantes").dataset.tipoUsuario ==='participante'? fechaValida : true)){
                 nombrePart.classList.remove('is-invalid')
                 const participantesFiltrados = usuariosTotales.filter(p => p.nombre.toLowerCase().includes(nombrePart.value.toLowerCase()));
                 if(participantesFiltrados.length){
@@ -249,9 +255,9 @@ function seleccionarUsuario(id =null, user = 'participante'){
     } else {
         const inputFecha = document.getElementById("fecha_vencimiento");
         const fecha = new Date();
+        inputFecha.min = fecha.toISOString().split('T')[0];
         fecha.setMonth(fecha.getMonth() + 1);
         document.getElementById("fecha_vencimiento_container").classList.remove('d-none');
-        inputFecha.min = fecha.toISOString().split('T')[0];
         inputFecha.value = fecha.toISOString().split('T')[0];
     }
 
@@ -270,8 +276,15 @@ function mostrarParticipantes(participantes){
     const modalUsuarios = document.getElementById('modalParticipantes');
     const tipoUsuario = modalUsuarios.dataset.tipoUsuario;
     const idVersion = modalUsuarios.dataset.idVersion;
-    if(participantes.length){
-        participantes.forEach((participante) => {
+    //paginado
+    const totalPaginas = Math.ceil(participantes.length / participantesPorPagina);
+    const inicio = (paginaActual - 1) * participantesPorPagina;
+    const fin = inicio + participantesPorPagina;
+    const participantesPagina = participantes.slice(inicio, fin);
+
+    lista_participantes.innerHTML = '';
+    if(participantesPagina.length){
+        participantesPagina.forEach((participante) => {
             const divParticipante = document.createElement("div");
             divParticipante.classList.add("card", "border_cuest", "my-2", "button_principal");
             divParticipante.id = 'addParticipante_'+participante.id;
@@ -294,6 +307,10 @@ function mostrarParticipantes(participantes){
                 }
             });
         })
+    }
+
+    if(totalPaginas > 1){
+        agregarControlesPaginado(totalPaginas, participantes);
     }
 }
 
@@ -444,4 +461,38 @@ function mostrarMensajeError(mensaje){
     toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
+}
+
+function agregarControlesPaginado(totalPaginas, participantes) {
+    const paginador = document.getElementById("paginador");
+    if (!paginador) return; // Por si el contenedor no existe
+
+    paginador.innerHTML = '';
+
+    // Botón "anterior"
+    const btnAnterior = document.createElement("button");
+    btnAnterior.classList.add("btn", "btn-sm", "me-2", "btn_paginado_color");
+    btnAnterior.innerHTML = `<i class="bi bi-arrow-left-circle-fill"></i>`;
+    btnAnterior.disabled = (paginaActual === 1);
+    btnAnterior.addEventListener("click", () => {
+        paginaActual--;
+        mostrarParticipantes(participantes);
+    });
+    paginador.appendChild(btnAnterior);
+
+    // Info de página
+    const span = document.createElement("span");
+    span.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+    paginador.appendChild(span);
+
+    // Botón "siguiente"
+    const btnSiguiente = document.createElement("button");
+    btnSiguiente.classList.add("btn", "btn-sm", "ms-2", "btn_paginado_color");
+    btnSiguiente.innerHTML = `<i class="bi bi-arrow-right-circle-fill"></i>`;
+    btnSiguiente.disabled = (paginaActual === totalPaginas);
+    btnSiguiente.addEventListener("click", () => {
+        paginaActual++;
+        mostrarParticipantes(participantes);
+    });
+    paginador.appendChild(btnSiguiente);
 }

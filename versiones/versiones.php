@@ -120,6 +120,7 @@
                   <div id="participantes_container" class="my-3 d-none">
                     <h2 class="text-center">USUARIOS</h2>
                     <div id="lista_participantes" class="m-1"></div>
+                    <div id="paginador" class="d-flex justify-content-center align-items-center mt-3"></div>
                     <p class="text-center fs-4 d-none" id="no_participantes">No se encontraron usuarios</p>
                   </div>
               </form>

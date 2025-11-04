@@ -4,8 +4,7 @@
 
     header('Content-Type: application/json');
 
-    //OBTENER ID USUARIO DE LA SESSION!!!!
-
+    //OBTENER ID USUARIO DE LA SESSION
     try {
         if(!isset($_SESSION['usuario_id'])){
             throw new Exception('Usuario no autenticado');
