@@ -136,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
       <div class="card-body">
         <h1>Crea una cuenta nueva</h1>
-        <h2>¿Ya estás registrado? <a id="cuentaExistenteLogin" href="../Login/login.html">Iniciá sesión aquí.</a></h2><br>
+        <h2>¿Ya estás registrado? <a id="cuentaExistenteLogin" href="../Login/login.php">Iniciá sesión aquí.</a></h2><br>
         <?php if ($registroExitoso): ?>
           <div class="alert alert-success"><?= $registroExitoso ?></div>
         <?php endif; ?>

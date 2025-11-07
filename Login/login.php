@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Enlaces y botones -->
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalOlvide">¿Olvidaste tu contraseña?</a>
                     <button type="submit" class="btn miboton mt-3" id="botonEnviar">Iniciar</button>
-                    <p>¿No tienes una cuenta? <a href="../Registro/registro.html">Registrarse</a></p>
+                    <p>¿No tienes una cuenta? <a href="../Registro/registro.php">Registrarse</a></p>
             </form>
 
         </div>
