@@ -36,18 +36,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
    // Si no hay errores, busco si el correo existe en mi base de datos
     if (empty($correoErr) && empty($contraError)) {
-        $stmt = $conn->prepare("SELECT * FROM usuario WHERE email = :correo");
+        $stmt = $conn->prepare("SELECT * FROM usuario WHERE EMAIL = :correo");
         $stmt->execute([':correo' => $correo]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         
          //si el usuario existe y la contra sta bien
         if ($usuario) {
-            if (password_verify($contra, $usuario['contrasena'])) {
+            if (password_verify($contra, $usuario['CONTRASEÑA'])) {
                 //guardo sesion,con los datos del usuario
-                $_SESSION['correo'] = $usuario['email'];
-                $_SESSION['usuario_id'] = $usuario['id'];
-                $_SESSION['nombre'] = $usuario['nombre'];
-                $_SESSION['foto_perfil'] = $usuario['foto_perfil'];
+                $_SESSION['correo'] = $usuario['EMAIL'];
+                $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
+                $_SESSION['nombre'] = $usuario['NOMBRE'];
+                $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
                 
                 //reedirijo a la pagina del admi
                 header("Location: ../administrador/administrador.php");
