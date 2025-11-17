@@ -16,8 +16,8 @@
         $moderador = $body['idModerador'];
         $stmt = $conn->prepare("
             UPDATE cuestionario
-            SET id_moderador = :idModerador
-            WHERE id = :idCuestionario
+            SET ID_MODERADOR = :idModerador
+            WHERE ID_CUESTIONARIO = :idCuestionario
         ");
         $stmt->bindParam(':idCuestionario', $cuestionario, PDO::PARAM_INT);
         $stmt->bindParam(':idModerador', $moderador, PDO::PARAM_INT);

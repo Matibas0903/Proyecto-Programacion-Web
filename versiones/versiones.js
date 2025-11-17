@@ -1,6 +1,6 @@
 let cuestionario = null;
 let versiones = [];
-//EJEMPLO LISTA DE USUARIOS, FALTA DEFINIR CAMPOS!!!
+
 let usuariosTotales = []
 //varible para manejar id seleccionado
 let idCuestionarioActual = null;
@@ -8,7 +8,7 @@ let idCuestionarioActual = null;
 let actionVersionesModal = '';
 //paginado participantes
 let paginaActual = 1;
-const participantesPorPagina = 2;
+const participantesPorPagina = 5;
 
 async function onloadPage(){
     const idCuestionario = new URLSearchParams(window.location.search).get('cuestionario');
@@ -19,23 +19,15 @@ async function onloadPage(){
         try {
             const response = await fetch(`../BaseDeDatos/controladores/getCuestionario.php?cuestionario=${idCuestionario}`);
             const result = await response.json();
-            if(result.status === 'success' && result.data.id){
+            if(result.status === 'success' && result.data.ID_CUESTIONARIO){
                 //cargar datos cuestionario
                 cuestionario = result.data;
-                document.getElementById("titulo_cuestionario").innerText = cuestionario.nombre;
-                if(cuestionario.descripcion){
-                    document.getElementById("descripcion_cuestionario").innerText = cuestionario.descripcion;
-                } else {
-                    document.getElementById("descripcion_cuestionario").innerText = 'Sin descripción';
-                }
-                if(cuestionario.imagen){
-                    document.getElementById("image_cuest").src = cuestionario.imagen;
-                }
-                if(cuestionario.id_moderador){
-                    const responseUsuario = await fetch(`../BaseDeDatos/controladores/getUsuario.php?id=${cuestionario.id_moderador}`);
+                document.getElementById("titulo_cuestionario").innerText = cuestionario.NOMBRE_CUESTIONARIO;
+                if(cuestionario.ID_MODERADOR){
+                    const responseUsuario = await fetch(`../BaseDeDatos/controladores/getUsuario.php?id=${cuestionario.ID_MODERADOR}`);
                     const resultUsuario = await responseUsuario.json();
-                    if(resultUsuario.status === 'success' && resultUsuario.data.id){
-                        mostrarModerador(resultUsuario.data.nombre, resultUsuario.data.foto_perfil);
+                    if(resultUsuario.status === 'success' && resultUsuario.data.ID_USUARIO){
+                        mostrarModerador(resultUsuario.data.NOMBRE, resultUsuario.data.FOTO_PERFIL);
                     }
                 }
             } else {
@@ -95,7 +87,7 @@ async function onloadPage(){
             const participanteValid = nombrePart.value && nombrePart.value.length > 1 && nombrePart.value.length <= 20;
             if (participanteValid && (document.getElementById("modalParticipantes").dataset.tipoUsuario ==='participante'? fechaValida : true)){
                 nombrePart.classList.remove('is-invalid')
-                const participantesFiltrados = usuariosTotales.filter(p => p.nombre.toLowerCase().includes(nombrePart.value.toLowerCase()));
+                const participantesFiltrados = usuariosTotales.filter(p => p.NOMBRE.toLowerCase().includes(nombrePart.value.toLowerCase()));
                 if(participantesFiltrados.length){
                     document.getElementById("no_participantes").classList.add('d-none');
                     mostrarParticipantes(participantesFiltrados); 
@@ -119,8 +111,8 @@ async function onloadPage(){
         const selectVersion = document.getElementById("select-version");
         versiones.forEach(version => {
             const option = document.createElement("option");
-            option.value = version.num_version;
-            option.text = `Versión ${version.num_version}`;
+            option.value = version.NUM_VERSION;
+            option.text = `Versión ${version.NUM_VERSION}`;
             selectVersion.appendChild(option);
         })
         const option = document.createElement("option");
@@ -148,7 +140,11 @@ async function onloadPage(){
 window.onload = onloadPage;
 
 function cargarVersiones(){
-    const versionesOrdenadas = versiones.slice().sort((a, b) => b.activo - a.activo);
+    const versionesOrdenadas = versiones.slice().sort((a, b) => {
+        if (a.ACTIVO === 'Activo' && b.ACTIVO === 'Inactivo') return -1;
+        if (a.ACTIVO === 'Inactivo' && b.ACTIVO === 'Activo') return 1;
+        return 0;
+    });
     let listaVersiones = document.getElementById("version-list");
     listaVersiones.innerHTML = "";
     versionesOrdenadas.forEach(version => {
@@ -160,17 +156,17 @@ function cargarVersiones(){
         let div = document.createElement("div");
         div.classList.add("col-12", "align-self-start");
         div.innerHTML = `
-            <div class="card border_cuest my-3 ${version.activo?'version-habilitada':'bg_cuest'}">
+            <div class="card border_cuest my-3 ${version.ACTIVO === 'Activo'?'version-habilitada':'bg_cuest'}">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h3>Version ${version.num_version}</h3>
-                        ${version.activo?'<p class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> HABILITADO</p>':''}
+                        <h3>Version ${version.NUM_VERSION}</h3>
+                        ${version.ACTIVO === 'Activo'?'<p class="text-success fw-bold"><i class="bi bi-check-circle-fill"></i> HABILITADO</p>':''}
                     </div>
                     <div>
-                        <p><strong>Descripción: </strong> ${version.descripcion? version.descripcion : 'Sin descripción'}</p>
-                        <p><i class="bi bi-calendar-date"></i> <strong>Fecha de creación:</strong> ${version.fecha_creacion}</p>
+                        <p><strong>Descripción: </strong> ${version.DESCRIPCION? version.DESCRIPCION : 'Sin descripción'}</p>
+                        <p><i class="bi bi-calendar-date"></i> <strong>Fecha de creación:</strong> ${formatearFecha(version.FECHA_CREACION)}</p>
                         <p><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${version.cantidad_preguntas? version.cantidad_preguntas : '-'}</p>
-                        <p><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${version.tiempo_total?version.tiempo_total + ' minutos' : 'Libre'}</p>
+                        <p><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${version.TIEMPO_TOTAL?version.TIEMPO_TOTAL + ' minutos' : 'Libre'}</p>
                         <p class="rating">
                             <i class="bi bi-star-fill"></i>
                             Valoración: ${estrellas}
@@ -184,7 +180,7 @@ function cargarVersiones(){
                         <button type="button" id="button_editar" class="btn bg-btn2"><i class="bi bi-pencil-fill"></i> Editar</button>
                       </div>
                       ${
-                        version.activo ? '<div class="col"><button type="button" id="button_invitar" class="btn bg-btn3"><i class="bi bi-person-fill-add"></i> Invitar</button></div>' +
+                        version.ACTIVO === 'Activo'? '<div class="col"><button type="button" id="button_invitar" class="btn bg-btn3"><i class="bi bi-person-fill-add"></i> Invitar</button></div>' +
                             '<div class="col"><button type="button" id="button_compartir" class="btn bg-btn4"><i class="bi bi-key-fill"></i> Compartir</button></div>'
                             : ''
                       }
@@ -194,17 +190,17 @@ function cargarVersiones(){
             `;
         listaVersiones.appendChild(div);
         div.querySelector("#button_ver").addEventListener("click", () => {
-            ver(version.num_version)
+            ver(version.ID_VERSION)
         });
         div.querySelector("#button_editar").addEventListener("click", () => {
-            editar(version.num_version)
+            editar(version.ID_VERSION)
         });
-        if(version.activo){
+        if(version.ACTIVO === 'Activo'){
             div.querySelector("#button_invitar").addEventListener("click", () => {
-                seleccionarUsuario(version.num_version)
+                seleccionarUsuario(version.ID_VERSION)
             });
             div.querySelector("#button_compartir").addEventListener("click", () => {
-                compartir(version.num_version)
+                compartir(version.ID_VERSION)
             });
         }
     });
@@ -223,23 +219,23 @@ function mostrarModerador(nombre, avatar=null){
 }
 
 function ver(version){
-    window.location.href = `../Vista previa/verCuestionario.php?cuestionario=${cuestionario.id}&version=${version}`;
+    window.location.href = `../Vista previa/verCuestionario.php?version=${version}`;
 }
 
 function editar(version){
     if(!version){
-        window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.id}`;
+        window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.ID_CUESTIONARIO}`;
         return;
     }
-    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.id}&version=${version}`;
+    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?version=${version}`;
 }
 
-function compartir(numVersion){
+function compartir(idVersion){
     for (let version of versiones) {
-        if (version.num_version == numVersion) {
+        if (version.ID_VERSION == idVersion) {
             const modalCompartir = new bootstrap.Modal(document.getElementById('modalCompartir'));
-            document.getElementById("modalTitulo").innerText = `${cuestionario.nombre} - Versión ${version.num_version}`;
-            document.getElementById("enlace").innerText = version.cod_acceso;
+            document.getElementById("modalTitulo").innerText = `${cuestionario.NOMBRE} - Versión ${version.NUM_VERSION}`;
+            document.getElementById("enlace").innerText = version.COD_ACCESO;
             modalCompartir.show();
         break;
         }
@@ -275,7 +271,7 @@ function mostrarParticipantes(participantes){
 
     const modalUsuarios = document.getElementById('modalParticipantes');
     const tipoUsuario = modalUsuarios.dataset.tipoUsuario;
-    const idVersion = modalUsuarios.dataset.idVersion;
+    const idVersion = parseInt(modalUsuarios.dataset.idVersion);
     //paginado
     const totalPaginas = Math.ceil(participantes.length / participantesPorPagina);
     const inicio = (paginaActual - 1) * participantesPorPagina;
@@ -287,23 +283,23 @@ function mostrarParticipantes(participantes){
         participantesPagina.forEach((participante) => {
             const divParticipante = document.createElement("div");
             divParticipante.classList.add("card", "border_cuest", "my-2", "button_principal");
-            divParticipante.id = 'addParticipante_'+participante.id;
+            divParticipante.id = 'addParticipante_'+participante.ID_USUARIO;
             divParticipante.innerHTML = `
               <div class="card-body row">
                 <div class="col-3 align-self-center">
-                  <img src=${participante.foto_perfil} alt="imagen usuario" class="navbar_usuario">
+                  <img src=${participante.FOTO_PERFIL} alt="imagen usuario" class="navbar_usuario">
                 </div>
                 <div class="col-9 align-self-center">
-                  <h3 class="mb-0">${participante.nombre}</h3>
+                  <h3 class="mb-0">${participante.NOMBRE}</h3>
                 </div> 
               </div>
             `;
             lista_participantes.appendChild(divParticipante);
-            document.getElementById('addParticipante_'+participante.id).addEventListener("click", () => {
+            document.getElementById('addParticipante_'+participante.ID_USUARIO).addEventListener("click", () => {
                 if(tipoUsuario === 'moderador'){
-                    cambiarModerador(participante.id);
+                    cambiarModerador(participante.ID_USUARIO);
                 } else {
-                    agregarParticipante(participante.id, idVersion);
+                    agregarParticipante(participante.ID_USUARIO, idVersion);
                 }
             });
         })
@@ -321,9 +317,10 @@ async function agregarParticipante(idUsuario, idVersion){
         id_version: idVersion,
         fecha_vencimiento: fechaVencimiento
     };
+    console.log(body);
     const modalParticipantesEl = document.getElementById('modalParticipantes');
     const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
-    if(idUsuario !== cuestionario.id_moderador && idUsuario !== cuestionario.id_administrador){
+    if(idUsuario !== cuestionario.ID_MODERADOR && idUsuario !== cuestionario.ID_USUARIO){
         try {
             const response = await fetch('../BaseDeDatos/controladores/postInvitacion.php', {
                 method: 'POST',
@@ -363,7 +360,7 @@ async function agregarParticipante(idUsuario, idVersion){
 
 async function cambiarModerador(idUsuario){
     const body = {
-        idCuestionario: cuestionario.id,
+        idCuestionario: cuestionario.ID_CUESTIONARIO,
         idModerador: idUsuario
     };
     try {
@@ -376,8 +373,8 @@ async function cambiarModerador(idUsuario){
         })
         const result = await response.json();
         if(result.status === 'success'){
-            const usuario = usuariosTotales.find(usuario => usuario.id === idUsuario);
-            mostrarModerador(usuario.nombre, usuario.foto_perfil);
+            const usuario = usuariosTotales.find(usuario => usuario.ID_USUARIO === idUsuario);
+            mostrarModerador(usuario.NOMBRE, usuario.FOTO_PERFIL);
             const modalParticipantesEl = document.getElementById('modalParticipantes');
             const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
             if (modalParticipantes) {
@@ -385,7 +382,7 @@ async function cambiarModerador(idUsuario){
             }
             const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
             modalConfirmacion.show();
-            cuestionario.id_moderador = idUsuario;
+            cuestionario.ID_MODERADOR = idUsuario;
         } else if(result.status === 'error'){
             mostrarMensajeError(result.message || 'Error al cambiar el moderador');
             if (modalParticipantes) {
@@ -402,7 +399,7 @@ async function cambiarModerador(idUsuario){
 }
   
 function seleccionarVersion(action){
-    const versionHabilitada = versiones.find(version => version.activo);
+    const versionHabilitada = versiones.find(version => version.activo === 'Activo');
     const opcion = document.getElementById("ninguno_opcion");
     if(!versionHabilitada && action==='habilitar'){
         opcion.classList.add('d-none');
@@ -421,7 +418,7 @@ function seleccionarVersion(action){
 
 async function activarVersion(idVersion){
     const body = {
-        idCuestionario: cuestionario.id,
+        idCuestionario: cuestionario.ID_CUESTIONARIO,
         numVersion: idVersion? idVersion : 'deshabilitar'
     }
     try {
@@ -435,10 +432,10 @@ async function activarVersion(idVersion){
         const result = await response.json();
         if(result.status === 'success'){
             versiones.forEach(version => {
-                if(version.num_version == idVersion){
-                    version.activo = true;
+                if(version.NUM_VERSION == idVersion){
+                    version.ACTIVO = 'Activo';
                 } else {
-                    version.activo = false;
+                    version.ACTIVO = 'Inactivo';
                 }
             });
             cargarVersiones();
@@ -495,4 +492,8 @@ function agregarControlesPaginado(totalPaginas, participantes) {
         mostrarParticipantes(participantes);
     });
     paginador.appendChild(btnSiguiente);
+}
+
+function formatearFecha(fechaString) {
+  return fechaString.split(' ')[0].split('-').reverse().join('/');
 }

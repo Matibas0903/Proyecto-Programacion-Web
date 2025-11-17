@@ -13,17 +13,16 @@
         $idUsuario = $_SESSION['usuario_id'];
 
         $stmtP = $conn->prepare("
-            SELECT c.*, v.num_version, v.activo, v.cod_acceso,
+            SELECT c.*, v.NUM_VERSION, v.ACTIVO, v.COD_ACCESO, v.ID_VERSION,
                 CASE 
-                    WHEN c.id_administrador = :idUsuario THEN 1 
+                    WHEN c.ID_USUARIO = :idUsuario THEN 1 
                     ELSE 0 
                 END AS isOwner
             FROM version_cuestionario v
             LEFT JOIN cuestionario c 
-                ON c.id = v.id_cuestionario
-            WHERE (c.id_administrador = :idUsuario)
-                OR (v.plantilla = 1 AND C.visibilidad = 'publico')
-            ORDER BY fecha_creacion DESC
+                ON c.ID_CUESTIONARIO = v.ID_CUESTIONARIO
+            WHERE (c.ID_USUARIO = :idUsuario AND v.PLANTILLA = 1)
+                OR (v.PLANTILLA = 1 AND C.VISIBILIDAD = 'publico')
         ");
         $stmtP->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmtP->execute();

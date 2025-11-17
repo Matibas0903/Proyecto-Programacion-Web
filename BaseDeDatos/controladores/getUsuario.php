@@ -10,9 +10,9 @@
         }
         $idUsuario = (int) $_GET['id'];
         $stmt = $conn->prepare("
-            SELECT id, nombre, email, foto_perfil 
+            SELECT ID_USUARIO, NOMBRE, EMAIL, FOTO_PERFIL  
             FROM usuario
-            WHERE id = :idUsuario
+            WHERE ID_USUARIO = :idUsuario
         ");
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->execute();

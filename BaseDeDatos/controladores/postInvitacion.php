@@ -15,20 +15,31 @@
             throw new Exception("Faltan parámetros");
         }
         $idParticipante = $body['id_participante'];
-        $idVersion = (int) $body['id_version'];
+        $idVersion = $body['id_version'];
         $fechaVencimiento = $body['fecha_vencimiento'];
         $fechaActual = date('Y-m-d');
 
+        //verificamos que el usuario no tenga una invitacion para esa version en estado Pendiente o Aceptada
+        $stmt1 = $conn->prepare("
+            SELECT COUNT(*) as count
+            FROM invitacion
+            WHERE ID_USUARIO = :idParticipante
+              AND ID_VERSION = :idVersion
+              AND ESTADO IN ('Pendiente', 'Aceptada')
+        ");
+        $stmt1->bindParam(':idParticipante', $idParticipante, PDO::PARAM_INT);
+        $stmt1->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+        $stmt1->execute();
+        $result = $stmt1->fetch(PDO::FETCH_ASSOC);
+        if ($result['count'] > 0) {
+            throw new Exception("El usuario ya tiene una invitación pendiente o aceptada para esta versión");
+        }
+
         $stmt = $conn->prepare("
-            INSERT INTO invitacion (
-                id_participante, id_moderador, fecha, estado, fecha_vencimiento, id_version
-            ) VALUES (
-                :idParticipante, :idModerador, :fecha, 'pendiente', :fechaVencimiento, :idVersion
-            )
+            INSERT INTO invitacion (ID_USUARIO, ESTADO, FECHA_VENCIMIENTO, ID_VERSION)
+             VALUES (:idParticipante, 'Pendiente', :fechaVencimiento, :idVersion)
         ");
         $stmt->bindParam(':idParticipante', $idParticipante, PDO::PARAM_INT);
-        $stmt->bindParam(':idModerador', $idModerador, PDO::PARAM_INT);
-        $stmt->bindParam(':fecha', $fechaActual);
         $stmt->bindParam(':fechaVencimiento', $fechaVencimiento);
         $stmt->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
         $stmt->execute();

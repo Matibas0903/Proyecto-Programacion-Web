@@ -19,7 +19,7 @@
         $stmt = $conn->prepare("
             SELECT* 
             FROM cuestionario
-            WHERE (id = :idCuestionario AND id_administrador = :idUsuario)
+            WHERE (ID_CUESTIONARIO = :idCuestionario AND ID_USUARIO = :idUsuario)
         ");
         $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':idCuestionario', $idCuestionario, PDO::PARAM_INT);

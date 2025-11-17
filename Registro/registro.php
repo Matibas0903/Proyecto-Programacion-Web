@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
   // Si no hay errores, busco si el correo existe en mi base de datos
     if (empty($mailError) && empty($contraseñaError)) {
-        $stmt = $conn->prepare("SELECT * FROM usuario WHERE email = :correo");
+        $stmt = $conn->prepare("SELECT * FROM usuario WHERE EMAIL = :correo");
         $stmt->execute([':correo' => $mail]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -79,8 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
       $hashPassword = password_hash($contraseña, PASSWORD_DEFAULT);
 
-      $stmt = $conn->prepare("INSERT INTO usuario (nombre, email, contrasena, fecha_nacimiento, foto_perfil) 
-                              VALUES (:nombre, :correo, :contrasena, :fechaNacimiento, :fotoPerfil)");
+      $stmt = $conn->prepare("INSERT INTO usuario (NOMBRE, EMAIL, CONTRASEÑA, FECHA_NACIMIENTO, FOTO_PERFIL, ID_ROL) 
+                              VALUES (:nombre, :correo, :contrasena, :fechaNacimiento, :fotoPerfil, 2)");
 
       $stmt->bindValue(':nombre', $nombre);
       $stmt->bindValue(':correo', $mail);
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $nuevoId = $conn->lastInsertId();
 
         // Consultar los datos del usuario recién insertado
-  $stmt = $conn->prepare("SELECT * FROM usuario WHERE id = :id");
+  $stmt = $conn->prepare("SELECT * FROM usuario WHERE ID_USUARIO = :id");
   $stmt->execute([':id' => $nuevoId]);
   $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
   //guardo sesion,con los datos del usuario

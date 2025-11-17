@@ -17,8 +17,8 @@
         //Desactivo todas las versiones del cuestionario
         $stmt = $conn->prepare("
             UPDATE version_cuestionario
-            SET activo = 0
-            WHERE id_cuestionario = :idCuestionario
+            SET ACTIVO = 'Inactivo'
+            WHERE ID_CUESTIONARIO = :idCuestionario
         ");
         $stmt->bindParam(':idCuestionario', $cuestionario, PDO::PARAM_INT);
         $stmt->execute();
@@ -30,8 +30,8 @@
         }
         $stmt1 = $conn->prepare("
             UPDATE version_cuestionario
-            SET activo = 1
-            WHERE id_cuestionario = :idCuestionario AND num_version = :numVersion
+            SET ACTIVO = 'Activo'
+            WHERE ID_CUESTIONARIO = :idCuestionario AND NUM_VERSION = :numVersion
         ");
         $stmt1->bindParam(':idCuestionario', $cuestionario, PDO::PARAM_INT);
         $stmt1->bindParam(':numVersion', $version, PDO::PARAM_INT);

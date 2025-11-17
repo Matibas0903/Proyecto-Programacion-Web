@@ -1,18 +1,22 @@
+
 <?php
+    session_start();
     require('../conexion.php');
 
     header('Content-Type: application/json');
 
+    //OBTENER ID USUARIO DE LA SESSION
     try {
+        if(!isset($_SESSION['usuario_id'])){
+            throw new Exception('Usuario no autenticado');
+        }
         $stmt = $conn->prepare("
-            SELECT ID_USUARIO, NOMBRE, EMAIL, FOTO_PERFIL 
-            FROM usuario
+            SELECT *
+            FROM categoria
         ");
         $stmt->execute();
-        $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        echo json_encode(["status"=>"success", "data"=>$usuarios]);
-
-
+        $cuestionariosPublicos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode(["status"=>"success", "data"=>$cuestionariosPublicos]);
     } catch (PDOException $e) {
         echo json_encode([
             "status" => "error",

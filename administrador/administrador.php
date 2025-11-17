@@ -111,6 +111,10 @@
       </div>
     </div>
 
+    <?php
+      include('../mensajeError/mensajeError.php');
+    ?>
+
 </body>
 <script src="./administrador.js"></script>
 </html>

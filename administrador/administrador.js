@@ -16,14 +16,18 @@ let idCuestionarioActual = null;
         });
         if(respuesta){
             const datos = await respuesta.json();
-            if(datos.status === 'success' && datos.data.length){
-                cuestionarios = datos.data;
+            if(datos.status === 'success'){
+                if(datos.data.length){
+                    cuestionarios = datos.data;
+                }else{
+                    document.getElementById("lista_cuestionarios").innerHTML = '<h4 class="text-center">Aun no tienes cuestionarios creados</h4>';
+                }
             }else{
-                document.getElementById("lista_cuestionarios").innerHTML = '<h4 class="text-center">Aun no tienes cuestionarios creados</h4>';
+                mostrarMensajeError(datos.message || 'Error al obtener los cuestionarios');
             }
         }
     } catch (error) {
-        console.error('Error al cargar los cuestionarios: ', error);
+        mostrarMensajeError('Error al obtener los cuestionarios');
     }
     //Traemos las plantillas
     try {
@@ -35,35 +39,39 @@ let idCuestionarioActual = null;
         });
         if(respPlantillas){
             const datosPlantillas = await respPlantillas.json();
-            if(datosPlantillas.status === 'success' && datosPlantillas.data.length){
-                plantillas = datosPlantillas.data;
+            if(datosPlantillas.status === 'success'){
+                if(datosPlantillas.data.length){
+                    plantillas = datosPlantillas.data;
+                }else{
+                    document.getElementById("lista_plantillas").innerHTML = '<h4 class="text-center">No hay plantillas disponibles</h4>';
+                }  
             }else{
-                document.getElementById("lista_plantillas").innerHTML = '<h4 class="text-center">No hay plantillas disponibles</h4>';
+                mostrarMensajeError(datosPlantillas.message || 'Error al obtener las plantillas');
             }
         }
         
     } catch (error) {
-        console.error('Error al cargar las plantillas: ', error);
+        mostrarMensajeError('Error al obtener las plantillas');
     }
 
     //cargar lista cuestionarios
     const lista_cuestionarios = document.getElementById("lista_cuestionarios");
     if(cuestionarios.length){
         cuestionarios.forEach((cuestionario, i) => {
-            if(i >= 3) return; //mostrar solo los primeros 3 cuestionarios (Luego cambiar a favoritos??)
+            if(i >= 3) return;
             const divCuestionario = document.createElement("div");
             divCuestionario.classList.add("p-2");
             divCuestionario.innerHTML = `
               <div class="d-flex justify-content-between">
-                  <h3>${cuestionario.nombre}</h3> 
-                  <h2 class="id_cuestionario">${cuestionario.id}</h2>
+                  <h3>${cuestionario.NOMBRE_CUESTIONARIO}</h3> 
+                  <h2 class="id_cuestionario">${cuestionario.ID_CUESTIONARIO}</h2>
               </div>
               <div class="row row-cols-auto">
                 <div class="col">
                   <button class="card_orange no_border button_orange" id="button_ver"><i class="bi bi-list-columns"></i> Gestionar</button>
                 </div>
                 <div class="col">
-                  ${cuestionario.activo && cuestionario.cod_acceso? 
+                  ${cuestionario.ACTIVO === 'Activo' && cuestionario.COD_ACCESO? 
                     '<button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>'
                     : '<p>Sin versión activa</p>'
                   } 
@@ -74,11 +82,11 @@ let idCuestionarioActual = null;
             lista_cuestionarios.appendChild(divCuestionario);
 
             divCuestionario.querySelector("#button_ver").addEventListener("click", () => {
-                ver('cuestionario', cuestionario.id)
+                ver('cuestionario', cuestionario.ID_CUESTIONARIO)
             });
-            if(cuestionario.activo && cuestionario.cod_acceso){
+            if(cuestionario.ACTIVO === 'Activo' && cuestionario.COD_ACCESO){
                 divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
-                    compartir('cuestionario', cuestionario.id)
+                    compartir('cuestionario', cuestionario.COD_ACCESO)
                 });
             }
         });
@@ -98,8 +106,8 @@ let idCuestionarioActual = null;
             divPlantilla.classList.add("p-2");
             divPlantilla.innerHTML = `
               <div class="d-flex justify-content-between">
-                  <h3>${plantilla.nombre}</h3> 
-                  <h2 class="id_plantilla">${plantilla.id}.${plantilla.num_version}</h2>
+                  <h3>${plantilla.NOMBRE_CUESTIONARIO}</h3> 
+                  <h2 class="id_plantilla">${plantilla.ID_CUESTIONARIO}.${plantilla.NUM_VERSION}</h2>
               </div>
               <div class="row row-cols-auto">
                 <div class="col">
@@ -109,7 +117,7 @@ let idCuestionarioActual = null;
                   <button class="card_yellow no_border button_yellow" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
                 </div>
                 ${
-                    plantilla.activo && !plantilla.isOwner ?'<div class="col"><button class="card_yellow no_border button_yellow" id="button_jugarPlantilla"><i class="bi bi-rocket-takeoff-fill"></i> Jugar</button></div>'
+                    plantilla.ACTIVO === 'Activo' && !plantilla.isOwner ?'<div class="col"><button class="card_yellow no_border button_yellow" id="button_jugarPlantilla"><i class="bi bi-rocket-takeoff-fill"></i> Jugar</button></div>'
                         : ''
                 }
               </div>
@@ -118,14 +126,14 @@ let idCuestionarioActual = null;
             lista_plantillas.appendChild(divPlantilla);
 
             divPlantilla.querySelector("#button_usar").addEventListener("click", () => {
-                usarPlantilla(plantilla.id)
+                usarPlantilla(plantilla.ID_VERSION)
             });
             divPlantilla.querySelector("#button_compartir").addEventListener("click", () => {
-                compartir('plantilla', plantilla.id)
+                compartir('plantilla', plantilla.COD_ACCESO)
             });
-            if(plantilla.activo && !plantilla.isOwner){
+            if(plantilla.ACTIVO === 'Activo' && !plantilla.isOwner){
                 divPlantilla.querySelector("#button_jugarPlantilla").addEventListener("click", () => {
-                    jugarPlantilla();
+                    jugarPlantilla(plantilla.ID_VERSION);
                 });
             }
         });
@@ -175,46 +183,23 @@ function unirmeCuestionario(){
     window.location.href = "../participante/participante.php";
 }
 
-function usarPlantilla(id){
-    window.location.href = "../Seleccionar Plantilla/SeleccionarPlantilla.php";
+function usarPlantilla(idVersion){
+    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${idVersion}`;
 }
-function jugarPlantilla(){
-    window.location.href = "../Lobby/lobby.php";
+function jugarPlantilla(idVersion){
+    window.location.href = `../Lobby/lobby.php?version=${idVersion}`;
 }
 function ver(type, id){
     if(type === 'cuestionario'){
         window.location.href = `../versiones/versiones.php?cuestionario=${id}`;
     }
 }
-function editar(type, id){
-    if(type === 'cuestionario'){
-        //AGREGAR ENLACE A PANTALLA CUESTIONARIO
-    }else if(type === 'plantilla'){
-        //AGREGAR ENLACE A PANTALLA PLANTILLA
-    }
-    console.log("Editar " + type + " con id: " + id);
-}
-function compartir(type, id){
-    let enlaceCuestionario = '';
-    if(type === 'cuestionario'){
-        cuestionarios.forEach(cuestionario => {
-            if(cuestionario.id === id){
-                enlaceCuestionario = cuestionario.cod_acceso;
-            }
-        })
-    } else if(type === 'plantilla'){
-        plantillas.forEach(plantilla => {
-            if(plantilla.id === id){
-                enlaceCuestionario = plantilla.enlace;
-            }
-        })
-    }
-    if(enlaceCuestionario){
-        const modalCompartir = new bootstrap.Modal(document.getElementById('modalCompartir'));
-        document.getElementById("modalTitulo").innerText = `Compartir ${type === 'cuestionario' ? 'Cuestionario' : 'Plantilla'}`;
-        document.getElementById("enlace").innerText = enlaceCuestionario;
-        modalCompartir.show();
-    }
+
+function compartir(type, cod_acceso){ 
+    const modalCompartir = new bootstrap.Modal(document.getElementById('modalCompartir'));
+    document.getElementById("modalTitulo").innerText = `Compartir ${type === 'cuestionario' ? 'Cuestionario' : 'Plantilla'}`;
+    document.getElementById("enlace").innerText = cod_acceso;
+    modalCompartir.show();  
 }
 
 function verMasCuestionarios(arrCuest = null){
@@ -228,15 +213,15 @@ function verMasCuestionarios(arrCuest = null){
         divCuestionario.innerHTML = `
          <div class="card-body">
           <div class="d-flex justify-content-between">
-              <h3>${cuestionario.nombre}</h3> 
-              <h2 class="id_cuestionario">${cuestionario.id}</h2>
+              <h3>${cuestionario.NOMBRE_CUESTIONARIO}</h3> 
+              <h2 class="id_cuestionario">${cuestionario.ID_CUESTIONARIO}</h2>
           </div>
           <div class="row row-cols-auto">
             <div class="col">
               <button class="card_orange no_border button_orange" id="button_ver"><i class="bi bi-list-columns"></i> Gestionar</button>
             </div>
             <div class="col">
-              ${cuestionario.activo && cuestionario.cod_acceso? 
+              ${cuestionario.ACTIVO === 'Activo' && cuestionario.COD_ACCESO? 
                 '<button class="card_orange no_border button_orange" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>'
                 : '<p>Sin versión activa</p>'
               } 
@@ -246,11 +231,11 @@ function verMasCuestionarios(arrCuest = null){
         `;
         contenedor.appendChild(divCuestionario);
         divCuestionario.querySelector("#button_ver").addEventListener("click", () => {
-            ver('cuestionario', cuestionario.id)
+            ver('cuestionario', cuestionario.ID_CUESTIONARIO)
         });
-        if(cuestionario.activo && cuestionario.cod_acceso){
+        if(cuestionario.ACTIVO === 'Activo' && cuestionario.COD_ACCESO){
             divCuestionario.querySelector("#button_compartir").addEventListener("click", () => {
-                compartir('cuestionario', cuestionario.id)
+                compartir('cuestionario', cuestionario.COD_ACCESO)
             });
         }
     });
@@ -267,8 +252,8 @@ function verMasPlantillas(){
         divPlantilla.innerHTML = `
          <div class="card-body">
             <div class="d-flex justify-content-between">
-                <h3>${plantilla.nombre}</h3> 
-                <h2 class="id_plantilla">${plantilla.id}</h2>
+                <h3>${plantilla.NOMBRE_CUESTIONARIO}</h3> 
+                <h2 class="id_plantilla">${plantilla.ID_CUESTIONARIO}.${plantilla.NUM_VERSION}</h2>
             </div>
             <div class="row row-cols-auto">
               <div class="col">
@@ -278,7 +263,7 @@ function verMasPlantillas(){
                 <button class="card_yellow no_border button_yellow" id="button_compartir"><i class="bi bi-key-fill"></i> Compartir</button>
               </div>
                 ${
-                    plantilla.activo && !plantilla.isOwner ?'<div class="col"><button class="card_yellow no_border button_yellow" id="button_jugarPlantilla"><i class="bi bi-rocket-takeoff-fill"></i> Jugar</button></div>'
+                    plantilla.ACTIVO === 'Activo' && !plantilla.isOwner ?'<div class="col"><button class="card_yellow no_border button_yellow" id="button_jugarPlantilla"><i class="bi bi-rocket-takeoff-fill"></i> Jugar</button></div>'
                         : ''
                 }
             </div>
@@ -286,16 +271,24 @@ function verMasPlantillas(){
         `;
         contenedor.appendChild(divPlantilla);
         divPlantilla.querySelector("#button_usar").addEventListener("click", () => {
-            usarPlantilla(plantilla.id)
+            usarPlantilla(plantilla.ID_VERSION)
         });
         divPlantilla.querySelector("#button_compartir").addEventListener("click", () => {
-            compartir('plantilla', plantilla.id)
+            compartir('plantilla', plantilla.COD_ACCESO)
         });
-        if(plantilla.activo && !plantilla.isOwner){
+        if(plantilla.ACTIVO === 'Activo' && !plantilla.isOwner){
             divPlantilla.querySelector("#button_jugarPlantilla").addEventListener("click", () => {
-                jugarPlantilla();
+                jugarPlantilla(plantilla.ID_VERSION);
             });
         }
     });
     contenedor.scrollIntoView();
+}
+
+function mostrarMensajeError(mensaje){
+    const toastEl = document.getElementById('toast_mensaje_error');
+    const toastBody = document.getElementById('mensaje_error');
+    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
 }
