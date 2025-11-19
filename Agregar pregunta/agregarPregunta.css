@@ -4,11 +4,13 @@
 }
 #navBarCrearPreg{
     background-color: #ffd0ae;
-    z-index: 2000;
+    z-index: 1010;
     border-right: 2px solid #000000;
     border-left: 2px solid #000000;
     border-bottom: 5px solid #000000;
-   
+    position: fixed;           
+    width: 100%; 
+    
 }
 
 body{
@@ -80,8 +82,10 @@ body{
     transform: scale(1.05);
 }
 #panelIzq{
+    position: relative;
+    bottom: 0;
     background-color:#c0cfcb;
-    margin-top: 10px;
+    margin-top: 70px;
     border: 2px solid #798380;
     border-radius: 10px;
     overflow-y: auto;  /* activa scroll vertical si hay contenido extra*/
@@ -105,13 +109,13 @@ body{
     margin-top: 10px;
     border: 2px solid #798380;
     border-radius: 10px;
-    position: absolute;
+    position: fixed;
     top: 133.6px;
     right: -300px;       
     width: 300px;
     background-color: #ffded3;
     transition: right 0.3s ease;
-    z-index: 1050;
+    z-index: 1008;
 }
 
 
@@ -122,7 +126,7 @@ body{
 
 
 #btnPanelDer {
-    position: absolute;
+    position: fixed;
     top: 50%;
     right: 0;                  
     transform: translateY(-50%);
@@ -135,7 +139,7 @@ body{
     border-bottom: 2px solid #af881b;
     color: #fff;
     cursor: pointer;
-    z-index: 1060;
+    z-index: 1008;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,13 +154,13 @@ body{
     border-radius: 10px;
     visibility: hidden;
     right: 0;
-    position: absolute;
+    position: fixed;
     top:  133.6px;
     width: 300px;
     background-color: #ffded3;
     padding: 20px;
     transition: right 0.3s ease;
-    z-index: 1080;
+    z-index: 1009;
 }
 
 
@@ -189,18 +193,23 @@ border:2px solid black;
     border-bottom: 5px solid #000000;
 }
 .navbar_usuario {
+   
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: 3px solid #000000;
 }
 .navbar-dropdown-btn {
+     
     background-color: transparent;
     border: none;
+
 }
+
 .navbar-dropdown-btn:hover .navbar_usuario{
     border: 3px solid #80c4e9;
 }
+
 .cardPregunta
 {
   background-color: rgba(0, 0, 0,0); 

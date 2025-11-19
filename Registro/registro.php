@@ -30,6 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $mail = trim($_POST["inputMail"]);
     $mail = htmlspecialchars($mail);
+    $mailError = "";
 
     if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
       $mailError = "Solo se permiten mails del tipo : usuario@gmail.com";
@@ -43,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contraseña = trim($_POST["inputContraseña"]);
     $contraseña = htmlspecialchars($contraseña);
 
-    if (!preg_match("/^[A-Za-z0-9_]{6,8}$/", $contraseña)) {
+    if (!preg_match("/^[A-Za-z0-9_]{6,12}$/", $contraseña)) {
       $contraseñaError = "Ingrese una contraseña correcta";
     }
   }
@@ -59,37 +60,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
 
-
   // Si no hay errores, busco si el correo existe en mi base de datos
-    if (empty($mailError) && empty($contraseñaError)) {
-        $stmt = $conn->prepare("SELECT * FROM usuario WHERE email = :correo");
-        $stmt->execute([':correo' => $mail]);
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+  if (empty($mailError) && empty($contraseñaError)) {
 
-         //si el usuario existe y la contra sta bien
-        if ($usuario) {
-            $existeUsuario = true;
-            $mensaje = "Ya existe un usuario con ese correo";
-        }
+
+    $stmt = $conn->prepare("SELECT * FROM usuario WHERE EMAIL = :correo");
+    $stmt->execute([':correo' => $mail]);
+
+    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+
+    //si el usuario existe y la contra sta bien
+    if ($usuario) {
+      $existeUsuario = true;
+      $mensaje = "Ya existe un usuario con ese correo";
     }
+  }
 
-    
 
-  if (empty($nombreError) && empty($mailError) && empty($contraseñaError) && empty($fechaNacimientoError)) {
+
+  if (empty($nombreError) && empty($mailError) && empty($contraseñaError) && empty($fechaNacimientoError) && $existeUsuario == false) {
     try {
+
+
       $hashPassword = password_hash($contraseña, PASSWORD_DEFAULT);
 
-      $stmt = $conn->prepare("INSERT INTO usuario (nombre, email, contrasena, fecha_nacimiento, foto_perfil) 
-                              VALUES (:nombre, :correo, :contrasena, :fechaNacimiento, :fotoPerfil)");
+      $stmt = $conn->prepare("INSERT INTO usuario (NOMBRE, EMAIL, CONTRASENA, FECHA_NACIMIENTO, ID_ROL, FOTO_PERFIL) 
+                              VALUES (:nombre, :correo, :contrasena, :fechaNacimiento, 1, :fotoPerfil)");
 
       $stmt->bindValue(':nombre', $nombre);
       $stmt->bindValue(':correo', $mail);
       $stmt->bindValue(':contrasena', $hashPassword);
       $stmt->bindValue(':fechaNacimiento', $fechaNacimiento);
-      $stmt->bindValue(':fotoPerfil', $fotoPerfil); 
+      $stmt->bindValue(':fotoPerfil', $fotoPerfil);
 
       $stmt->execute();
       $registroExitoso = "Registro guardado correctamente.";
+      $nuevoId = $conn->lastInsertId();
+
+      // Consultar los datos del usuario recién insertado
+      $stmt = $conn->prepare("SELECT * FROM usuario WHERE ID_USUARIO = :id");
+      $stmt->execute([':id' => $nuevoId]);
+      $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+      //guardo sesion,con los datos del usuario
+      $_SESSION['correo'] = $usuario['EMAIL'];
+      $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
+      $_SESSION['nombre'] = $usuario['NOMBRE'];
+      $_SESSION['fecha_nacimiento'] = $usuario['FECHA_NACIMIENTO'];
+      $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
+      //reedirijo a la pagina del admi
+      if (headers_sent($file, $line)) {
+        die("Error: Los headers ya fueron enviados en $file línea $line");
+      }
+      header("Location: C:\xampp/htdocs/Proyecto programacion web ultima version 31-10/administrador/administrador.php");
+      exit;
 
       // Limpiar campos
       $nombre = $mail = $contraseña = $fechaNacimiento = $fotoPerfil = "";
@@ -97,22 +122,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $mailError = "Error al guardar: " . $e->getMessage();
     }
   }
-  $nuevoId = $conn->lastInsertId();
-
-        // Consultar los datos del usuario recién insertado
-  $stmt = $conn->prepare("SELECT * FROM usuario WHERE id = :id");
-  $stmt->execute([':id' => $nuevoId]);
-  $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-  //guardo sesion,con los datos del usuario
-  $_SESSION['correo'] = $usuario['email'];
-  $_SESSION['usuario_id'] = $usuario['id'];
-  $_SESSION['nombre'] = $usuario['nombre'];
-  $_SESSION['fecha_nacimiento'] = $usuario['fecha_nacimiento'];               
-  $_SESSION['foto_perfil'] = $usuario['foto_perfil'];
-  //reedirijo a la pagina del admi
-  header("Location: ../administrador/administrador.php");
-  exit;
-  
 }
 ?>
 
@@ -136,11 +145,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       </div>
       <div class="card-body">
         <h1>Crea una cuenta nueva</h1>
-        <h2>¿Ya estás registrado? <a id="cuentaExistenteLogin" href="../Login/login.html">Iniciá sesión aquí.</a></h2><br>
+        <h2>¿Ya estás registrado? <a id="cuentaExistenteLogin" href="../Login/login.php">Iniciá sesión aquí.</a></h2><br>
         <?php if ($registroExitoso): ?>
           <div class="alert alert-success"><?= $registroExitoso ?></div>
         <?php endif; ?>
-        <?php if($existeUsuario): ?>
+        <?php if ($existeUsuario): ?>
           <div class="alert alert-danger"><?= $mensaje ?></div>
         <?php endif; ?>
         <form id="registroForm" method="POST" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>" class="form-floating">
@@ -180,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <option value="../EditarUsuario/Recursos/Avatar5.png">Avatar 5</option>
             </select>
           </div>
-        
+
           <div class="text-center mb-3">
             <img id="vistaPreviaFoto" src="../EditarUsuario/Recursos/icono.png" class="rounded-circle border" width="100" height="100" alt="Vista previa">
           </div>
@@ -199,7 +208,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   ¡Gracias por registrarte! Tu cuenta fue creada correctamente.
                 </div>
                 <div class="modal-footer">
-                  <a href="../administrador/administrador.html" class="btn btn-success">Aceptar</a>
+                  <a href="../administrador/administrador.php" class="btn btn-success">Aceptar</a>
                 </div>
               </div>
             </div>

@@ -1,3 +1,26 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$idUsuario = $_SESSION["usuario_id"];
+
+require("../BaseDeDatos/conexion.php");
+
+
+try {
+    // Consultar las categorias
+    $stmt = $conn->prepare("SELECT ID_CATEGORIA, NOMBRE FROM categoria ORDER BY NOMBRE ASC");
+    $stmt->execute();
+
+    // Guardar los resultados
+    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "Error al obtener categorías: " . $e->getMessage();
+}
+
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +34,10 @@
 </head>
 
 <body>
+
+
     <?php
+
     require('../includesPHP/navGeneral.php');
     ?>
 
@@ -103,20 +129,6 @@
                     <option class="dropdown-item" value="3" disabled>20 segundos(Proximamente)</option>
                 </select>
             </div>
-            <h5>
-
-                Categoria de la pregunta
-            </h5>
-            <div class="mb-5">
-                <select class="form-select" name="selectCategoria" id="selectCategoria">
-                    <option class="dropdown-item" value>Categorias</option>
-                    <option class="dropdown-item" value="1">Geografía</option>
-                    <option class="dropdown-item" value="2">Historia</option>
-                    <option class="dropdown-item" value="3">Programación</option>
-                    <option class="dropdown-item" value="4">Matemática</option>
-                    <option class="dropdown-item" value="5">Biología</option>
-                </select>
-            </div>
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
 
@@ -129,8 +141,6 @@
                     <img id="tema1" src="./Recursos/tema1.jpeg" width="100" height="100" type="button">
                     <img id="tema2" src="./Recursos/tema2.jpg" width="100" height="100" type="button">
                     <div id="tema3" width="100" height="100" type="button"></div>
-
-
                 </div>
             </div>
         </div>
@@ -163,16 +173,23 @@
                 <!-- config Header -->
                 <div class="modal-header">
                     <h4 class="modal-title"><i class="bi bi-gear"></i> Configuracion</h4>
+
                     <div class="ms-auto">
                         <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button>
+
+
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" class="fw-bold fs-5 form-label" for="SwitchEstado">Activar Cuestionario</label>
+                            <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
+
+                        </div>
                     </div>
 
                 </div>
 
                 <!-- config body -->
                 <div class="modal-body">
-                    <form>
+                    <form method="POST" id="cuestionarioData" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
                         <div class="d-flex flex-column flex-lg-row justify-content-center gap-3">
                             <div class="container mt-4">
                                 <div class="row">
@@ -182,15 +199,30 @@
 
                                                 <label for="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
                                                 <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
-                                                <input type="text" id="inputTitulo" class="form-control needs-validation" <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label">Descripcion</label>
-
+                                                <input type="text" id="inputTitulo" name="nombreCuestionario" class="form-control needs-validation">
+                                                <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label">Descripcion</label>
                                                 <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
                                                 <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
-                                                <textarea id="descripcion" class="form-textarea" maxlength="500" rows="3"></textarea>
+                                                <textarea id="descripcion" name="txtDescripcion" class="form-textarea" maxlength="300" rows="3"></textarea>
+                                                <label for="inputCodigoAcceso" id="lblCodigoAcceso" class="subtitulo form-label">Ingrese un codigo para acceder al cuestionario</label>
+                                                <input type="text" id="inputCodigoAcceso" name="codigoAcceso" class="form-control needs-validation">
+                                                <label for="selectCategoria" class="fw-bold fs-5 form-label">Categoria del cuestionario</label>
+                                                <select name="selectCategoria" id="selectCategoria" class="form-select">
+                                                    <option value="">Seleccionar categoría</option>
 
+                                                    <?php //llenar el select
+                                                    foreach ($categorias as $cat): ?>
+                                                        <option value="<?= htmlspecialchars($cat['ID_CATEGORIA']) ?>">
+                                                            <?= htmlspecialchars($cat['NOMBRE']) ?>
+
+                                                        </option>
+                                                    <?php endforeach;
+                                                    ?>
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
+
 
                                     <div class="card flex-fill w-10 0 w-lg-50 mb-3 mb-lg-0">
                                         <div class="card-body p-4">
@@ -200,23 +232,24 @@
                                                 <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
 
                                                 <div class="form-check d-flex align-items-center mb-2">
-                                                    <input type="radio" class="form-check-input" name="Visibilidad" id="radioPrivado">
+                                                    <input type="radio" class="form-check-input" name="Visibilidad" value="privado" id="radioPrivado">
                                                     <label for="radioPrivado" class="form-check-label fw-bold ms-2">Privado</label>
                                                     <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
                                                 </div>
 
                                                 <div class="form-check d-flex align-items-center mb-2">
-                                                    <input type="radio" class="form-check-input" name="Visibilidad" id="radiopublico">
+                                                    <input type="radio" class="form-check-input" name="Visibilidad" value="publico" id="radiopublico" checked>
                                                     <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
                                                     <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
                                                 </div>
-
+                                                <!-- <button class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button> -->
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </form>
                 </div>
 

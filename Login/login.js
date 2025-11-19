@@ -15,7 +15,7 @@ window.onload = function () {
     if (!correoValido || !contraValido) {
         event.preventDefault();
         if (mensaje) {
-            mensaje.textContent = "Por favor, ingrese datos validos.";
+           mensaje.textContent = "Por favor, ingrese datos validos.";
             mensaje.classList.remove("d-none");
         }
     }
@@ -26,7 +26,7 @@ window.onload = function () {
 function validarContra() {
     const contra = document.getElementById("contraseña");
     const valor = contra.value.trim();
-    const regex = /^[A-Za-z0-9_]{6,8}$/;
+    const regex = /^[A-Za-z0-9_]{6,12}$/;
 
     if (!regex.test(valor) || valor === "") {
         if (!contra.classList.contains("is-invalid")) {
@@ -77,7 +77,7 @@ function inicializarModal() {
 
         // Validar formato de correo
         if (validarGmail(inputCorreo.id)) {
-            fetch('recuperar_contraseñaf.php', {
+            fetch('recuperar_contraseña.php', {
                 method: 'POST',
                 body: new URLSearchParams({ correo: inputCorreo.value })
             })
