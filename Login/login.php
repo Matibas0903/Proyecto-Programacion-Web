@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-require("conexion.php");
+require("../BaseDeDatos/conexion.php");
 
 $correo = $contra = "";
 $correoErr = $contraError = "";
@@ -39,19 +39,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare("SELECT * FROM usuario WHERE EMAIL = :correo");
         $stmt->execute([':correo' => $correo]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-         
         
-
          //si el usuario existe y la contra sta bien
         if ($usuario) {
-             $hash = trim($usuario['CONTRASENA']);
-            if (password_verify($contra,$hash)) {
+            if (password_verify($contra, $usuario['CONTRASEÑA'])) {
                 //guardo sesion,con los datos del usuario
                 $_SESSION['correo'] = $usuario['EMAIL'];
                 $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
                 $_SESSION['nombre'] = $usuario['NOMBRE'];
-                $_SESSION["foto_perfil"] = $usuario["FOTO_PERFIL"];
-                 
+                $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
+                
                 //reedirijo a la pagina del admi
                 header("Location: ../administrador/administrador.php");
                 exit;
@@ -60,8 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $mostrarMensaje = true;
             }
         } else {
-             $mensaje = "Cuenta no encontrada.";
-             $mostrarMensaje = true;
+            $mensaje = "Cuenta no encontrada.";
+            $mostrarMensaje = true;
         }
     }
 }
@@ -116,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <!-- Enlaces y botones -->
                     <a href="#" data-bs-toggle="modal" data-bs-target="#modalOlvide">¿Olvidaste tu contraseña?</a>
                     <button type="submit" class="btn miboton mt-3" id="botonEnviar">Iniciar</button>
-                    <p>¿No tienes una cuenta? <a href="../Registro/registro.html">Registrarse</a></p>
+                    <p>¿No tienes una cuenta? <a href="../Registro/registro.php">Registrarse</a></p>
             </form>
 
         </div>

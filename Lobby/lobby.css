@@ -1,0 +1,85 @@
+/* estilos navbar */
+.navbar-cuestionarios {
+    border-top: 2px solid #000000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+}
+.navbar_usuario {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #000000;
+}
+.navbar-dropdown-btn {
+    background-color: transparent;
+    border: none;
+}
+.navbar-dropdown-btn:hover .navbar_usuario{
+    border: 3px solid #80c4e9;
+}
+
+#panelIzq{
+    background-color: #fff1be;
+    border-right: 5px solid #000000;
+    border-bottom: 2px solid #000000;
+}
+
+body{
+    background-image: url("../Seleccionar plantilla/Recursos/temaHistoria.jpg");
+}
+#btnIniciarCuestionario{
+    color: #000000;
+    position: fixed;
+    bottom: 20px;           /* Separado 20px del borde inferior */
+    right: 20px;            /* Separado 20px del borde derecho */
+    z-index: 1050; 
+    background-color: #4f9d86;
+    border-bottom: 5px solid #000000;
+    border-top: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    transition: 0.2s;
+}
+#btnSalirLobby{
+    color: #000000;
+    position: fixed;
+    bottom: 20px;           /* Separado 20px del borde inferior */
+    right: 200px;            /* Separado 20px del borde derecho */
+    z-index: 1050; 
+    background-color: #f46958;
+    border-bottom: 5px solid #000000;
+    border-top: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+    transition: 0.2s;
+}
+#btnIniciarCuestionario:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#btnSalirLobby:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#tablaUsuarios {
+    --bs-table-bg: #fff6e9 !important;        /* color base */
+    --bs-table-striped-bg: #ffeccf !important; /* color de las filas alternadas */
+    --bs-table-striped-color: #212529;
+    --bs-table-hover-bg: #ffe2b8 !important;   /* color al pasar el mouse */
+    border-radius: 10px;
+
+    border-bottom: 5px solid #000000;
+    border-top: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+}
+#tituloCuestionario{
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 10px 20px;
+    border-radius: 10px;
+    border-bottom: 5px solid #000000;
+    border-top: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-right: 2px solid #000000;
+}

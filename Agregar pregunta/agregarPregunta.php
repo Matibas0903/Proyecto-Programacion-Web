@@ -1,39 +1,19 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="SeleccionarPlantilla.css">
-    <script src="SeleccionarPlantilla.js" defer></script>
-    <title> Seleccionar Plantilla </title>
+    <?php
+        require('../includesPHP/head.php');
+    ?>
+    <link rel="stylesheet" href="agregarPregunta.css">
+    <script src="agregarPregunta.js" defer></script>
+    <title>Agregar Pregunta</title>
 </head>
 <body>
-        <!-- navbar general -->
-    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Nombre web</a>
-        <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-            <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
-            <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
-            A su pantalla ponganle # y class active -->
-            <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
-            <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
-            <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-            <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
-        </ul>
-        </div>
-    </div>
-    </nav>
+    <?php
+        require('../includesPHP/navGeneral.php');
+    ?>
+
     <!-- navbar crear cuestionario -->
     <nav id="navBarCrearPreg" class="navbar navbar-expand-lg ">
         <div class="container-fluid">
@@ -57,7 +37,7 @@
         </form>
 
         <!-- Derecha -->
-        <div class="d-flex ms-auto">
+        <div class="d-flex ms-auto justify-content-end">
             <button id="btnTemas" class="btn me-3">
                 <i class="bi bi-palette-fill"></i>
                 Temas</button>
@@ -73,7 +53,7 @@
         <div class="row">
             
             <!-- PANEL IZQUIERDO -->
-            <div id="panelIzq" class="col-12 col-md-4 col-lg-2 p-3 border-end vh-100">
+          <div id="panelIzq" class="col-2 p-3 border-end vh-100">
                 <h6 class="fw-bold">1 Quiz</h6>
             <div class="border rounded p-2 mb-3" id="divPreguntas">
                 
@@ -81,16 +61,13 @@
             <button id="btnAñadirPregunta" class="btn w-100 mb-2">
                 <i class="bi bi-plus-square"></i> Añadir pregunta
             </button>
-            </div>
-
+        </div>
             <!-- ÁREA PRINCIPAL -->
-             <!--Le puse lo del responsive aca y en la del panel izquierdo-->
-            <div class="col-12 col-md-8 col-lg-10 p-4 position-relative" id="panelPrincipal">
+               
+            <div class="col-sm-10 col-lg-8 p-4 position-relative" id="panelPrincipal">
                 
-                <!--Estos dos div no lo estas utilizando y por eso hay una linea horizontal arriba del card de las preguntas :(
-                 no lo quiero sacar por si las moscas
                 <div class="container mt-4">
-                    <div class="card mb-4">-->
+                    <div class="card mb-4">
                     
                     
                         <!-- Opciones en 2x2 -->
@@ -101,7 +78,7 @@
                 </div>
             </div>
 
-            <!-- SIDEBAR DERECHO -->
+            <!-- PANEL DERECHO -->
         <div id="panelDer"  class="col-3 p-3 border-start vh-100 " >
             <div class="d-flex"></div>
             <h5>
@@ -149,12 +126,13 @@
             <div><button id="btnCerrarTemas" type="button" class="btn-close"></button></div>
             <div class="d-flex"></div>
             <div class="row">
-                <h5>Temas</h5>  
+                <h5>Temas</h5>
                 <div>
-                        <img id="tema1" src="./Recursos/temaHistoria.jpg" width="100" height="100" type="button">
-                        <img id="tema2" src="./Recursos/temaHistoria2.jpg" width="100" height="100" type="button">
+                        <img id="tema1" src="./Recursos/tema1.jpeg" width="100" height="100" type="button">
+                        <img id="tema2" src="./Recursos/tema2.jpg" width="100" height="100" type="button">
                         <div id="tema3" width="100" height="100" type="button"></div>
                         
+
                 </div>
             </div>
 
@@ -189,7 +167,7 @@
             <div class="modal-header">
              <h4 class="modal-title"><i class="bi bi-gear"></i> Configuracion</h4>
              <div class="ms-auto">
-                <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button>
              </div>
            
@@ -198,10 +176,12 @@
       <!-- config body -->
             <div class="modal-body">
                 <form>
-                    <div class="d-flex flex-column justify-content-center">
-                        <div class="card h-75 w-50 mb-3">
-                            <div class="card-body">
-                                <div class="m-3">
+                    <div class="d-flex flex-column flex-lg-row justify-content-center gap-3">
+                        <div class="container mt-4">
+                        <div class="row">
+                        <div class="card flex-fill w-100 w-lg-50 mb-3 mb-lg-0">
+                            <div class="card-body p-4">
+                                <div class="d-flex flex-column">
                                                 
                                     <label for="lblTitulo" class="fw-bold fs-5 form-label" >Titulo</label>
                                     <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
@@ -215,9 +195,9 @@
                             </div>
                         </div>
                                 
-                        <div class="card h-75 w-50 mb-3">
-                            <div class="card-body">   
-                                <div class="m-3">
+                        <div class="card flex-fill w-10 0 w-lg-50 mb-3 mb-lg-0">
+                            <div class="card-body p-4">   
+                                <div class="d-flex flex-column">
                                                 
                                     <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label" >Visibilidad</label><br>
                                     <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
@@ -236,6 +216,8 @@
                                                     
                                 </div>
                             </div>
+                        </div>
+                        </div>
                         </div>
                     </div>
                 </form>

@@ -2,44 +2,17 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ver Cuestionario</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <<?php
+      require('../includesPHP/head.php');
+    ?>
   <link rel="stylesheet" href="verCuestionario.css">
   <script src="verCuestionario.js" defer></script>
-
+  <title>Ver cuestionario</title>
 </head>
-
-
 <body>
-
-<nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nombre web</a>
-      <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-          <img src="./Recursos/icono.png" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
-          <li><a class="dropdown-item" href="../administrador/administrador.html">Pantalla administrador</a></li>
-          <li><a class="dropdown-item" href="../participante/participante.html">Pantalla participante</a></li>
-          <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadisticas</a></li>
-          <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <!-- 🔹 FIN NAVBAR -->
-  
-
-
-
-
-
+<?php
+  require('../includesPHP/navGeneral.php');
+?>
 
  <h1>VISTA PREVIA DEL CUESTIONARIO</h1><br><br>
 

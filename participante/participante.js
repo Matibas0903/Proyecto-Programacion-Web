@@ -1,122 +1,11 @@
-//EJEMPLO USUARIO, SOLO PARA MOSTRAR DATA!!!
-const usuario = {
-    nombre: "Usuario Prueba",
-    avatar: "../administrador/images/perrito-avatar.jpg",
-    cuestionariosParticipante: [6, 10]
-}
-//EJEMPLO LISTA DE CUESTIONARIOS, SOLO PARA MOSTRAR DATA!!!
-let cuestionarios = [
-    {
-        nombre: "Cuestionario Historia",
-        id: 3,
-        codigo: "HIST123",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 10,
-        tiempo: 15,
-        categoria: 'historia',
-        calificacion: 3,
-        imagen: 'https://i.pinimg.com/736x/06/d2/cf/06d2cfa5cd7f8fbe8e94ef5d75496a75.jpg'
-    },
-    {
-        nombre: "Cuestionario Cine",
-        id: 5,
-        codigo: "CINE456",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 5,
-        tiempo: null,
-        categoria: 'varios',
-        calificacion: 3,
-        imagen: 'https://i.pinimg.com/1200x/31/81/2b/31812b668760eb3bba7fb1ec63177d47.jpg'
-    },
-    {
-        nombre: "Cuestionario Clase Front-End",
-        id: 6,
-        codigo: "FRONT789",
-        habilitado: true,
-        tipo: 'privado',
-        preguntas: 15,
-        tiempo: 30,
-        categoria: 'programación',
-        calificacion: 4,
-        imagen: 'https://i.pinimg.com/736x/7f/e1/85/7fe1858030393b64f7467e5a90761b66.jpg'
-    },
-    {
-        nombre: "Cuestionario Clase Programación 1",
-        id: 10,
-        codigo: "PROG101",
-        habilitado: true,
-        tipo: 'privado',
-        preguntas: 7,
-        tiempo: null,
-        categoria: 'programación',
-        calificacion: 5,
-        imagen: 'https://i.pinimg.com/1200x/0e/4f/dc/0e4fdce8ac22e09688c580e5bc4dcd7d.jpg'
-    },
-    {
-        nombre: "Cuestionario Matemática 2",
-        id: 2,
-        codigo: "MATE202",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 5,
-        tiempo: 20,
-        categoria: 'matemática',
-        calificacion: 4,
-        imagen: 'https://i.pinimg.com/736x/ae/69/d0/ae69d02a7332a6efa533951431c94c12.jpg'
-    },
-    {
-        nombre: "Cuestionario Historia Argentina",
-        id: 13,
-        codigo: "HISTARG1",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 12,
-        tiempo: 30,
-        categoria: 'historia',
-        calificacion: 2,
-        imagen: 'https://i.pinimg.com/736x/06/d2/cf/06d2cfa5cd7f8fbe8e94ef5d75496a75.jpg'
-    },
-    {
-        nombre: "Cuestionario Series",
-        id: 50,
-        codigo: "SERIES222",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 8,
-        tiempo: null,
-        categoria: 'varios',
-        calificacion: 4,
-        imagen: 'https://i.pinimg.com/1200x/31/81/2b/31812b668760eb3bba7fb1ec63177d47.jpg'
-    },
-    {
-        nombre: "Logica de Programación",
-        id: 26,
-        codigo: "PROG111",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 20,
-        tiempo: null,
-        categoria: 'programación',
-        calificacion: 3,
-        imagen: 'https://i.pinimg.com/736x/7f/e1/85/7fe1858030393b64f7467e5a90761b66.jpg'
-    },
-    {
-        nombre: "Cuestionario Matemática 3",
-        id: 20,
-        codigo: "MATE300",
-        habilitado: true,
-        tipo: 'publico',
-        preguntas: 10,
-        tiempo: 40,
-        categoria: 'matemática',
-        calificacion: 4,
-        imagen: 'https://i.pinimg.com/736x/ae/69/d0/ae69d02a7332a6efa533951431c94c12.jpg'
-    }
-]
+let cuestionarios = [];
 
-function onloadParticipante(){
+let cuestionariosInvitado = [];
+//paginado
+let paginaActual = 1;
+const cuestionariosPorPagina = 20;
+
+async function onloadParticipante(){
     //Buscador cuestionarios
     const formCuestionarios = document.getElementById("formId");
     formCuestionarios.addEventListener("submit", (e) => {
@@ -125,7 +14,7 @@ function onloadParticipante(){
         const inputValid = nombreCuest.value && nombreCuest.value.length <= 50;
         if (inputValid){
             nombreCuest.classList.remove('is-invalid')
-            const cuestFiltrados = cuestionarios.filter(c => c.nombre.toLowerCase().includes(nombreCuest.value.toLowerCase()) && c.tipo ==='publico' && c.habilitado);
+            const cuestFiltrados = cuestionarios.filter(c => c.NOMBRE_CUESTIONARIO.toLowerCase().includes(nombreCuest.value.toLowerCase()) && c.VISIBILIDAD ==='Publico' && c.ACTIVO === "Activo");
             if(cuestFiltrados.length){
                 listaCuestionarios(cuestFiltrados);
             } else {
@@ -140,7 +29,82 @@ function onloadParticipante(){
         }
     })
 
+    //cargamos los cuestionarios publicos
+    try {
+        const respuesta = await fetch('../BaseDeDatos/controladores/getCuestionariosPublicos.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(respuesta){
+            const datos = await respuesta.json();
+            if(datos.status === 'success'){
+                if(datos.data.length){
+                    cuestionarios = datos.data;
+                }
+            } else {
+                mostrarMensajeError(datos.message || 'Error al obtener los cuestionarios');
+            }
+        }    
+    } catch (error) {
+         mostrarMensajeError('Error al obtener los cuestionarios');
+    }
+
+    //cargamos los cuestionarios de invitado
+    try {
+        const respuestaInv = await fetch('../BaseDeDatos/controladores/getCuestionarioInvitado.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(respuestaInv){
+            const datosInv = await respuestaInv.json();
+            if(datosInv.status === 'success'){
+                if(datosInv.data.length){
+                    cuestionariosInvitado = datosInv.data;
+                }
+            } else {
+                mostrarMensajeError(datosInv.message || 'Error al obtener los cuestionarios INV');
+            }
+        }    
+    } catch (error) {
+         mostrarMensajeError('Error al obtener los cuestionarios INV');
+    }
+
     //FILTROS CUESTIONARIOS
+    //cargamos filtro categorias
+    try {
+        const respuestaCat = await fetch('../BaseDeDatos/controladores/getCategorias.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if(respuestaCat){
+            const datosCat = await respuestaCat.json();
+            if(datosCat.status === 'success'){
+                if(datosCat.data.length){
+                    const selectCategoria = document.getElementById("select-categoria");
+                    datosCat.data.forEach((categoria) => {
+                        const option = document.createElement("option");
+                        option.value = categoria.NOMBRE;
+                        option.text = categoria.NOMBRE;
+                        selectCategoria.appendChild(option);
+                    });
+                    const option = document.createElement("option");
+                    option.value = 'Todas';
+                    option.text = 'Todas';
+                    selectCategoria.appendChild(option);
+                }
+            } else {
+                mostrarMensajeError(datosCat.message || 'Error al obtener las categorias');
+            }
+        }
+    } catch (error) {
+        mostrarMensajeError('Error al obtener las categorias');
+    }
     const filtros = document.getElementById('form_filtros');
     filtros.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -155,9 +119,9 @@ function onloadParticipante(){
         } else {
             errorFiltros.classList.add('d-none');
             const cuestFiltrados = cuestionarios.filter((c) => {
-                  const coincideCategoria = !categoria || c.categoria === categoria;
-                  const coincideCalificacion = !calificacion || c.calificacion === parseInt(calificacion);
-                  return coincideCategoria && coincideCalificacion && c.tipo === 'publico' && c.habilitado;
+                  const coincideCategoria = !categoria || categoria === 'Todas' || c.CATEGORIA_NOMBRE === categoria;
+                  const coincideCalificacion = !calificacion || Math.round(c.promedio_calificacion) === parseInt(calificacion);
+                  return coincideCategoria && coincideCalificacion && c.VISIBILIDAD === 'Publico' && c.ACTIVO === "Activo";
                 });
             if(cuestFiltrados.length){
                 listaCuestionarios(cuestFiltrados);
@@ -172,50 +136,51 @@ function onloadParticipante(){
     })
 
     //Cuestionarios que le han compartido al participante
-    if(usuario.cuestionariosParticipante && usuario.cuestionariosParticipante.length){
-        cuestionarioInvitado(usuario.cuestionariosParticipante);
+    if(cuestionariosInvitado.length){
+        cuestionarioInvitado();
     } else {
         document.getElementById("contenedor_cuest_invitado").classList.add("d-none");
     }
 
     listaCuestionarios(null, false);
     document.getElementById("button_todos").addEventListener("click", () => listaCuestionarios());
+
+    moderarCuestionario();
 }
 
 window.onload = onloadParticipante;
 
-function cuestionarioInvitado(cuestionarioIds) {
+function cuestionarioInvitado() {
     const contenedor = document.getElementById("lista_cuest_invitado");
     contenedor.innerHTML = '';
-    const cuestInvitados = cuestionarios.filter(c => cuestionarioIds.includes(c.id) && c.habilitado);
-    if(cuestInvitados.length){
+    if(cuestionariosInvitado.length){
         document.getElementById("contenedor_cuest_invitado").classList.remove("d-none");
-        cuestInvitados.forEach((cuestionario) => {
+        cuestionariosInvitado.forEach((cuestionario) => {
             const colDiv = document.createElement("div");
             colDiv.classList.add("col-12", "col-md-4", "col-xxl-3");
             const card = document.createElement("div");
             card.classList.add("card", "border_cuest", "overflow-hidden", "h-100", "card_cuest");
 
-            const calificacion = cuestionario.calificacion || 0;
+            const calificacion = cuestionario.promedio_calificacion || 0;
             let estrellas = "";
             for (let i = 1; i <= 5; i++) {
                 estrellas += i <= calificacion ? "★" : "☆";
             }
             card.innerHTML = `
-              <img src="${cuestionario.imagen}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
+              <img src="${cuestionario.IMAGEN}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
               <div class="card-header">
-                  <h5 class="card-title text-center card_titulo">${cuestionario.nombre}</h5>
+                  <h5 class="card-title text-center card_titulo">${cuestionario.NOMBRE_CUESTIONARIO}</h5>
               </div>
               <div class="card-body">
-                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.preguntas}</p>
-                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.tiempo? cuestionario.tiempo + ' minutos' : 'Libre'}</p>
+                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.cantidad_preguntas}</p>
+                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.TIEMPO_TOTAL? cuestionario.TIEMPO_TOTAL + ' minutos' : 'Libre'}</p>
                 <div class="rating text-center">
                     <i class="bi bi-star-fill"></i> Valoración: ${estrellas}
                 </div>
             </div>
             `;
 
-            card.addEventListener("click", () => participarCuest(cuestionario.id));
+            card.addEventListener("click", () => participarCuest(cuestionario.ID_VERSION));
 
             colDiv.appendChild(card);
             contenedor.appendChild(colDiv);
@@ -226,43 +191,47 @@ function cuestionarioInvitado(cuestionarioIds) {
             
 }
 
-function participarCuest(id) {
-    console.log("participar cuestionario id: ", id);
-    //Agregar enlace para redirigir a pagina cuestionario de usuario registrado
-    window.location.href = '../Cuestionario invitado/preguntasInvitado.html';
+function participarCuest(idVersion) {
+    window.location.href = `../Lobby/lobby.php?version=${idVersion}`;
 }
 
 function listaCuestionarios(arrCuest = null, scroll = true) {
     const cuest = arrCuest ? arrCuest : cuestionarios;
+
+    //paginado
+    const totalPaginas = Math.ceil(cuest.length / cuestionariosPorPagina);
+    const inicio = (paginaActual - 1) * cuestionariosPorPagina;
+    const fin = inicio + cuestionariosPorPagina;
+    const cuestionariosPagina = cuest.slice(inicio, fin);
+
     const contenedor = document.getElementById("listado_total");
     contenedor.innerHTML = '';
-    const cuestHabilitados = cuest.filter(c => c.tipo ==='publico' && c.habilitado);
-    if(cuestHabilitados.length){
-        cuestHabilitados.forEach((cuestionario) => {
+    if(cuestionariosPagina.length){
+        cuestionariosPagina.forEach((cuestionario) => {
             const colDiv = document.createElement("div");
             colDiv.classList.add("col-12", "col-md-4", "col-xxl-3");
             const card = document.createElement("div");
             card.classList.add("card", "border_cuest", "overflow-hidden", "h-100", "card_cuest");
-            const calificacion = cuestionario.calificacion || 0;
+            const calificacion = cuestionario.promedio_calificacion || 0;
             let estrellas = "";
             for (let i = 1; i <= 5; i++) {
                 estrellas += i <= calificacion ? "★" : "☆";
             }
             card.innerHTML = `
-              <img src="${cuestionario.imagen}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
+              <img src="${cuestionario.IMAGEN}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
               <div class="card-header">
-                  <h5 class="card-title text-center card_titulo">${cuestionario.nombre}</h5>
+                  <h5 class="card-title text-center card_titulo">${cuestionario.NOMBRE_CUESTIONARIO}</h5>
               </div>
               <div class="card-body">
-                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.preguntas}</p>
-                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.tiempo? cuestionario.tiempo + ' minutos' : 'Libre'}</p>
+                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.cantidad_preguntas}</p>
+                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.TIEMPO_TOTAL? cuestionario.TIEMPO_TOTAL + ' minutos' : 'Libre'}</p>
                 <div class="rating text-center">
                     <i class="bi bi-star-fill"></i> Valoración: ${estrellas}
                 </div>
               </div>
             `;
 
-            card.addEventListener("click", () => participarCuest(cuestionario.id));
+            card.addEventListener("click", () => participarCuest(cuestionario.ID_VERSION));
 
             colDiv.appendChild(card);
             contenedor.appendChild(colDiv);
@@ -271,4 +240,57 @@ function listaCuestionarios(arrCuest = null, scroll = true) {
             contenedor.scrollIntoView()
         };
     }
+    if(totalPaginas > 1){
+        agregarControlesPaginado(totalPaginas, cuest);
+    }
+}
+
+function moderarCuestionario(){
+    const btnModerar = document.getElementById("button-moderador");
+
+    btnModerar.addEventListener("click", function(){
+        window.location.href = "../Moderador/moderador.php";
+    });
+}
+
+function mostrarMensajeError(mensaje){
+    const toastEl = document.getElementById('toast_mensaje_error');
+    const toastBody = document.getElementById('mensaje_error');
+    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
+}
+
+function agregarControlesPaginado(totalPaginas, cuestionariosMostrar) {
+    const paginador = document.getElementById("paginador");
+    if (!paginador) return; // Por si el contenedor no existe
+
+    paginador.innerHTML = '';
+
+    // Botón "anterior"
+    const btnAnterior = document.createElement("button");
+    btnAnterior.classList.add("btn", "btn-sm", "me-2", "btn_paginado_color");
+    btnAnterior.innerHTML = `<i class="bi bi-arrow-left-circle-fill"></i>`;
+    btnAnterior.disabled = (paginaActual === 1);
+    btnAnterior.addEventListener("click", () => {
+        paginaActual--;
+        listaCuestionarios(cuestionariosMostrar);
+    });
+    paginador.appendChild(btnAnterior);
+
+    // Info de página
+    const span = document.createElement("span");
+    span.textContent = `Página ${paginaActual} de ${totalPaginas}`;
+    paginador.appendChild(span);
+
+    // Botón "siguiente"
+    const btnSiguiente = document.createElement("button");
+    btnSiguiente.classList.add("btn", "btn-sm", "ms-2", "btn_paginado_color");
+    btnSiguiente.innerHTML = `<i class="bi bi-arrow-right-circle-fill"></i>`;
+    btnSiguiente.disabled = (paginaActual === totalPaginas);
+    btnSiguiente.addEventListener("click", () => {
+        paginaActual++;
+        listaCuestionarios(cuestionariosMostrar);
+    });
+    paginador.appendChild(btnSiguiente);
 }

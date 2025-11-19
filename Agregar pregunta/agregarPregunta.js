@@ -238,7 +238,7 @@ function añadirPregunta(cantidadPreguntas) {
     });
 }
 
-// --------- Función nueva: bloque principal de la pregunta ----------
+
 function crearPregunta(preguntaId) {
 
     const panelPrincipal = document.getElementById("panelPrincipal");
@@ -295,13 +295,22 @@ cardBody.appendChild(divBusqueda);
     for (let i = 1; i <= 4; i++) {
         const col = document.createElement("div");
         col.classList.add("col-6");
+        const cardRespuesta = document.createElement("div");
+        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
+        cardRespuesta.id = "OpcionRespuesta";
 
         const btnOpcion = document.createElement("button");
         btnOpcion.classList.add("btn", "btn-outline-primary", "w-100");
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = `Opción ${i}`;
+        const radioCorrecta = document.createElement("input");
+        radioCorrecta.type="radio";
+        radioCorrecta.name= "radioCorrecto";
+        radioCorrecta.classList.add("form-check-input");
 
-        col.appendChild(btnOpcion);
+        cardRespuesta.appendChild(radioCorrecta);
+        cardRespuesta.appendChild(btnOpcion);
+        col.appendChild(cardRespuesta);
         row.appendChild(col);
     }
 // Escuchar busquedad 
@@ -367,3 +376,12 @@ function mostrarImagenSeleccionada(cardBody, url) {
   imgPreview.src = url;
 }
 
+function leerRespuestaCorrecta()
+{
+    const respuestaCorrecta = document.querySelectorAll('input[name="radioCorrecto"]:checked');
+    if(!respuestaCorrecta) return null;
+
+    const cardSeleccionada = radioSeleccionado.closest(".card-body"); //obtiene la card que contiene el boton y el radio, y lo devuelve
+    return cardSeleccionada;
+
+}

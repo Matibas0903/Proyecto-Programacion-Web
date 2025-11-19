@@ -7,39 +7,18 @@ session_start();
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resultados del Cuestionario</title>
-  
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-
-   <link rel="stylesheet" href="invitadoResultado.css">
-  <script src="invitadoResultado.js" defer></script>
-
+    <?php
+        require('../includesPHP/head.php');
+    ?>
+    <link rel="stylesheet" href="invitadoResultado.css">
+    <script src="invitadoResultado.js" defer></script>
+    <title>Resultados del cuestionario - invitado</title>
 </head>
 <body>
 
-      <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Nombre web</a>
-        <div class="dropdown-center ms-auto">
-            <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-                <img src="../administrador/images/invitado.png" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><span class="dropdown-item-text" id="navbarName"><?= $_SESSION["nombre_Invitado"]?></span></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item active" href="../Login/login.html">Iniciar sesion</a></li>
-                <li><a class="dropdown-item" href="#">Registrarse</a></li>
-            </ul>
-            </div>
-        </div>
-    </nav>
-
+    <?php
+        require('../includesPHP/navInvitado.php');
+    ?>
      <div class="container micontainer ">
         <div class="row align-items-center contenedorDatos ">
             <div class="col-12 col-md-6 imagen" id="imgUsuario">

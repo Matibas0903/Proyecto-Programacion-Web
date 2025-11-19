@@ -1,57 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Versiones</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <?php
+      require('../includesPHP/head.php');
+    ?>
     <link rel="stylesheet" href="./versiones.css">
+    <title>Versiones</title>
 </head>
 <body>
-  <!-- navbar -->
-  <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nombre web</a>
-      <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-          <img src="" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
-          <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
-          <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
-          <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-          <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php
+    require('../includesPHP/navGeneral.php');
+  ?>
   <div class="container mt-3">
     <!--header -->
     <div class="row">
         <div class="col-12 col-md-8 my-3 order-2 order-md-1">
-            <h1>Programación web</h1>
-            <p><strong>Descripción: </strong>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque saepe numquam, esse enim voluptatum dolor quas odio repellendus eligendi labore tempore magnam quae neque, beatae ut delectus eum itaque illum?</p>
+            <h1 id="titulo_cuestionario"></h1>
+            <!-- <p><strong>Descripción: </strong><span id="descripcion_cuestionario"></span></p> -->
             <div>
                 <div class="border_cuest d-flex justify-content-between align-items-center p-2 my-3">
-                    <p class="mb-0"><i class="bi bi-incognito"></i> <strong>Moderador: </strong> User moderador</p>
-                    <img src="../administrador/images/perrito-avatar.jpg" alt="moderador" class="moderador_avatar" id="moderador_avatar">
+                    <p class="mb-0"><i class="bi bi-incognito"></i> <strong>Moderador: </strong> <span id="moderador_nombre"></span></p>
+                    <img src="" alt="moderador" class="moderador_avatar" id="moderador_avatar">
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-4 my-3 order-1 order-md-2">
-            <img src="https://i.pinimg.com/736x/7f/e1/85/7fe1858030393b64f7467e5a90761b66.jpg" alt="img-programacion" class="img-cuestionario d-block mx-auto">
-        </div>
+        <!-- <div class="col-12 col-md-4 my-3 order-1 order-md-2">
+            <img src="" alt="img-programacion" id="image_cuest" class="img-cuestionario d-block mx-auto">
+        </div> -->
     </div>
         <div class="col-12 col-md-8 row g-2 mb-3">
             <div class="col-12 col-md-3">
                 <button class="button_principal border_cuest" id="button-nueva-version"><i class="bi bi-plus-circle-fill"></i> Nueva version</button>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-3" id="habilitar_container">
                 <button class="button_principal border_cuest" id="button-habilitar"><i class="bi bi-lock-fill"></i> Habilitar version</button>
             </div>
             <div class="col-12 col-md-3">
@@ -124,6 +105,11 @@
            </div>
            <div class="modal-body">
               <form id="formParticipante" class="needs-validation" novalidate>
+                  <div class="mb-3" id="fecha_vencimiento_container">
+                    <label for="fecha" class="form-label">Fecha de vencimiento de la invitación</label>
+                    <input type="date" class="form-control border_cuest" name="inputFechaNacimiento" id="fecha_vencimiento">
+                    <div class="invalid-feedback">La fecha debe ser superior a la fecha actual</div>
+                  </div>
                   <div class="input-group input-group-lg">
                     <button class="input-group-text icon_container c_orange button_search" id="button-part"><i class="bi bi-search"></i></button>
                     <input type="text" id="nombrePart" class="form-control border_cuest" placeholder="" maxlength="20" required>
@@ -134,6 +120,7 @@
                   <div id="participantes_container" class="my-3 d-none">
                     <h2 class="text-center">USUARIOS</h2>
                     <div id="lista_participantes" class="m-1"></div>
+                    <div id="paginador" class="d-flex justify-content-center align-items-center mt-3"></div>
                     <p class="text-center fs-4 d-none" id="no_participantes">No se encontraron usuarios</p>
                   </div>
               </form>
@@ -167,6 +154,10 @@
         </div>
       </div>
     </div>
+
+    <?php
+      include('../mensajeError/mensajeError.php');
+    ?>
 
 </body>
 <script src="./versiones.js"></script>

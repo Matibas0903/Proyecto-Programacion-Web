@@ -1,35 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Participante</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <?php
+      require('../includesPHP/head.php');
+    ?>
     <link rel="stylesheet" href="./participante.css">
+    <title>Participante</title>
 </head>
 <body>
-  <!-- navbar -->
-  <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nombre web</a>
-      <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-          <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
-          <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
-          <li><a class="dropdown-item active" href="#">Panel de participante</a></li>
-          <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-          <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php
+    require('../includesPHP/navGeneral.php');
+  ?>
   <div class="container mt-3">
     <!--header -->
     <div class="row my-3">
@@ -48,6 +29,9 @@
             <div class="d-flex justify-content-center m-1">
                 <button class="button_principal border_cuest py-2" id="button_todos">Mostrar todos</button>
             </div>
+            <div class="d-flex justify-content-center m-1">
+                <button class="button_principal border_cuest" id="button-moderador"><i class="bi bi-incognito"></i> Moderar</button>
+            </div>
         </div>
     </div>
     <!-- todos los cuestionarios -->
@@ -60,10 +44,6 @@
                 <div class="col-12 col-md-4">
                   <select class="form-select border_select" id="select-categoria">
                     <option value="" selected>Categoría</option>
-                    <option value="historia">Historia</option>
-                    <option value="matemática">Matemática</option>
-                    <option value="programación">Programación</option>
-                    <option value="varios">Varios</option>
                   </select>
                 </div>
                 <div class="col-12 col-md-4">
@@ -99,9 +79,14 @@
     <div class="container">
       <h2 class="text-center" id="list_title">Cuestionarios</h2>
       <div id="listado_total" class="row g-4 justify-content-center"></div>
+      <div id="paginador" class="d-flex justify-content-center align-items-center mt-3"></div>
     </div>
  
   </div>
+
+  <?php
+    include('../mensajeError/mensajeError.php');
+  ?>
 
 </body>
 <script src="./participante.js"></script>

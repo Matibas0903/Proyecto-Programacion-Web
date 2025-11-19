@@ -1,48 +1,26 @@
 <?php
-session_start();
+  session_start();
 
-// Verificar si el usuario inició sesión
-if (!isset($_SESSION['usuario_id'])) {
+  // Verificar si el usuario inició sesión
+  if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../Login/login.php");
     exit;
-}
-
+  }
+  require('../BaseDeDatos/conexion.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrador</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <?php
+      require('../includesPHP/head.php');
+    ?>
     <link rel="stylesheet" href="./administrador.css">
+    <title>Administrador</title>
 </head>
 <body>
-  <!-- navbar -->
-  <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Tukki</a>
-      <div class="dropdown-center ms-auto">
-        <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-          <img src="./images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end">
-          <li><span class="dropdown-item-text" id="navbarName"><?= $_SESSION["nombre"]; ?> </span></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.php">Editar usuario</a></li>
-          <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
-          A su pantalla ponganle # y class active -->
-          <li><a class="dropdown-item active" href="#">Panel de administrador</a></li>
-          <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
-          <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-          <li><a class="dropdown-item" href="../Login/logout.php">Logout</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <?php
+    require('../includesPHP/navGeneral.php');
+  ?>
   <div class="container mt-3">
     <!--header -->
     <div class="row">
@@ -65,10 +43,10 @@ if (!isset($_SESSION['usuario_id'])) {
           <!-- Usuario -->
           <div class="card-body row">
             <div class="col-3 align-self-center">
-              <img src="./images/perrito-avatar.jpg" alt="imagen usuario" class="img_usuario" id="img_usuario">
+              <img src="<?=$_SESSION['foto_perfil']?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
             </div>
             <div class="col-9 align-self-center">
-              <h2 class="mb-0" id="name_usuario">dfdsfsdfsdfds</h2>
+              <h2 class="mb-0" id="name_usuario"><?=$_SESSION['nombre']?></h2>
             </div> 
           </div> 
         </div>
@@ -132,6 +110,10 @@ if (!isset($_SESSION['usuario_id'])) {
         </div>
       </div>
     </div>
+
+    <?php
+      include('../mensajeError/mensajeError.php');
+    ?>
 
 </body>
 <script src="./administrador.js"></script>

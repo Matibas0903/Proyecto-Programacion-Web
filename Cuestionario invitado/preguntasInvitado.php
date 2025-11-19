@@ -28,44 +28,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-      <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
+    <?php
+      require('../includesPHP/head.php');
+    ?>
     <link rel="stylesheet" href="preguntasInvitado.css">
     <title>Preguntas</title>
 
     <script src="preguntasInvitado.js" defer></script>
 </head>
 <body>
+  <?php
+    require('../includesPHP/navInvitado.php');
+  ?>
 
-<!--navbar-->
-    <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Tukii</a>
-        <div class="dropdown-center ms-auto">
-            <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-                <img src="../administrador/images/invitado.png" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="../Login/login.html">Iniciar sesion</a></li>
-                <li><a class="dropdown-item" href="../Registro/registro.html">Registrarse</a></li>
-            </ul>
-            </div>
-        </div>
-    </nav>
-   
 <div class="container vh-100 d-flex flex-column justify-content-center align-items-center">
 
   <!-- Input de nombre -->
