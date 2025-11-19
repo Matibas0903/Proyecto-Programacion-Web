@@ -1,3 +1,30 @@
+<?php
+session_start();
+
+$nombreInvitado=$nombreErr="";
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
+    if(empty($_POST["nombreInvitado"]))
+    {
+      $nombreErr="Ingrese un nombre";
+    }
+    else
+    {
+      $nombreInvitado=trim($_POST["nombreInvitado"]);
+      $nombreInvitado=htmlspecialchars($nombreInvitado);
+
+      if(!preg_match("/^[A-Za-z0-9_]+$/",$nombreInvitado))
+      {
+        $nombreErr="ingrese un nombre valido";
+      }
+      else
+      {
+        $_SESSION['nombre_Invitado'] = $nombreInvitado;
+      }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -24,7 +51,7 @@
 <!--navbar-->
     <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Nombre web</a>
+            <a class="navbar-brand" href="#">Tukii</a>
         <div class="dropdown-center ms-auto">
             <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
                 <img src="../administrador/images/invitado.png" alt="imagen usuario" class="navbar_usuario" id="navbarImg">

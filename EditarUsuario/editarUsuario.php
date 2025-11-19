@@ -1,3 +1,17 @@
+<?php
+session_start();
+
+require("conexion.php");
+
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../Login/login.php");
+    exit;
+}
+
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,27 +21,27 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="editarUsuarioEstilos.css">
 
-  <script src="editarUsuario.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
 <body>
   <!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nombre web</a>
+      <a class="navbar-brand" href="#">Tukii</a>
       <div class="dropdown-center ms-auto">
         <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
-          <img src="../administrador/images/perrito-avatar.jpg" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
+          <img  src="<?=$_SESSION["foto_perfil"]?>"  alt="imagen usuario" class="navbar_usuario" id="navbarImg">
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
+          <li><span class="dropdown-item-text" id="navbarName"><?= $_SESSION["nombre"]; ?></span></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.html">Editar usuario</a></li>
+          <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.php">Editar usuario</a></li>
           <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
           A su pantalla ponganle # y class active -->
           <li><a class="dropdown-item" href="../administrador/administrador.html">Panel de administrador</a></li>
           <li><a class="dropdown-item" href="../participante/participante.html">Panel de participante</a></li>
           <li><a class="dropdown-item" href="../Estadisticas/estadisticas.html">Ver estadísticas</a></li>
-          <li><a class="dropdown-item" href="../Inicio/inicio.html">Logout</a></li>
+          <li><a class="dropdown-item" href="../Login/logout.php">Logout</a></li>
         </ul>
       </div>
     </div>
@@ -35,35 +49,40 @@
   <div class="container vh-100 flex-column justify-content-center align-items-center">
   <div class="card m-5">
   <div class="text-center" >
-      <img src="Recursos/icono.png" id="icono" class="img-fluid mx-auto d-block" alt="Imagen no encontrada"><br>
+      <img src="" id="icono" class="img-fluid mx-auto d-block" alt="Imagen no encontrada"><br>
   </div>
       <div class="card-body">
       <h1>Editar Usuario</h1>
 
       <form id="editarForm" class="form-floating">
-
         <div class="mb-3">
-        <label for="text" class="form-label">Nuevo nombre</label>
-        <input type="text" class="form-control" id="nombreNuevo" placeholder="Ingrese nombre completo">
-        <div class="invalid-feedback">Nombre inválido</label></div>
+            <label for="nombreNuevo" class="form-label">Nuevo nombre</label>
+            <input type="text" class="form-control" id="nombreNuevo" placeholder="Ingrese nombre completo">
+            <div class="invalid-feedback">Nombre inválido</label></div>
         </div>
 
         <div class="mb-3">
-        <label for="email" class="form-label">Cambiar correo electronico</label>
-        <input type="email" class="form-control" id="emailNuevo" placeholder="example@gmail.com">
-        <div class="invalid-feedback">Correo electronico invalido</div>
+            <label for="email" class="form-label">Cambiar correo electronico</label>
+            <input type="email" class="form-control" id="emailNuevo" placeholder="example@gmail.com">
+            <div class="invalid-feedback">Correo electronico invalido</div>
         </div>
 
         <div class="mb-3">
-        <label for="contrasena" class="form-label">Cambiar contraseña</label>
-        <input type="password" class="form-control" id="contrasenaNueva" placeholder="Ingrese una contraseña ">
-        <div class="invalid-feedback">Contraseña Invalida</div>
+            <label for="contrasena" class="form-label">Cambiar contraseña</label>
+            <input type="password" class="form-control" id="contrasenaNueva" placeholder="Ingrese una contraseña ">
+            <div class="invalid-feedback">Contraseña Invalida</div>
+        </div>
+
+         <div class="mb-3">
+          <label for="contrasena" class="form-label">Repetir contraseña</label>
+          <input type="password" class="form-control" id="contrasenaNueva2" placeholder="Ingrese una contraseña ">
+          <div class="invalid-feedback">Contraseña Invalida</div>
         </div>
 
         <div class="mb-3">
-        <label for="fecha" class="form-label">Cambiar fecha de Nacimiento</label>
-        <input type="date" class="form-control" id="fechaNueva">
-        <div class="invalid-feedback">Fecha Invalida</div>
+            <label for="fecha" class="form-label">Cambiar fecha de Nacimiento</label>
+            <input type="date" class="form-control" id="fechaNueva">
+            <div class="invalid-feedback">Fecha Invalida</div>
         </div>
 
          <div class="mb-3">

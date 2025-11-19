@@ -105,10 +105,10 @@ function guardarCambios() {
     preview.src = fotoSelect.value;
 
     // Mostrar modal Bootstrap
-    const modal = new bootstrap.Modal(document.getElementById("edicionExitosa"));
-    modal.show();
+    /*const modal = new bootstrap.Modal(document.getElementById("edicionExitosa"));
+    modal.show();*/
 
-    // Resetear formulario y limpiar
+    //Resetear formulario y limpiar
     form.reset();
     [nombreInput, emailInput, contrasenaInput, fechaInput, fotoSelect].forEach(input => {
       input.classList.remove("is-valid");
@@ -116,9 +116,34 @@ function guardarCambios() {
   });
 }
 
+//nueva funcion
+function cargarDatosInput() {
+  const nombre = document.getElementById("nombreNuevo");
+  const mail = document.getElementById("emailNuevo");
+  const fechaNacimiento = document.getElementById("fechaNueva");
+  const fotoPerfil = document.getElementById("icono");
+  const contra1=document.getElementById("contrasenaNueva");
+  const contra2=document.getElementById("contrasenaNueva2");
+
+  fetch("traerDatos.php")
+    .then(res => {
+      if (!res.ok) throw new Error("Error al obtener los datos");
+      return res.json();
+    })
+    .then(data => {
+      console.log("Datos recibidos:", data);
+
+      if (data.NOMBRE) nombre.value = data.NOMBRE;
+      if (data.EMAIL) mail.value = data.EMAIL;
+      if (data.FECHA_NACIMIENTO) fechaNacimiento.value = data.FECHA_NACIMIENTO.split(" ")[0];
+      if(data.FOTO_PERIL)fotoPerfil.src = data.FOTO_PERIL;
+    })
+    .catch(err => console.error("Error en fetch:", err));
+}
 
 
 document.addEventListener("DOMContentLoaded", () => {
+  cargarDatosInput();
   vistaPrevia();
-  guardarCambios();
+ guardarCambios();
 });

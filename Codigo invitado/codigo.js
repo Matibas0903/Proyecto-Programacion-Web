@@ -1,15 +1,21 @@
 window.onload = function() {
     const botonIngresar = document.getElementById("btingresar");
     const spinnerContainer = document.getElementById("spinnerContainer");
+    const miForm = document.getElementById("miform");
 
     // cuando se ingresa el codigo,y si es valido, muestro el cargando...
-    botonIngresar.addEventListener("click", function() {
-        if (validarCodigo()) { 
-            mostrarSpinner();
-            setTimeout(() => {
+    miForm.addEventListener("submit", function(e) {
+        if (!validarCodigo()) { 
+           e.preventDefault();
+        }
+        else
+        {
+             mostrarSpinner();
+             mostrarSpinner();
+             setTimeout(() => {
                 ocultarSpinner();  //muestro el spiner por 2 seg y lo oculto 
                 // Redirigir a la página de preguntas
-                window.location.href = "../Cuestionario invitado/preguntasInvitado.html";
+                //window.location.href = "../Cuestionario invitado/preguntasInvitado.html";
             }, 2000); 
         }
     });

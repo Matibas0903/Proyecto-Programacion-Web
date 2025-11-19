@@ -1,3 +1,9 @@
+<?php
+session_start();
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,7 +31,7 @@
                 <img src="../administrador/images/invitado.png" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><span class="dropdown-item-text" id="navbarName">Usuario Prueba</span></li>
+                <li><span class="dropdown-item-text" id="navbarName"><?= $_SESSION["nombre_Invitado"]?></span></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item active" href="../Login/login.html">Iniciar sesion</a></li>
                 <li><a class="dropdown-item" href="#">Registrarse</a></li>
