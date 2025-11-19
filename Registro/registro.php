@@ -113,7 +113,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if (headers_sent($file, $line)) {
         die("Error: Los headers ya fueron enviados en $file línea $line");
       }
-      header("Location: C:\xampp/htdocs/Proyecto programacion web ultima version 31-10/administrador/administrador.php");
+      header("Location:../administrador/administrador.php");
       exit;
 
       // Limpiar campos
