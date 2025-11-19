@@ -1,0 +1,10 @@
+<div class="position-fixed top-50 start-50 translate-middle p-3" style="z-index: 1100">
+    <div id="toast_mensaje_error" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="mensaje_error">
+            Ups, ocurrio un error inesperado
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+</div>

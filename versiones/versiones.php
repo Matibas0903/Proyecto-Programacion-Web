@@ -17,24 +17,24 @@
     <!--header -->
     <div class="row">
       <div class="col-12 col-md-8 my-3 order-2 order-md-1">
-        <h1>Programación web</h1>
-        <p><strong>Descripción: </strong>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cumque saepe numquam, esse enim voluptatum dolor quas odio repellendus eligendi labore tempore magnam quae neque, beatae ut delectus eum itaque illum?</p>
+        <h1 id="titulo_cuestionario"></h1>
+        <!-- <p><strong>Descripción: </strong><span id="descripcion_cuestionario"></span></p> -->
         <div>
           <div class="border_cuest d-flex justify-content-between align-items-center p-2 my-3">
-            <p class="mb-0"><i class="bi bi-incognito"></i> <strong>Moderador: </strong> User moderador</p>
-            <img src="../administrador/images/perrito-avatar.jpg" alt="moderador" class="moderador_avatar" id="moderador_avatar">
+            <p class="mb-0"><i class="bi bi-incognito"></i> <strong>Moderador: </strong> <span id="moderador_nombre"></span></p>
+            <img src="" alt="moderador" class="moderador_avatar" id="moderador_avatar">
           </div>
         </div>
       </div>
-      <div class="col-12 col-md-4 my-3 order-1 order-md-2">
-        <img src="https://i.pinimg.com/736x/7f/e1/85/7fe1858030393b64f7467e5a90761b66.jpg" alt="img-programacion" class="img-cuestionario d-block mx-auto">
-      </div>
+      <!-- <div class="col-12 col-md-4 my-3 order-1 order-md-2">
+            <img src="" alt="img-programacion" id="image_cuest" class="img-cuestionario d-block mx-auto">
+        </div> -->
     </div>
     <div class="col-12 col-md-8 row g-2 mb-3">
       <div class="col-12 col-md-3">
         <button class="button_principal border_cuest" id="button-nueva-version"><i class="bi bi-plus-circle-fill"></i> Nueva version</button>
       </div>
-      <div class="col-12 col-md-3">
+      <div class="col-12 col-md-3" id="habilitar_container">
         <button class="button_principal border_cuest" id="button-habilitar"><i class="bi bi-lock-fill"></i> Habilitar version</button>
       </div>
       <div class="col-12 col-md-3">
@@ -107,6 +107,11 @@
         </div>
         <div class="modal-body">
           <form id="formParticipante" class="needs-validation" novalidate>
+            <div class="mb-3" id="fecha_vencimiento_container">
+              <label for="fecha" class="form-label">Fecha de vencimiento de la invitación</label>
+              <input type="date" class="form-control border_cuest" name="inputFechaNacimiento" id="fecha_vencimiento">
+              <div class="invalid-feedback">La fecha debe ser superior a la fecha actual</div>
+            </div>
             <div class="input-group input-group-lg">
               <button class="input-group-text icon_container c_orange button_search" id="button-part"><i class="bi bi-search"></i></button>
               <input type="text" id="nombrePart" class="form-control border_cuest" placeholder="" maxlength="20" required>
@@ -117,6 +122,7 @@
             <div id="participantes_container" class="my-3 d-none">
               <h2 class="text-center">USUARIOS</h2>
               <div id="lista_participantes" class="m-1"></div>
+              <div id="paginador" class="d-flex justify-content-center align-items-center mt-3"></div>
               <p class="text-center fs-4 d-none" id="no_participantes">No se encontraron usuarios</p>
             </div>
           </form>
@@ -150,6 +156,10 @@
       </div>
     </div>
   </div>
+
+  <?php
+  include('../mensajeError/mensajeError.php');
+  ?>
 
 </body>
 <script src="./versiones.js"></script>

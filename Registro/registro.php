@@ -122,6 +122,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $mailError = "Error al guardar: " . $e->getMessage();
     }
   }
+  $nuevoId = $conn->lastInsertId();
+
+  // Consultar los datos del usuario recién insertado
+  $stmt = $conn->prepare("SELECT * FROM usuario WHERE ID_USUARIO = :id");
+  $stmt->execute([':id' => $nuevoId]);
+  $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+  //guardo sesion,con los datos del usuario
+  $_SESSION['correo'] = $usuario['email'];
+  $_SESSION['usuario_id'] = $usuario['id'];
+  $_SESSION['nombre'] = $usuario['nombre'];
+  $_SESSION['fecha_nacimiento'] = $usuario['fecha_nacimiento'];
+  $_SESSION['foto_perfil'] = $usuario['foto_perfil'];
+  //reedirijo a la pagina del admi
+  header("Location: ../administrador/administrador.php");
+  exit;
 }
 ?>
 

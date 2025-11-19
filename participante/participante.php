@@ -46,10 +46,6 @@
               <div class="col-12 col-md-4">
                 <select class="form-select border_select" id="select-categoria">
                   <option value="" selected>Categoría</option>
-                  <option value="historia">Historia</option>
-                  <option value="matemática">Matemática</option>
-                  <option value="programación">Programación</option>
-                  <option value="varios">Varios</option>
                 </select>
               </div>
               <div class="col-12 col-md-4">
@@ -85,9 +81,14 @@
     <div class="container">
       <h2 class="text-center" id="list_title">Cuestionarios</h2>
       <div id="listado_total" class="row g-4 justify-content-center"></div>
+      <div id="paginador" class="d-flex justify-content-center align-items-center mt-3"></div>
     </div>
 
   </div>
+
+  <?php
+  include('../mensajeError/mensajeError.php');
+  ?>
 
 </body>
 <script src="./participante.js"></script>

@@ -117,3 +117,18 @@ body, .bg_cuest {
 .navbar-dropdown-btn:hover .navbar_usuario{
     border: 3px solid #80c4e9;
 }
+
+/*paginado*/
+.btn_paginado_color {
+    color: #80c4e9;
+    font-size: 1.2em;
+}
+.btn_paginado_color:hover {
+    color: #ef7131;
+    font-size: 1.2em;
+}
+.btn_paginado_color:disabled {
+    color: gray;
+    font-size: 1.2em;
+    border: none;
+}
