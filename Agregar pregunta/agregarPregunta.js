@@ -1,6 +1,6 @@
 window.onload = function () {
   const btnGuardar = document.getElementById("btnGuardar");
-  btnGuardar.addEventListener("click", EnviarPreguntas);
+  btnGuardar.addEventListener("click", guardarCuestionario);
   let cantidadPreguntas = 0;
 
   abrirPanelDerecho();
@@ -364,8 +364,10 @@ async function guardarCuestionario() {
       method: "POST",
       body: formData,
     });
-
-    const data = await response.json();
+    const raw = await response.text();
+    console.log("Respuesta cruda del servidor:", raw);
+    const data = JSON.parse(raw);
+    //const data = await response.json();
     //se guardo la info del cuestionario y me trajo el id de la version
     const idVersionGlobal = data.idVersion;
     console.log("ID VERSION RECIBIDO:", idVersionGlobal);
@@ -379,7 +381,7 @@ async function guardarCuestionario() {
 async function EnviarPreguntas(version) {
   console.log("enviando preguntas...");
   const preguntas = recolectarPreguntas();
-  console.log(preguntas);
+  console.log("preguntas contruidas", preguntas);
   const idVersionGlobal = version;
   try {
     //este codigo es para pasar el json a guardarCuestionario.php funciona pero todavia esta complciado el idVersion(comentario viejo)
@@ -395,8 +397,10 @@ async function EnviarPreguntas(version) {
       }),
     });
 
-    const data = await response.json();
-    console.log(data.message); // Mensaje de PHP
+    const responseText = await response.text();
+    console.log("Respuesta cruda", responseText);// Mensaje de PHP
+
+    const data = JSON.parse(responseText);
     alert(data.message);
     console.log("llenando campos");
     llenarCampos();

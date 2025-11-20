@@ -178,11 +178,7 @@ try {
                         <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Cerrar</button>
 
 
-                        <div class="form-check form-switch">
-                            <label class="form-check-label" class="fw-bold fs-5 form-label" for="SwitchEstado">Activar Cuestionario</label>
-                            <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
-
-                        </div>
+                        
                     </div>
 
                 </div>
@@ -242,7 +238,11 @@ try {
                                                     <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
                                                     <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
                                                 </div>
-                                                <!-- <button class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button> -->
+                                                <div class="form-check form-switch">
+                                                    <label class="form-check-label" class="fw-bold fs-5 form-label" for="SwitchEstado">Activar Cuestionario</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

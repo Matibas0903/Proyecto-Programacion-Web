@@ -2,10 +2,10 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 //EPA ESTE ES NUEVO, NO?, SI!
 require("../BaseDeDatos/conexion.php");
 header("Content-Type: application/json");
-$_SESSION["idVersion"];
 
 /*try {
 
@@ -73,14 +73,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $visibilidad = trim($_POST["Visibilidad"] ?? "");
     $nombre = trim($_POST["nombreCuestionario"] ?? "");
     $idCategoria = trim($_POST["selectCategoria"] ?? "");
-    $idUsuario = trim($_POST["usuario_id"] ?? "");
+    $idUsuario = $_SESSION["usuario_id"];
 
     $idCustionario = trim($conn->lastInsertId() ?? "");
     $descripcion = trim($_POST["txtDescripcion"] ?? "");
     //Asigno la fehca de HOY
     $fecha_creacion = trim(date("Y-m-d") ?? "");
     $cod_acceso = trim($_POST["codigoAcceso"] ?? "");
-    $activo = trim($_POST['Activo']) ? 'Activo' : 'Inactivo';
+    $activo = trim($_POST["estado"]);
 
     //borro los otros que estan abajo?
 
@@ -146,10 +146,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $conn->prepare("SELECT COALESCE(MAX(NUM_VERSION), 0) AS ultimo_num FROM version_cuestionario WHERE ID_CUESTIONARIO = :id_cuestionario");
         $stmt->bindValue(':id_cuestionario', $idCustionario);
         $stmt->execute();
-        $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         // Le sumo uno al NUM_VERSION para auto incrementar
-        $numVersion = trim(($row['ultimo_num'] + 1) ?? "");
+        $numVersion = ($row['ultimo_num'] ?? 0)+ 1;
     } catch (PDOException $e) {
         echo "Error al obtener categorías: " . $e->getMessage();
     }
@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindValue(':num_version', $numVersion);
     $stmt->execute();
     // Guardo el Id de la version creada
-    $idVersion = trim($conn->lastInsertId() ?? "");
+    $idVersion = $conn->lastInsertId();
 
     $_SESSION["idVersion"] = $idVersion;
 

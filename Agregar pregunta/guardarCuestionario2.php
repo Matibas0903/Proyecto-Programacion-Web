@@ -2,13 +2,24 @@
 //este archivo los escribio chatgpt se supone que recibe el idversion,vpero falta la logica de escribir la informacion del cuestionario, podria modificar la forma en la que se envian esos datos y hacerlo con ajax, significa tener un archi para la info del cuestionario y otro para el guardado de preguntas, mañana sigo, el id version ya se esta psando el problema no era la session, aun asi hay que leer el codigo de gpt y verificarlo
 
 session_start();
+
 header("Content-Type: application/json");
 
 // 1) Validar que exista idVersion
 
-$data = json_decode(file_get_contents("php://input"), true);
+$input = json_decode(file_get_contents("php://input"), true);
 
-$idVersion = $data["idVersion"] ?? ($_SESSION["idVersion"] ?? null);
+if (!$input) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "No se recibió JSON válido."
+    ]);
+    exit;
+}
+
+//Obtenemos el id version, si no existe lo pasamos por sesion
+$idVersion = $input["idVersion"] ?? null;
+
 
 if (!$idVersion) {
     echo json_encode([
@@ -18,13 +29,9 @@ if (!$idVersion) {
     exit;
 }
 
-$idVersion = $_SESSION["idVersion"];
+$preguntas = $input["preguntas"] ?? null;
 
-// 2) Leer el JSON enviado por fetch
-$input = file_get_contents("php://input");
-$data = json_decode($input, true);
-
-if (!$data || !isset($data["preguntas"])) {
+if (!$preguntas || !is_array($preguntas)) {
     echo json_encode([
         "status" => "error",
         "message" => "No se recibieron preguntas."
@@ -37,51 +44,47 @@ require("../BaseDeDatos/conexion.php");
 
 // 4) Insertar preguntas y opciones
 try {
-    $conexion->beginTransaction();
+    $conn->beginTransaction();
 
-    foreach ($data["preguntas"] as $pregunta) {
+    // Preparar consultas
+    $sqlPregunta = $conn->prepare("
+        INSERT INTO pregunta (ID_VERSION, NRO_ORDEN, ENUNCIADO, IMAGEN)
+        VALUES (:idv, :nro, :enun, :img)
+    ");
 
-        $nro = $pregunta["nro_orden"];
-        $enunciado = $pregunta["enunciado"];
-        $imagen = $pregunta["imagen"]; // puede ser null
+    $sqlOpcion = $conn->prepare("
+        INSERT INTO opcion (ID_PREGUNTA, TEXTO, ES_CORRECTA)
+        VALUES (:idp, :txt, :cor)
+    ");
 
-        // 4A) Insertar pregunta
-        $sql = "INSERT INTO pregunta (ID_VERSION, NRO_ORDEN, ENUNCIADO, IMAGEN)
-                VALUES (:idv, :nro, :enun, :img)";
-        $stmt = $conexion->prepare($sql);
-        $stmt->execute([
+    foreach ($preguntas as $pregunta) {
+
+        $sqlPregunta->execute([
             ":idv" => $idVersion,
-            ":nro" => $nro,
-            ":enun" => $enunciado,
-            ":img" => $imagen
+            ":nro" => $pregunta["nro_orden"],
+            ":enun" => $pregunta["enunciado"],
+            ":img" => $pregunta["imagen"] ?? null,
         ]);
 
-        $idPregunta = $conexion->lastInsertId();
+        $idPregunta = $conn->lastInsertId();
 
-        // 4B) Insertar opciones
         foreach ($pregunta["opciones"] as $op) {
-            $texto = $op["texto"];
-            $correcta = $op["esCorrecta"]; // 1 o 0
-
-            $sql2 = "INSERT INTO opcion (ID_PREGUNTA, TEXTO, CORRECTA)
-                     VALUES (:idp, :txt, :cor)";
-            $stmt2 = $conexion->prepare($sql2);
-            $stmt2->execute([
+            $sqlOpcion->execute([
                 ":idp" => $idPregunta,
-                ":txt" => $texto,
-                ":cor" => $correcta,
+                ":txt" => $op["texto"],
+                ":cor" => $op["esCorrecta"],
             ]);
         }
     }
 
-    $conexion->commit();
+    $conn->commit();
 
     echo json_encode([
         "status" => "success",
         "message" => "Preguntas guardadas correctamente."
     ]);
 } catch (Exception $e) {
-    $conexion->rollBack();
+    $conn->rollBack();
     echo json_encode([
         "status" => "error",
         "message" => "Error al guardar: " . $e->getMessage()

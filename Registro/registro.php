@@ -109,11 +109,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $_SESSION['nombre'] = $usuario['NOMBRE'];
       $_SESSION['fecha_nacimiento'] = $usuario['FECHA_NACIMIENTO'];
       $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
+
       //reedirijo a la pagina del admi
-      if (headers_sent($file, $line)) {
-        die("Error: Los headers ya fueron enviados en $file línea $line");
-      }
-      header("Location:../administrador/administrador.php");
+      header("Location: ../administrador/administrador.php");
       exit;
 
       // Limpiar campos
@@ -122,21 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $mailError = "Error al guardar: " . $e->getMessage();
     }
   }
-  $nuevoId = $conn->lastInsertId();
-
-  // Consultar los datos del usuario recién insertado
-  $stmt = $conn->prepare("SELECT * FROM usuario WHERE ID_USUARIO = :id");
-  $stmt->execute([':id' => $nuevoId]);
-  $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
-  //guardo sesion,con los datos del usuario
-  $_SESSION['correo'] = $usuario['email'];
-  $_SESSION['usuario_id'] = $usuario['id'];
-  $_SESSION['nombre'] = $usuario['nombre'];
-  $_SESSION['fecha_nacimiento'] = $usuario['fecha_nacimiento'];
-  $_SESSION['foto_perfil'] = $usuario['foto_perfil'];
-  //reedirijo a la pagina del admi
-  header("Location: ../administrador/administrador.php");
-  exit;
+  
 }
 ?>
 
@@ -177,8 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
           <div class="mb-3">
             <label for="email" class="form-label">Correo electronico</label>
-            <input type="email" class="form-control  <?= $mailError ? 'is-invalid' : '' ?>" value="<?= $mail ?>" name="inputMail" id="email" placeholder="example@gmail.com">
-            <div class="invalid-feedback" <?= $mailError ?>>Correo electronico invalido</div>
+            <input type="text" class="form-control  <?= $mailError ? 'is-invalid' : '' ?>" value="<?= $mail ?>" name="inputMail" id="email" placeholder="example@gmail.com">
+            <div class="invalid-feedback" <?= $mailError ?>><?= $mailError ?></div>
           </div>
 
           <div class="mb-3">
