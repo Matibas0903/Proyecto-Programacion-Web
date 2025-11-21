@@ -2,18 +2,20 @@ window.onload = function () {
   const btnGuardar = document.getElementById("btnGuardar");
   btnGuardar.addEventListener("click", guardarCuestionario);
   let cantidadPreguntas = 0;
+  const btnConfig = document.getElementById("btnConfig");
+
+  btnConfig.addEventListener("click", mostrarConfiguracion);
 
   abrirPanelDerecho();
   abrirPanelTemas();
   seleccionarTema();
   salirDeCreacion();
-  mostrarConfiguracion();
   ponerNombre();
-  //validarTitulo();
   añadirPregunta(cantidadPreguntas);
 };
 
 function abrirPanelDerecho() {
+  //Abre el panel derecho(sin muchas opciones)
   const panelDer = document.getElementById("panelDer");
   const btnPanelDer = document.getElementById("btnPanelDer");
   const main = document.getElementById("panelPrincipal");
@@ -37,6 +39,7 @@ function abrirPanelDerecho() {
 }
 
 function abrirPanelTemas() {
+  //muestra el panel para seleccionar temas
   const btnTemas = document.getElementById("btnTemas");
   const panelTemas = document.getElementById("panelTemas");
   const btnCerrarTemas = document.getElementById("btnCerrarTemas");
@@ -76,6 +79,7 @@ function abrirPanelTemas() {
 }
 
 function seleccionarTema() {
+  //Pone en el fondo el tema seleccionado
   const btntema1 = document.getElementById("tema1");
   const btntema2 = document.getElementById("tema2");
   const btntema3 = document.getElementById("tema3");
@@ -93,8 +97,8 @@ function seleccionarTema() {
   });
 }
 
-
 function salirDeCreacion() {
+  //Muestra el modal para salir sin guardar
   const btnSalir = document.getElementById("btnSalir");
 
   btnSalir.addEventListener("click", function () {
@@ -106,38 +110,17 @@ function salirDeCreacion() {
 }
 
 function mostrarConfiguracion() {
-  const btnConfig = document.getElementById("btnConfig");
-
-  btnConfig.addEventListener("click", () => {
-    const modalConfig = new bootstrap.Modal(
-      document.getElementById("modalConfiguracion")
-    );
-    modalConfig.show();
-  });
+  //Abre el modal de configuracion
+  const modalConfig = new bootstrap.Modal(
+    document.getElementById("modalConfiguracion")
+  );
+  modalConfig.show();
 }
-/* function validarTitulo() {
-  const btnGuardar = document.getElementById("btnGuardar");
-  const titulo = document.getElementById("tituloCuestionario");
-  const inputTitulo = document.getElementById("inputIngresarTitulo");
-
-  btnGuardar.addEventListener("click", () => {
-    if (titulo.innerText.trim() === "") {
-      inputTitulo.classList.add("is-invalid");
-      inputTitulo.classList.remove("is-valid");
-      titulo.innerHTML = "cuestionario";
-    } else {
-      inputTitulo.classList.add("is-valid");
-      inputTitulo.classList.remove("is-invalid");
-    }
-  });
-}
-*/
 
 function ponerNombre() {
+  //Escribo en el titulo el nombre ingresado en el modal
   const titulo = document.getElementById("tituloCuestionario");
   const inputTituloconfig = document.getElementById("inputTitulo");
-  const btnListo = document.getElementById("btnListo");
-
   inputTituloconfig.addEventListener("change", () => {
     titulo.innerHTML = inputTituloconfig.value;
     if (titulo.innerText.trim() === "") {
@@ -147,6 +130,7 @@ function ponerNombre() {
 }
 
 function añadirPregunta(cantidadPreguntas) {
+  //Agrega una diapositiva en el panel izquierdo
   const btnAñadirPregunta = document.getElementById("btnAñadirPregunta");
   const divContenedor = document.getElementById("divPreguntas");
 
@@ -205,6 +189,7 @@ function añadirPregunta(cantidadPreguntas) {
 }
 
 function crearPregunta(preguntaId) {
+  //Crea el cuerpo de la pregunta editable
   const panelPrincipal = document.getElementById("panelPrincipal");
 
   const container = document.createElement("div");
@@ -273,7 +258,7 @@ function crearPregunta(preguntaId) {
     cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
     cardRespuesta.classList.add("OpcionRespuesta");
 
-   const btnOpcion = document.createElement("div");
+    const btnOpcion = document.createElement("div");
     btnOpcion.classList.add("btn", "w-100", "btnOpciones");
     btnOpcion.contentEditable = true;
     btnOpcion.textContent = `Opción ${i}`;
@@ -327,11 +312,13 @@ function crearPregunta(preguntaId) {
   });
 }
 
+//Consume la API
 //API
 // ========== UNSPLASH API ==========
 const UNSPLASH_ACCESS_KEY = "lDb4UKPmw_gnTXieod-jR_pWtDpRszsGNSuPlOpyudc";
 
 async function buscarImagenesUnsplash(query) {
+  // buscaen la API una imagen de acuerdo a la palabra ingresada
   const url = `https://api.unsplash.com/search/photos?query=${query}&per_page=6&client_id=${UNSPLASH_ACCESS_KEY}`;
   const response = await fetch(url);
   const data = await response.json();
@@ -340,6 +327,7 @@ async function buscarImagenesUnsplash(query) {
 
 // Mostrar la imagen seleccionada en la tarjeta
 function mostrarImagenSeleccionada(cardBody, url) {
+  //Muestra el resultado de la busqueda
   let imgPreview = cardBody.querySelector(".img-preview");
   if (!imgPreview) {
     imgPreview = document.createElement("img");
@@ -352,6 +340,14 @@ function mostrarImagenSeleccionada(cardBody, url) {
 }
 
 async function guardarCuestionario() {
+  //Se conecta con los php para guardar la informacion y las preguntas del cuestionario
+  const esValido = await ValidarForm();
+
+  if (!esValido) {
+    console.log("Hay errores, no guardo nada");
+    return;
+  }
+
   try {
     const form = document.getElementById("cuestionarioData");
     const formData = new FormData(form);
@@ -376,13 +372,12 @@ async function guardarCuestionario() {
 }
 
 async function EnviarPreguntas(version) {
+  //Envia las preguntas al PHP, las inserta y llena el form nuevamente con el contenido
   console.log("enviando preguntas...");
   const preguntas = recolectarPreguntas();
   console.log("preguntas contruidas", preguntas);
   const idVersionGlobal = version;
   try {
-    //este codigo es para pasar el json a guardarCuestionario.php funciona pero todavia esta complciado el idVersion(comentario viejo)
-    //veremos dijo el ciego
     const response = await fetch("InsertPreguntas.php", {
       method: "POST",
       headers: {
@@ -395,7 +390,6 @@ async function EnviarPreguntas(version) {
     });
 
     const responseText = await response.text();
-    console.log("Respuesta cruda", responseText);// Mensaje de PHP
 
     const data = JSON.parse(responseText);
     alert(data.message);
@@ -405,8 +399,9 @@ async function EnviarPreguntas(version) {
     console.error("Error al enviar las preguntas:", error);
   }
 }
-//NUEVO RECOLECTAR PREGUNTAS
+
 function recolectarPreguntas() {
+  //Junta todas la Preguntas y opciones creadas en un array para enviar al PHP
   const preguntas = [];
   const formularios = document.querySelectorAll(".form-pregunta");
 
@@ -420,7 +415,7 @@ function recolectarPreguntas() {
     // Recolectar las opciones
     const opciones = [];
     const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
-    const opcionesCorrectas =[];
+    const opcionesCorrectas = [];
 
     opcionesDiv.forEach((div) => {
       const texto = div.querySelector(".btnOpciones").textContent.trim();
@@ -428,7 +423,7 @@ function recolectarPreguntas() {
         ? 1
         : 0;
 
-      if( esCorrecta === 1){
+      if (esCorrecta === 1) {
         opcionesCorrectas.push(esCorrecta);
       }
 
@@ -443,7 +438,7 @@ function recolectarPreguntas() {
       enunciado: enunciado,
       imagen: imagenSeleccionada,
       opciones: opciones,
-      opcionesCorrectas : opcionesCorrectas
+      opcionesCorrectas: opcionesCorrectas,
     });
   });
 
@@ -451,6 +446,9 @@ function recolectarPreguntas() {
 }
 
 async function llenarCampos(idVersionGlobal) {
+  //Llena los campos con los datos del cuestionario ya insertado
+
+  //Declaro todos los inputs
   const inputTitulo = document.getElementById("inputTitulo");
   const inputDescripcion = document.getElementById("descripcion");
   const inputCodAcceso = document.getElementById("inputCodigoAcceso");
@@ -458,34 +456,96 @@ async function llenarCampos(idVersionGlobal) {
   const publico = document.getElementById("radiopublico");
   const privado = document.getElementById("radioPrivado");
   try {
+    //obtengo los datos
     const response = await fetch("obtenerDatosCuestionario.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        idVersion: idVersionGlobal
+        idVersion: idVersionGlobal,
       }),
     });
 
     const data = await response.json();
 
-   const c = data.cuestionario;
+    //lleno los inputs con la informacion de la tabla cuestionario
+    const c = data.cuestionario;
 
-inputTitulo.value = c.NOMBRE_CUESTIONARIO;
-selectCategoria.value = c.ID_CATEGORIA;
+    inputTitulo.value = c.NOMBRE_CUESTIONARIO;
+    selectCategoria.value = c.ID_CATEGORIA;
 
-  if (c.VISIBILIDAD === "Publico") {
-    publico.checked = true;
-  } else {
-    privado.checked = true;
-  }
-  const v = data.version;
-  inputDescripcion.value = v.DESCRIPCION;
-  inputCodAcceso.value = v.COD_ACCESO;
+    if (c.VISIBILIDAD === "Publico") {
+      publico.checked = true;
+    } else {
+      privado.checked = true;
+    }
+    //lleno los inputs con la informacion de la tabla version_cuestionario
+    const v = data.version;
+    inputDescripcion.value = v.DESCRIPCION;
+    inputCodAcceso.value = v.COD_ACCESO;
 
     console.log("campos llenos");
   } catch (error) {
     console.error("Error al cargar el cuestionario:", error);
   }
+}
+
+async function ValidarForm() {
+  //Valida los campos del formulario si hay errores los muestra
+  const formData = new FormData(document.getElementById("cuestionarioData"));
+
+  try {
+    const response = await fetch("validarForm.php", {
+      method: "POST",
+      body: formData,
+    });
+    const data = await response.json();
+    console.log(data);
+
+    if (data.status === "error") {
+      mostrarConfiguracion();
+      mostrarErrores(data); // Si hay errores, los muestro
+      return false;
+    } else {
+      console.log("form validado");
+      return true;
+    }
+  } catch (error) {
+    console.log("oh no");
+    console.error("Error al registrar inscripción:", error);
+    return false;
+  }
+}
+
+function mostrarErrores(data) {
+  //Recorre el form y agrega la clazase is-invalid en lo campos que dieron error
+  const miForm = document.getElementById("cuestionarioData");
+
+  //selecciono todos los inpust con esas clases y lo limpio
+  miForm.querySelectorAll(".form-control, .form-select").forEach((input) => {
+    input.classList.remove("is-invalid");
+  });
+
+  //selecciono todos los div con class invalid-feedback
+  miForm.querySelectorAll(".invalid-feedback").forEach((div) => {
+    //los escondo y los limpio
+    div.classList.add("d-none");
+    div.textContent = "";
+  });
+
+  Object.keys(data.errors).forEach((campo) => {
+    const input = document.getElementById(campo);
+    //seleciono todos los divs para mostrar el mensaje de error
+    const divError = input.parentElement.querySelector(".invalid-feedback");
+
+    if (input && divError) {
+      //le pongo class invlaid a mis input
+      input.classList.add("is-invalid");
+      //pongo el mensaje de error que traigo desde php
+      divError.textContent = data.errors[campo];
+      //lo mustro el div con los mensajes
+      divError.classList.remove("d-none");
+    }
+  });
 }

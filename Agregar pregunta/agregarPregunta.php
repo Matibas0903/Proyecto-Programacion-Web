@@ -197,16 +197,19 @@ try {
                                                     <label for="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
                                                     <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
                                                     <input type="text" id="inputTitulo" name="nombreCuestionario" class="form-control needs-validation">
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
 
                                                 <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label">Descripcion</label>
                                                 <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
                                                 <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
                                                 <textarea id="descripcion" name="txtDescripcion" class="form-textarea" maxlength="300" rows="3"></textarea>
+                                                <div class="invalid-feedback"></div>
 
                                                 <div class="mb-5">
                                                     <label for="inputCodigoAcceso" id="lblCodigoAcceso" class="subtitulo form-label">Ingrese un codigo para acceder al cuestionario</label>
                                                     <input type="text" id="inputCodigoAcceso" name="codigoAcceso" class="form-control needs-validation">
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                                 <div class="mb-5">
                                                     <label for="selectCategoria" class="fw-bold fs-5 form-label">Categoria del cuestionario</label>
@@ -222,6 +225,7 @@ try {
                                                         <?php endforeach;
                                                         ?>
                                                     </select>
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                                 <h5>
                                                     <i class="bi bi-question-square-fill"></i>
@@ -239,6 +243,7 @@ try {
                                                         <?php endforeach;
                                                         ?>
                                                     </select>
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                                 <h5>
                                             </div>
@@ -264,10 +269,12 @@ try {
                                                         <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
                                                         <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
                                                     </div>
+                                                    <div class="invalid-feedback"></div>
                                                 </div>
                                                 <div class="form-check form-switch mb-5">
                                                     <label class="fw-bold fs-6 form-check-label" for="SwitchEstado">Activar Cuestionario</label>
                                                     <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
+                                                    <div class="invalid-feedback"></div>
 
                                                 </div>
                                             </div>
