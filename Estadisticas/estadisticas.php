@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-   <?php
-      require('../includesPHP/head.php');
+    <?php
+    require('../includesPHP/head.php');
     ?>
     <link rel="stylesheet" href="estadisticas.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="estadisticas.js" defer></script>
     <title>Estadisticas</title>
 </head>
+
 <body>
     <?php
-        require('../includesPHP/navGeneral.php');
+    require('../includesPHP/navGeneral.php');
     ?>
     <div class="container mt-4">
         <div class="row">
@@ -44,15 +46,15 @@
                     <div class="card-body">
                         <div>
                             <h6 class="card-title">Cantidad de respuestas</h5>
-                            <canvas id="graficoCantRespuestas"></canvas>
+                                <canvas id="graficoCantRespuestas"></canvas>
                         </div>
                         <div>
                             <h6 class="card-title">Cantidad de usuarios</h5>
-                            <canvas id="graficoCantUsuarios"></canvas>
+                                <canvas id="graficoCantUsuarios"></canvas>
                         </div>
                         <div>
                             <h6 class="card-title">Valoracion promedio</h5>
-                            <canvas id="graficoValoracion"></canvas>
+                                <canvas id="graficoValoracion"></canvas>
                         </div>
                     </div>
                 </div>
@@ -60,4 +62,5 @@
         </div>
     </div>
 </body>
+
 </html>

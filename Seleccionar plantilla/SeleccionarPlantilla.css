@@ -3,12 +3,16 @@
 }
 #navBarCrearPreg{
     background-color: #f4d4ca;
-    z-index: 4;
-    
+    z-index: 2000;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
 }
 
 body{
     background-color: #fdecd7;
+    overflow-y:auto;
+    overflow-x: clip;
 }
 #panelPrincipal
 {
@@ -84,9 +88,7 @@ body{
 #btnOpcion{
     background-color: #ef7131;
 }
-#panelDer{
-    background-color: #ffded3;
-}
+
 #btnAñadirPregunta{
     background-color: #3e7463;
     border: solid #748283;
@@ -96,19 +98,19 @@ body{
     background-color: #d8eced;
 }
 
+
 #panelDer {
-    position: fixed;
+    margin-top: 10px;
+    border: 2px solid #798380;
+    border-radius: 10px;
+    position: absolute;
     top: 133.6px;
     right: -300px;       
     width: 300px;
-    height: calc(100vh - 133.6px);
-    background-color: #fff;
-    border-left: 1px solid #ddd;
-    padding: 20px;
+    background-color: #ffded3;
     transition: right 0.3s ease;
     z-index: 1050;
 }
-
 
 #panelDer.active {
     right: 0;
@@ -116,16 +118,18 @@ body{
 
 
 #btnPanelDer {
-    position: fixed;
+    position: absolute;
     top: 50%;
-    right: 0;                
+    right: 0;                   
     transform: translateY(-50%);
     width: 30px;
     height: 60px;
     border-radius: 15px;
-    background-color: #007bff;
+    background-color: #edb51a;
+    border-top: 2px solid #af881b;
+    border-right: 2px solid #af881b;
+    border-bottom: 2px solid #af881b;
     color: #fff;
-    border: none;
     cursor: pointer;
     z-index: 1060;
     display: flex;
@@ -137,19 +141,19 @@ body{
 
 #panelTemas
 {
+    margin-top: 10px;
+    border: 2px solid #798380;
+    border-radius: 10px;
     visibility: hidden;
     right: 0;
-    position: fixed;
-    top: 133.6px;
-    height: calc(100vh - 133.6px);
-    background-color: #fff;
-    border-left: 1px solid #ddd;
+    position: absolute;
+    top:  133.6px;
+    width: 300px;
+    background-color: #ffded3;
     padding: 20px;
     transition: right 0.3s ease;
     z-index: 1080;
 }
-
-
 
 #panelDer.active + #btnPanelDer {
     right: 300px;  
@@ -169,6 +173,10 @@ border:2px solid black;
 }
 
 /* estilos navbar */
+.navbar-general
+{
+    z-index: 3000;
+}
 .navbar-cuestionarios {
     border-top: 2px solid #000000;
     border-right: 2px solid #000000;
@@ -220,7 +228,10 @@ border:2px solid black;
 .cardBodyPregun input
 {
    background-color: #fca493;
-   border:0;
+   margin-bottom: 10px;
+    border-radius: 8px;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;  
 }
 .cardBodyPregun input:focus
 {
@@ -240,3 +251,7 @@ border:2px solid black;
     border-width: 1px 1px 3px 1px;
 }
 
+.modal
+{
+    z-index: 5000;
+}

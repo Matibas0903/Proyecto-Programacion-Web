@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <?php
-      require('../includesPHP/head.php');
+    require('../includesPHP/head.php');
     ?>
     <link rel="stylesheet" href="lobby.css">
     <script src="lobby.js" defer></script>
     <title>Document</title>
 </head>
+
 <body>
     <?php
-        require('../includesPHP/navGeneral.php');
+    require('../includesPHP/navGeneral.php');
     ?>
     <!--Barra lateral izquierda-->
-    <div  class="container-fluid">
+    <div class="container-fluid">
         <div class="row">
             <div id="panelIzq" class="col-3 p-3 vh-100">
                 <h4 class="fw-bold">Jugadores</h4>
@@ -50,10 +52,10 @@
                     </table>
                 </div>
             </div>
-        
-    
 
-        <!--Contenedor principal-->
+
+
+            <!--Contenedor principal-->
             <div class="col-9 d-flex flex-column justify-content-center align-items-center vh-100">
                 <div>
                     <button class="btn" id="btnIniciarCuestionario">Iniciar cuestionario</button>
@@ -68,4 +70,5 @@
         </div>
     </div>
 </body>
+
 </html>

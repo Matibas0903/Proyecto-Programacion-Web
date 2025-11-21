@@ -1,40 +1,37 @@
 <?php
-  session_start();
+session_start();
 
-  // Verificar si el usuario inició sesión
-  if (!isset($_SESSION['usuario_id'])) {
-    header("Location: ../Login/login.php");
-    exit;
-  }
-  require('../BaseDeDatos/conexion.php');
+require('../BaseDeDatos/conexion.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <?php
-      require('../includesPHP/head.php');
-    ?>
-    <link rel="stylesheet" href="./administrador.css">
-    <title>Administrador</title>
+  <?php
+  require('../includesPHP/head.php');
+  ?>
+  <link rel="stylesheet" href="./administrador.css">
+  <title>Administrador</title>
 </head>
+
 <body>
   <?php
-    require('../includesPHP/navGeneral.php');
+  require('../includesPHP/navGeneral.php');
   ?>
   <div class="container mt-3">
     <!--header -->
     <div class="row">
-        <div class="col-12 col-md-6 my-3">
-            <form id="formId" class="needs-validation" novalidate>
-                <div class="input-group input-group-lg">
-                  <button class="input-group-text icon_container c_orange button_search" id="basic-addon1"><i class="bi bi-search"></i></button>
-                  <input type="text" id="nombreCuest" class="form-control border_cuest" placeholder="Buscar cuestionario" maxlength="50" required>
-                  <div class="invalid-feedback" id="nameInvalid">
-                    Ingresa un nombre de cuestionario no mayor a 50 caracteres
-                  </div>
-                </div>
-            </form>
-        </div>
+      <div class="col-12 col-md-6 my-3">
+        <form id="formId" class="needs-validation" novalidate>
+          <div class="input-group input-group-lg">
+            <button class="input-group-text icon_container c_orange button_search" id="basic-addon1"><i class="bi bi-search"></i></button>
+            <input type="text" id="nombreCuest" class="form-control border_cuest" placeholder="Buscar cuestionario" maxlength="50" required>
+            <div class="invalid-feedback" id="nameInvalid">
+              Ingresa un nombre de cuestionario no mayor a 50 caracteres
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
     <!--cuerpo -->
     <div class="row my-3">
@@ -43,12 +40,12 @@
           <!-- Usuario -->
           <div class="card-body row">
             <div class="col-3 align-self-center">
-              <img src="<?=$_SESSION['foto_perfil']?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
+              <img src="<?= $_SESSION['foto_perfil'] ?>" alt="imagen usuario" class="img_usuario" id="img_usuario">
             </div>
             <div class="col-9 align-self-center">
-              <h2 class="mb-0" id="name_usuario"><?=$_SESSION['nombre']?></h2>
-            </div> 
-          </div> 
+              <h2 class="mb-0" id="name_usuario"><?= $_SESSION['nombre'] ?></h2>
+            </div>
+          </div>
         </div>
 
         <!-- Cuestionarios -->
@@ -94,22 +91,22 @@
   </div>
 
   <!-- modal compartir -->
-   <div class="modal" tabindex="-1" id="modalCompartir">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="modalTitulo"></h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <p class="text-center">Copia y comparte el enlace</p>
-              <br>
-              <h2 class="text-center modal_enlace" id="enlace"></h2>
-            <p></p>
-          </div>
+  <div class="modal" tabindex="-1" id="modalCompartir">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitulo"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-center">Copia y comparte el enlace</p>
+          <br>
+          <h2 class="text-center modal_enlace" id="enlace"></h2>
+          <p></p>
         </div>
       </div>
     </div>
+  </div>
 
     <?php
       include('../mensajeError/mensajeError.php');
@@ -117,4 +114,5 @@
 
 </body>
 <script src="./administrador.js"></script>
+
 </html>
