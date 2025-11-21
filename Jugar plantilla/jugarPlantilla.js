@@ -47,7 +47,7 @@ function mostrarPreguntas() {
                 cards[preguntaNum].classList.remove("d-none");
             } else {
                 setTimeout(() => {
-                    window.location.href = "../Resultado/resultado.html";
+                    window.location.href = "../Resultado/resultado.php";
                 }, 300);
             }
             }, 1000);

@@ -9,13 +9,13 @@ function jugarPlantilla(){
     const btnJugar = document.getElementById("btnIniciarCuestionario");
 
     btnJugar.addEventListener("click", function (){
-        window.location.href = "../Jugar plantilla/jugarPlantilla.html";
+        window.location.href = "../Jugar plantilla/jugarPlantilla.php";
     });
 }
 function salirDePlantilla(){
     const btnSalir = document.getElementById("btnSalirLobby");
 
     btnSalir.addEventListener("click", function (){
-        window.location.href = "../administrador/administrador.html";
+        window.location.href = "../administrador/administrador.php";
     });
 }
