@@ -9,7 +9,7 @@ window.onload = function () {
   salirDeCreacion();
   mostrarConfiguracion();
   ponerNombre();
-  validarTitulo();
+  //validarTitulo();
   añadirPregunta(cantidadPreguntas);
 };
 
@@ -93,7 +93,6 @@ function seleccionarTema() {
   });
 }
 
-function mostrarAlertaGuardado() {}
 
 function salirDeCreacion() {
   const btnSalir = document.getElementById("btnSalir");
@@ -116,8 +115,7 @@ function mostrarConfiguracion() {
     modalConfig.show();
   });
 }
-
-function validarTitulo() {
+/* function validarTitulo() {
   const btnGuardar = document.getElementById("btnGuardar");
   const titulo = document.getElementById("tituloCuestionario");
   const inputTitulo = document.getElementById("inputIngresarTitulo");
@@ -133,22 +131,19 @@ function validarTitulo() {
     }
   });
 }
+*/
 
 function ponerNombre() {
-  const inputTitulo = document.getElementById("inputIngresarTitulo");
   const titulo = document.getElementById("tituloCuestionario");
   const inputTituloconfig = document.getElementById("inputTitulo");
   const btnListo = document.getElementById("btnListo");
 
-  inputTitulo.addEventListener("input", () => {
-    titulo.innerHTML = inputTitulo.value;
-  });
-  /*btnListo.addEventListener("click", () => {
+  inputTituloconfig.addEventListener("change", () => {
     titulo.innerHTML = inputTituloconfig.value;
     if (titulo.innerText.trim() === "") {
       titulo.innerHTML = "cuestionario";
     }
-  });*/
+  });
 }
 
 function añadirPregunta(cantidadPreguntas) {
@@ -270,6 +265,7 @@ function crearPregunta(preguntaId) {
   const row = document.createElement("div");
   row.classList.add("row", "g-3");
 
+  //Creo las 4 opciones con sus respectivas cards
   for (let i = 1; i <= 4; i++) {
     const col = document.createElement("div");
     col.classList.add("col-12", "col-md-6");
@@ -277,15 +273,16 @@ function crearPregunta(preguntaId) {
     cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
     cardRespuesta.classList.add("OpcionRespuesta");
 
-    const btnOpcion = document.createElement("button");
+   const btnOpcion = document.createElement("div");
     btnOpcion.classList.add("btn", "w-100", "btnOpciones");
     btnOpcion.contentEditable = true;
     btnOpcion.textContent = `Opción ${i}`;
     const radioCorrecta = document.createElement("input");
     radioCorrecta.type = "radio";
-    radioCorrecta.name = "radioCorrecto-${preguntaId}";
+    radioCorrecta.name = `radioCorrecto-${preguntaId}`;
     radioCorrecta.classList.add("form-check-input");
 
+    //asigno la opcion correcta a opciones
     cardRespuesta.appendChild(radioCorrecta);
     cardRespuesta.appendChild(btnOpcion);
     col.appendChild(cardRespuesta);
@@ -360,7 +357,7 @@ async function guardarCuestionario() {
     const formData = new FormData(form);
 
     //envio la info del cuestionario
-    const response = await fetch("guardarCuestionario.php", {
+    const response = await fetch("InsertDatosCuestionario.php", {
       method: "POST",
       body: formData,
     });
@@ -386,7 +383,7 @@ async function EnviarPreguntas(version) {
   try {
     //este codigo es para pasar el json a guardarCuestionario.php funciona pero todavia esta complciado el idVersion(comentario viejo)
     //veremos dijo el ciego
-    const response = await fetch("guardarCuestionario2.php", {
+    const response = await fetch("InsertPreguntas.php", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -403,7 +400,7 @@ async function EnviarPreguntas(version) {
     const data = JSON.parse(responseText);
     alert(data.message);
     console.log("llenando campos");
-    llenarCampos();
+    llenarCampos(idVersionGlobal);
   } catch (error) {
     console.error("Error al enviar las preguntas:", error);
   }
@@ -423,12 +420,17 @@ function recolectarPreguntas() {
     // Recolectar las opciones
     const opciones = [];
     const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
+    const opcionesCorrectas =[];
 
     opcionesDiv.forEach((div) => {
       const texto = div.querySelector(".btnOpciones").textContent.trim();
       const esCorrecta = div.querySelector("input[type='radio']").checked
         ? 1
         : 0;
+
+      if( esCorrecta === 1){
+        opcionesCorrectas.push(esCorrecta);
+      }
 
       opciones.push({
         texto: texto,
@@ -441,37 +443,47 @@ function recolectarPreguntas() {
       enunciado: enunciado,
       imagen: imagenSeleccionada,
       opciones: opciones,
+      opcionesCorrectas : opcionesCorrectas
     });
   });
 
   return preguntas;
 }
 
-async function llenarCampos() {
-  const inputTitulo = document.getElementById("inputTitulo").value;
-  const inputDescripcion = document.getElementById("descripcion").value;
-  const inputCodAcceso = document.getElementById("inputCodigoAcceso").value;
+async function llenarCampos(idVersionGlobal) {
+  const inputTitulo = document.getElementById("inputTitulo");
+  const inputDescripcion = document.getElementById("descripcion");
+  const inputCodAcceso = document.getElementById("inputCodigoAcceso");
   const selectCategoria = document.getElementById("selectCategoria").value;
   const publico = document.getElementById("radiopublico");
   const privado = document.getElementById("radioPrivado");
   try {
-    const response = await fetch("obtenerDatosCuestionario.php");
+    const response = await fetch("obtenerDatosCuestionario.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idVersion: idVersionGlobal
+      }),
+    });
+
     const data = await response.json();
 
-    data.cuestionario.forEach((dato) => {
-      inputTitulo.textContent = dato.NOMBRE_CUESTIONARIO;
-      selectCategoria.value = dato.ID_CATEGORIA;
-      if (dato.VISIBILIDAD === "Publico") {
-        publico.checked = true;
-      } else {
-        privado.checked = true;
-      }
-    });
+   const c = data.cuestionario;
 
-    data.version.forEach((dato) => {
-      inputDescripcion.value = dato.DESCRIPCION;
-      inputCodAcceso.value = dato.COD_ACCESO;
-    });
+inputTitulo.value = c.NOMBRE_CUESTIONARIO;
+selectCategoria.value = c.ID_CATEGORIA;
+
+  if (c.VISIBILIDAD === "Publico") {
+    publico.checked = true;
+  } else {
+    privado.checked = true;
+  }
+  const v = data.version;
+  inputDescripcion.value = v.DESCRIPCION;
+  inputCodAcceso.value = v.COD_ACCESO;
+
     console.log("campos llenos");
   } catch (error) {
     console.error("Error al cargar el cuestionario:", error);

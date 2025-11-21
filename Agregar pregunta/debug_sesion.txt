@@ -1,8 +1,0 @@
-Array
-(
-    [correo] => marco22@gmail.com
-    [usuario_id] => 8
-    [nombre] => Marco
-    [foto_perfil] => ../EditarUsuario/Recursos/icono.png
-    [rol_id] => 1
-)

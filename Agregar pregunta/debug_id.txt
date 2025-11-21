@@ -1,3 +1,0 @@
-ID usado = array (
-  'isTrusted' => true,
-)
