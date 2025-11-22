@@ -2,14 +2,21 @@ window.onload = function()
 {
 let cantidadPreguntas = 0;
 
+ const btnGuardar = document.getElementById("btnGuardar");
+  btnGuardar.addEventListener("click", guardarCuestionario);
+
+  const btnConfig = document.getElementById("btnConfig");
+
+  btnConfig.addEventListener("click", mostrarConfiguracion);
+
 obtenerPlantilla(cantidadPreguntas);
 abrirPanelDerecho();
 abrirPanelTemas();
 seleccionarTema();
 salirDeCreacion();
-mostrarConfiguracion();
-/*ponerNombre();
-validarTitulo();*/    
+
+ponerNombre();
+
 añadirPregunta(cantidadPreguntas);
 }
 
@@ -140,15 +147,12 @@ function salirDeCreacion(){
 }
 
 
-function mostrarConfiguracion()
-{
-    const btnConfig = document.getElementById("btnConfig");
-
-    btnConfig.addEventListener("click", ()=>
-        {
-            const modalConfig = new bootstrap.Modal(document.getElementById('modalConfiguracion'))
-            modalConfig.show();
-        })
+function mostrarConfiguracion() {
+  //Abre el modal de configuracion
+  const modalConfig = new bootstrap.Modal(
+    document.getElementById("modalConfiguracion")
+  );
+  modalConfig.show();
 }
 
 /*function validarTitulo() 
@@ -174,26 +178,17 @@ function mostrarConfiguracion()
         });
 }*/
 
-/*function ponerNombre()
-{
-    const inputTitulo = document.getElementById("inputIngresarTitulo");
-    const titulo = document.getElementById("tituloCuestionario");
-    const inputTituloconfig = document.getElementById("inputTitulo")
-    const btnListo = document.getElementById("btnListo");
-
-    inputTitulo.addEventListener("input", ()=>
-        {
-            titulo.innerHTML= inputTitulo.value;
-        })
-    btnListo.addEventListener("click", ()=>
-        {
-            titulo.innerHTML = inputTituloconfig.value;
-            if(titulo.innerText.trim() === "")
-                {
-                    titulo.innerHTML = "cuestionario";
-                }
-        })
-}*/
+function ponerNombre() {
+  //Escribo en el titulo el nombre ingresado en el modal
+  const titulo = document.getElementById("tituloCuestionario");
+  const inputTituloconfig = document.getElementById("inputTitulo");
+  inputTituloconfig.addEventListener("change", () => {
+    titulo.innerHTML = inputTituloconfig.value;
+    if (titulo.innerText.trim() === "") {
+      titulo.innerHTML = "cuestionario";
+    }
+  });
+}
 
 function crearBotonPregunta(preguntaId, titulo) {
     const div = document.createElement("div");
@@ -414,7 +409,7 @@ async function obtenerPlantilla(cantidadPreguntas){
 
 
     const version = idVersion;
-
+    console.log("ID version obtenido:", version);
 
     if(version === null){
         return error;
@@ -425,12 +420,23 @@ async function obtenerPlantilla(cantidadPreguntas){
             headers: {"Content-Type": "application/json",
             },
             body: JSON.stringify({
-                idVersion: idVersion
+                idVersion: version
             })
         });
         
         const data = await response2.json();
+        if (data.status === "error") {
+            alert(data.message);
+            return;
+        }
 
+        if (data.status === "warning") {
+            console.warn(data.message);
+            alert(data.message);
+            //si el cuestionario no esta disponible para plantilla redirige a administrador
+            window.location.href = "../administrador/administrador.php";
+            // igual puedes mostrar los datos si quieres
+        }
         if(data === null){
             return error;
         }else{
@@ -479,7 +485,7 @@ async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
     
     try {
 
-    const response2 = await fetch("obtenerPreguntas.php", {
+    const response2 = await fetch("../AgregarPregunta/obtenerPreguntas.php", {
         method: "POST",
         headers: {"Content-Type": "application/json",
         },
@@ -520,4 +526,111 @@ async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
 
     
 
+}
+
+
+async function guardarCuestionario() {
+  //Se conecta con los php para guardar la informacion y las preguntas del cuestionario
+  const esValido = await ValidarForm();
+
+  if (!esValido) {
+    console.log("Hay errores, no guardo nada");
+    return;
+  }
+
+  try {
+    const form = document.getElementById("cuestionarioData");
+    const formData = new FormData(form);
+
+    //envio la info del cuestionario
+    const response = await fetch("../AgregarPregunta/InsertDatosCuestionario.php", {
+      method: "POST",
+      body: formData,
+    });
+    const raw = await response.text();
+    console.log("Respuesta cruda del servidor:", raw);
+    const data = JSON.parse(raw);
+    //const data = await response.json();
+    //se guardo la info del cuestionario y me trajo el id de la version
+    const idVersionGlobal = data.idVersion;
+    console.log("ID VERSION RECIBIDO:", idVersionGlobal);
+    //procedo a enviar las preguntas para guardarlas
+    EnviarPreguntas(idVersionGlobal);
+  } catch (error) {
+    console.error("Error al guardar el cuestionario:", error);
+  }
+}
+
+async function EnviarPreguntas(version) {
+  //Envia las preguntas al PHP, las inserta y llena el form nuevamente con el contenido
+  console.log("enviando preguntas...");
+  const preguntas = recolectarPreguntas();
+  console.log("preguntas contruidas", preguntas);
+  const idVersionGlobal = version;
+  try {
+    const response = await fetch("../AgregarPregunta/InsertPreguntas.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idVersion: idVersionGlobal,
+        preguntas: preguntas,
+      }),
+    });
+
+    const responseText = await response.text();
+
+    const data = JSON.parse(responseText);
+    alert(data.message);
+    console.log("llenando campos");
+    llenarCampos(idVersionGlobal);
+  } catch (error) {
+    console.error("Error al enviar las preguntas:", error);
+  }
+}
+
+function recolectarPreguntas() {
+  //Junta todas la Preguntas y opciones creadas en un array para enviar al PHP
+  const preguntas = [];
+  const formularios = document.querySelectorAll(".form-pregunta");
+
+  formularios.forEach((form, index) => {
+    const enunciado = form.querySelector(".input-pregunta").value.trim();
+
+    // Intentar obtener imagen seleccionada (si existe)
+    const imagenSeleccionada =
+      form.querySelector(".imagen-seleccionada")?.src || null;
+
+    // Recolectar las opciones
+    const opciones = [];
+    const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
+    const opcionesCorrectas = [];
+
+    opcionesDiv.forEach((div) => {
+      const texto = div.querySelector(".btnOpciones").textContent.trim();
+      const esCorrecta = div.querySelector("input[type='radio']").checked
+        ? 1
+        : 0;
+
+      if (esCorrecta === 1) {
+        opcionesCorrectas.push(esCorrecta);
+      }
+
+      opciones.push({
+        texto: texto,
+        esCorrecta: esCorrecta,
+      });
+    });
+
+    preguntas.push({
+      nro_orden: index + 1,
+      enunciado: enunciado,
+      imagen: imagenSeleccionada,
+      opciones: opciones,
+      opcionesCorrectas: opcionesCorrectas,
+    });
+  });
+
+  return preguntas;
 }
