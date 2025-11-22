@@ -1,42 +1,6 @@
-<?php
-    if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-    }
-    $idUsuario = $_SESSION["usuario_id"];
-    require("../BaseDeDatos/conexion.php");
-
-
-    $idVersion = $_GET['id_version'] ?? null;
-
-    try {
-    // Consultar las categorias
-    $stmt = $conn->prepare("SELECT ID_CATEGORIA, NOMBRE FROM categoria ORDER BY NOMBRE ASC");
-    $stmt->execute();
-
-    // Guardar los resultados
-    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Error al obtener categorías: " . $e->getMessage();
-}
-
-
-try {
-    // Consultar los tipos de preguntas
-    $stmt = $conn->prepare("SELECT ID_TIPO_PREGUNTA, TIPO FROM tipo_pregunta");
-    $stmt->execute();
-
-    // Guardar los resultados
-    $tipoPreguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Error al obtener el tipo de preguntas: " . $e->getMessage();
-}
-
-   
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <?php
     require('../includesPHP/head.php');
@@ -46,7 +10,7 @@ try {
     <title> Seleccionar Plantilla </title>
 </head>
 
-<body data-idversion="<?= $idVersion ?>">
+<body>
     <?php
     require('../includesPHP/navGeneral.php');
     ?>
@@ -214,105 +178,47 @@ try {
 
                 <!-- config body -->
                 <div class="modal-body">
-                    <form method="POST" id="cuestionarioData" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
-                        <div class="d-flex flex-column flex-lg-row justify-content-center gap-3">
-                            <div class="container mt-4">
-                                <div class="row">
-                                    <div class="card flex-fill w-100 w-lg-50 mb-3 mb-lg-0">
-                                        <div class="card-body p-4">
-                                            <div class="d-flex flex-column">
+                    <form>
+                        <div class="d-flex flex-column justify-content-center">
+                            <div class="card h-75 w-50 mb-3">
+                                <div class="card-body">
+                                    <div class="m-3">
 
-                                                <div class="mb-5">
-                                                    <label for="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
-                                                    <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
-                                                    <input type="text" id="inputTitulo" name="nombreCuestionario" class="form-control needs-validation">
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
+                                        <label for="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
+                                        <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
+                                        <input type="text" id="inputTitulo" class="form-control needs-validation" <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label">Descripcion</label>
 
-                                                <label for="lblDescripcion" id="lblTituloDescripcion" class="fw-bold fs-5 form-label">Descripcion</label>
-                                                <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
-                                                <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
-                                                <textarea id="descripcion" name="txtDescripcion" class="form-textarea" maxlength="300" rows="3"></textarea>
-                                                <div class="invalid-feedback"></div>
+                                        <label for="lblTituloDescripcion" class="opcional fs-6 form-label"> (Opcional)</label>
+                                        <label for="descripcion" class="subtitulo form-label" id="lblDescripcion">Escribe una breve descripcion</label>
+                                        <textarea id="descripcion" class="form-textarea" maxlength="500" rows="3"></textarea>
 
-                                                <div class="mb-5">
-                                                    <label for="inputCodigoAcceso" id="lblCodigoAcceso" class="subtitulo form-label">Ingrese un codigo para acceder al cuestionario</label>
-                                                    <input type="text" id="inputCodigoAcceso" name="codigoAcceso" class="form-control needs-validation">
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
-                                                <div class="mb-5">
-                                                    <label for="selectCategoria" class="fw-bold fs-5 form-label">Categoria del cuestionario</label>
-                                                    <select name="selectCategoria" id="selectCategoria" class="form-select">
-                                                        <option value="">Seleccionar categoría</option>
-
-                                                        <?php //llenar el select
-                                                        foreach ($categorias as $cat): ?>
-                                                            <option value="<?= htmlspecialchars($cat['ID_CATEGORIA']) ?>">
-                                                                <?= htmlspecialchars($cat['NOMBRE']) ?>
-
-                                                            </option>
-                                                        <?php endforeach;
-                                                        ?>
-                                                    </select>
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
-                                                <h5>
-                                                    <i class="bi bi-question-square-fill"></i>
-                                                    Tipo de pregunta
-                                                </h5>
-                                                <div class="mb-5">
-                                                    <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
-                                                        <option class="dropdown-item" value>Tipo de pregunta</option>
-                                                        <?php //llenar el select
-                                                        foreach ($tipoPreguntas as $cat): ?>
-                                                            <option value="<?= htmlspecialchars($cat['ID_TIPO_PREGUNTA']) ?>">
-                                                                <?= htmlspecialchars($cat['TIPO']) ?>
-
-                                                            </option>
-                                                        <?php endforeach;
-                                                        ?>
-                                                    </select>
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
-                                                <h5>
-                                            </div>
-                                        </div>
                                     </div>
+                                </div>
+                            </div>
 
+                            <div class="card h-75 w-50 mb-3">
+                                <div class="card-body">
+                                    <div class="m-3">
 
-                                    <div class="card flex-fill w-10 0 w-lg-50 mb-3 mb-lg-0">
-                                        <div class="card-body p-4">
-                                            <div class="d-flex flex-column">
-                                                <div class="mb-5">
-                                                    <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label">Visibilidad</label><br>
-                                                    <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
+                                        <label for="lblVisibilidad" id="lblVisivilidad" class="fw-bold fs-5 form-label">Visibilidad</label><br>
+                                        <label for="radios" class="subtitulo form-label" id="lblDescripVisibilidad">Elige quien tiene acceso</label><br>
 
-                                                    <div class="form-check d-flex align-items-center mb-4">
-                                                        <input type="radio" class="form-check-input" name="Visibilidad" value="privado" id="radioPrivado">
-                                                        <label for="radioPrivado" class="form-check-label fw-bold ms-2">Privado</label>
-                                                        <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
-                                                    </div>
-
-                                                    <div class="form-check d-flex align-items-center mb-4">
-                                                        <input type="radio" class="form-check-input" name="Visibilidad" value="publico" id="radiopublico" checked>
-                                                        <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
-                                                        <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
-                                                    </div>
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
-                                                <div class="form-check form-switch mb-5">
-                                                    <label class="fw-bold fs-6 form-check-label" for="SwitchEstado">Activar Cuestionario</label>
-                                                    <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
-                                                    <div class="invalid-feedback"></div>
-
-                                                </div>
-                                            </div>
+                                        <div class="form-check d-flex align-items-center mb-2">
+                                            <input type="radio" class="form-check-input" name="Visibilidad" id="radioPrivado">
+                                            <label for="radioPrivado" class="form-check-label fw-bold ms-2">Privado</label>
+                                            <span class="subtitulo ms-3">(solo tendrán acceso con link)</span>
                                         </div>
+
+                                        <div class="form-check d-flex align-items-center mb-2">
+                                            <input type="radio" class="form-check-input" name="Visibilidad" id="radiopublico">
+                                            <label for="radiopublico" class="form-check-label fw-bold ms-2">Público</label>
+                                            <span class="subtitulo ms-3">(Cualquiera puede acceder)</span>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </form>
                 </div>
 
