@@ -34,6 +34,7 @@ function generarPreguntas() {
             <div class="text-center pregunta">
                 <h5 class="fw-bold mb-2">Pregunta ${index + 1}</h5>
                 <p>${pregunta.ENUNCIADO}</p>
+                ${pregunta.IMAGEN ? `<img src="${pregunta.IMAGEN}" alt="Imagen de la pregunta" class="mb-3 pregunta_img">` : ''}
             </div>
             <div class="row g-3 mt-3">
                 ${opcionesHTML}
