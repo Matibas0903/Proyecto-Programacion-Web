@@ -24,7 +24,7 @@ if (!isset($_SESSION['usuario_id'])) {
         <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.php">Editar usuario</a></li>
         <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
           A su pantalla ponganle # y class active -->
-        <li><a class="dropdown-item active" href="#">Panel de administrador</a></li>
+        <li><a class="dropdown-item active" href="../administrador/administrador.php">Panel de administrador</a></li>
         <li><a class="dropdown-item" href="../participante/participante.php">Panel de participante</a></li>
         <li><a class="dropdown-item" href="../Estadisticas/estadisticas.php">Ver estadísticas</a></li>
         <li><a class="dropdown-item" href="../Registro/logout.php">Logout</a></li>

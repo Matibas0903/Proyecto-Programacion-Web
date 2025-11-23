@@ -4,16 +4,17 @@
 }
 <<<<<<< Updated upstream
 #navBarCrearPreg{
-    background-color: #f4d4ca;
-    z-index: 2000;
+    background-color: #ffd0ae;
+    z-index: 1010;
     border-right: 2px solid #000000;
     border-left: 2px solid #000000;
     border-bottom: 5px solid #000000;
+    position: fixed;           
+    width: 100%; 
 }
 
 body{
-    background-color: #fdecd7;
-    overflow-y:auto;
+    background-color: #fff1be;
     overflow-x: clip;
 =======
 #navBarCrearPreg {
@@ -97,8 +98,10 @@ body {
 }
 <<<<<<< Updated upstream
 #panelIzq{
+    position: relative;
+    bottom: 0;
     background-color:#c0cfcb;
-    margin-top: 10px;
+    margin-top: 70px;
     border: 2px solid #798380;
     border-radius: 10px;
     overflow-y: auto;  /* activa scroll vertical si hay contenido extra*/
@@ -131,7 +134,7 @@ body {
     margin-top: 10px;
     border: 2px solid #798380;
     border-radius: 10px;
-    position: absolute;
+    position: fixed;
     top: 133.6px;
     right: -300px;       
     width: 300px;
@@ -186,7 +189,7 @@ body {
     border-radius: 10px;
     visibility: hidden;
     right: 0;
-    position: absolute;
+    position: fixed;
     top:  133.6px;
     width: 300px;
     background-color: #ffded3;
