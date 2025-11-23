@@ -6,6 +6,14 @@ window.onload = function () {
 
   btnConfig.addEventListener("click", mostrarConfiguracion);
 
+  const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
+  btnSalirSinGuardar.addEventListener("click", () => {
+    window.location.href = "../administrador/administrad or.php";
+  });
+
+  const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
+  btnGuardarYSalir.addEventListener("click", guardarCuestionario);
+
   abrirPanelDerecho();
   abrirPanelTemas();
   seleccionarTema();

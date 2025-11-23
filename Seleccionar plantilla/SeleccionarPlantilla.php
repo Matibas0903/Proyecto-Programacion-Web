@@ -140,7 +140,7 @@
                 </div>
             </div>
         </div>
-
+        <!-- Modal Salir-->
     </div>
     <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
         <div class="modal-dialog">
@@ -153,8 +153,8 @@
                     <p>¿Está seguro que desea salir sin guardar?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
-                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" id="btnSalirSinGuardar" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" id="btnGuardarYSalir" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -171,7 +171,6 @@
                     <h4 class="modal-title"><i class="bi bi-gear"></i> Configuracion</h4>
                     <div class="ms-auto">
                         <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button>
                     </div>
 
                 </div>
