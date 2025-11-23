@@ -25,14 +25,11 @@
     border-bottom: 2px solid #000000;
 }
 
-body{
-    background-image: url("../Seleccionar plantilla/Recursos/temaHistoria.jpg");
-}
 #btnIniciarCuestionario{
     color: #000000;
     position: fixed;
-    bottom: 20px;           /* Separado 20px del borde inferior */
-    right: 20px;            /* Separado 20px del borde derecho */
+    bottom: 20px;           
+    right: 20px;            
     z-index: 1050; 
     background-color: #4f9d86;
     border-bottom: 5px solid #000000;
@@ -44,8 +41,8 @@ body{
 #btnSalirLobby{
     color: #000000;
     position: fixed;
-    bottom: 20px;           /* Separado 20px del borde inferior */
-    right: 200px;            /* Separado 20px del borde derecho */
+    bottom: 20px;           
+    right: 200px;          
     z-index: 1050; 
     background-color: #f46958;
     border-bottom: 5px solid #000000;
@@ -82,4 +79,36 @@ body{
     border-top: 2px solid #000000;
     border-left: 2px solid #000000;
     border-right: 2px solid #000000;
+}
+
+.rating {
+    color: #f39c12;
+    margin-bottom: 0;
+    font-size: 25px;
+}
+
+#background_image {
+    height: 100vh;
+}
+
+@media (max-width: 768px) {
+    #background_image {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        max-height: 50vh;
+    }
+
+    #panelIzq {
+        border-right: none;
+        border-bottom: 5px solid #000000;
+        min-height: 50vh;
+    }
+
+    #btnIniciarCuestionario,
+    #btnSalirLobby {
+        position: static;
+        right: auto;
+        bottom: auto;
+    }
 }
