@@ -3,7 +3,6 @@
   width: 100%;
 }
 
-
 .pregunta{
   background-color: #fff4e6; 
   border-radius: 12px;
@@ -30,7 +29,7 @@
   transform: translate(-50%, -50%);
   font-size: 3rem; 
   font-weight: bold; 
-  color: #5e351a; 
+  color: white; 
   text-align: center;
   z-index: 1000;
 }
@@ -44,16 +43,6 @@
 .btnRespuestas.incorrecta {
   background-color: #dc3545; 
   color: white;
-}
-
-body {
-  background-image: url("../Seleccionar plantilla/Recursos/temaHistoria.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  margin: 0; 
-  height: 100vh;
 }
 
 #contenedor-juego{
@@ -121,4 +110,28 @@ body {
 }
 .navbar-dropdown-btn:hover .navbar_usuario{
     border: 3px solid #80c4e9;
+}
+
+#cronometro {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    z-index: 1050;
+    border: 2px solid #000;
+}
+
+#cronometro.tiempo-bajo {
+    background-color: #f46958;
+    animation: parpadeo 0.5s infinite;
+}
+
+@keyframes parpadeo {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
 }

@@ -18,7 +18,7 @@
             COALESCE((SELECT AVG(pa.VALORACION_CUESTIONARIO) 
                 FROM participacion pa
                 WHERE pa.ID_VERSION = v.ID_VERSION
-                  AND pa.VALORACION_CUESTIONARIO IS NOT NULL
+                  AND pa.VALORACION_CUESTIONARIO > 0
             ), 0) AS promedio_calificacion
             FROM version_cuestionario v
             WHERE ID_CUESTIONARIO = :idCuestionario
