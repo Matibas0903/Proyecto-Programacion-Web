@@ -2,19 +2,19 @@
 <html lang="es">
 
 <head>
-  <<?php
+   <title>Ver cuestionario</title>
+  <?php
       require('../includesPHP/head.php');
     ?>
   <link rel="stylesheet" href="verCuestionario.css">
   <script src="verCuestionario.js" defer></script>
-  <title>Ver cuestionario</title>
 </head>
 <body>
 <?php
   require('../includesPHP/navGeneral.php');
 ?>
 
- <h1>VISTA PREVIA DEL CUESTIONARIO</h1><br><br>
+ <h1 class="mt-3">VISTA PREVIA DEL CUESTIONARIO</h1><br><br>
 
  <!--Preguntas y respuesta, repetir por x cantidad-->
 <div class="container mt-4" id="contendedorPrincipal">

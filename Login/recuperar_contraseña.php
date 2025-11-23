@@ -1,5 +1,5 @@
 <?php
-require("conexion.php"); // tu conexión PDO
+require("../BaseDeDatos/conexion.php");
 
 $respuesta = ['success' => false, 'mensaje' => ''];
 
@@ -13,7 +13,7 @@ if (!empty($_POST['correo'])) {
     if ($usuario) {
         // Simulación de envío de correo
         $respuesta['success'] = true;
-        $respuesta['mensaje'] = "Simulación: correo enviado correctamente a $correo";
+        $respuesta['mensaje'] = "Correo enviado correctamente a $correo";
     } else {
         $respuesta['mensaje'] = "Correo no registrado.";
     }

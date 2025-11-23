@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
          //si el usuario existe y la contra sta bien
         if ($usuario) {
-            if (password_verify($contra, $usuario['CONTRASEÑA'])) {
+            if (password_verify($contra, $usuario['CONTRASENA'])) {
                 //guardo sesion,con los datos del usuario
                 $_SESSION['correo'] = $usuario['EMAIL'];
                 $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
@@ -129,8 +129,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <div class="modal-body">
                 <input type="email" class="form-control " id="inputCorreo" placeholder="Tu correo">
-                <div class="valid-feedback mensaje">Revisa tu email. Se ha enviado un enlace para restablecer la contraseña.</div>
-                <div class="invalid-feedback">Ingrese un correo valido.</div>
+                <div class="valid-feedback d-none">Correo enviado correctamente</div>
+                <div class="invalid-feedback d-none" id="mensajeError"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelar">Cancelar</button>

@@ -172,12 +172,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <div class="mb-3">
             <label for="fotoSelect" class="form-label">Seleccionar foto de perfil</label>
             <select id="fotoSelect" name="selectFotoPerfil" class="form-select">
-              <option value="../EditarUsuario/Recursos/icono.png">Predeterminada</option>
-              <option value="../EditarUsuario/Recursos/Avatar1.png">Avatar 1</option>
-              <option value="../EditarUsuario/Recursos/Avatar2.png">Avatar 2</option>
-              <option value="../EditarUsuario/Recursos/Avatar3.png">Avatar 3</option>
-              <option value="../EditarUsuario/Recursos/Avatar4.png">Avatar 4</option>
-              <option value="../EditarUsuario/Recursos/Avatar5.png">Avatar 5</option>
+              <option value="../Recursos/icono.png">Predeterminada</option>
+              <option value="../Recursos/Avatar1.png">Avatar 1</option>
+              <option value="../Recursos/Avatar2.png">Avatar 2</option>
+              <option value="../Recursos/Avatar3.png">Avatar 3</option>
+              <option value="../Recursos/Avatar4.png">Avatar 4</option>
+              <option value="../Recursos/Avatar5.png">Avatar 5</option>
             </select>
           </div>
         

@@ -14,7 +14,7 @@
      <div class="container">
         <div class="row g-4">
             <div class="col-12 col-lg-4">
-                <a href="../Codigo invitado/codigo.html" class="text-decoration-none text-dark">
+                <a href="../Codigo invitado/codigo.php" class="text-decoration-none text-dark">
                 <div class="card" id="miCard">
                     <img src="../inicio/img/4.png" class="card-img-top" alt="Invitado">
                     <div class="card-body">
@@ -35,7 +35,7 @@
                 </a>
             </div>
             <div class="col-12  col-lg-4">
-                <a href="../Login/login.html" class="text-decoration-none text-dark">
+                <a href="../Login/login.php" class="text-decoration-none text-dark">
                 <div class="card" id="miCard">
                     <img src="../inicio/img/2.png" class="card-img-top" alt="Invitado">
                     <div class="card-body">

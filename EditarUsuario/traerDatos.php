@@ -1,7 +1,6 @@
 <?php 
 session_start();
-
-require("conexion.php");
+require('../BaseDeDatos/conexion.php');
 
 
 //verifico si inicio sesion

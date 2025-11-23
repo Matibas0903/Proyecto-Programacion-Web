@@ -11,7 +11,7 @@ if(session_status() === PHP_SESSION_NONE){
 <!-- navbar -->
   <nav class="navbar sticky-top bg-body-tertiary navbar-cuestionarios" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Nombre web</a>
+      <a class="navbar-brand" href="#">Tukii</a>
       <div class="dropdown-center ms-auto">
         <button class="navbar-dropdown-btn" type="button" data-bs-toggle="dropdown">
           <img src="<?=$_SESSION['foto_perfil']?>" alt="imagen usuario" class="navbar_usuario" id="navbarImg">
@@ -22,7 +22,7 @@ if(session_status() === PHP_SESSION_NONE){
           <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.php">Editar usuario</a></li>
           <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
           A su pantalla ponganle # y class active -->
-          <li><a class="dropdown-item active" href="#">Panel de administrador</a></li>
+          <li><a class="dropdown-item active" href="../administrador/administrador.php">Panel de administrador</a></li>
           <li><a class="dropdown-item" href="../participante/participante.php">Panel de participante</a></li>
           <li><a class="dropdown-item" href="../Estadisticas/estadisticas.php">Ver estadísticas</a></li>
           <li><a class="dropdown-item" href="../Registro/logout.php">Logout</a></li>
