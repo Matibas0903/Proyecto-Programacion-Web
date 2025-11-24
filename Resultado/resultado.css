@@ -216,3 +216,29 @@ p.fecha{
   pointer-events: none; 
   cursor: default;      /* quita el cursor*/
 }
+
+#btnSalir{
+    color: #000000;
+    background-color: #f46958;
+    border: solid #000000;
+    border-width: 1px 1px 3px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#btnSalir:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#btnComentar
+{
+  background-color: #4f9d86;
+  border: solid #1e3830;
+  border-width: 1px 1px 3px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#btnComentar:hover
+{ 
+  transform: scale(1.05);
+}

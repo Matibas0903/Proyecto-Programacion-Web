@@ -1,19 +1,23 @@
 window.onload = function()
 {
-inicializarPreguntasHardcodeadas();
-let cantidadPreguntas = 3;
+let cantidadPreguntas = 0;
 
+ const btnGuardar = document.getElementById("btnGuardar");
+  btnGuardar.addEventListener("click", guardarCuestionario);
+
+  const btnConfig = document.getElementById("btnConfig");
+
+  btnConfig.addEventListener("click", mostrarConfiguracion);
+
+obtenerPlantilla(cantidadPreguntas);
 abrirPanelDerecho();
 abrirPanelTemas();
 seleccionarTema();
 salirDeCreacion();
-mostrarConfiguracion();
+
 ponerNombre();
-validarTitulo();    
+
 añadirPregunta(cantidadPreguntas);
-
-
-
 }
 
 function abrirPanelDerecho()
@@ -143,18 +147,15 @@ function salirDeCreacion(){
 }
 
 
-function mostrarConfiguracion()
-{
-    const btnConfig = document.getElementById("btnConfig");
-
-    btnConfig.addEventListener("click", ()=>
-        {
-            const modalConfig = new bootstrap.Modal(document.getElementById('modalConfiguracion'))
-            modalConfig.show();
-        })
+function mostrarConfiguracion() {
+  //Abre el modal de configuracion
+  const modalConfig = new bootstrap.Modal(
+    document.getElementById("modalConfiguracion")
+  );
+  modalConfig.show();
 }
 
-function validarTitulo() 
+/*function validarTitulo() 
 {
     const btnGuardar = document.getElementById("btnGuardar");
     const titulo = document.getElementById("tituloCuestionario");
@@ -175,30 +176,21 @@ function validarTitulo()
                 }
 
         });
+}*/
+
+function ponerNombre() {
+  //Escribo en el titulo el nombre ingresado en el modal
+  const titulo = document.getElementById("tituloCuestionario");
+  const inputTituloconfig = document.getElementById("inputTitulo");
+  inputTituloconfig.addEventListener("change", () => {
+    titulo.innerHTML = inputTituloconfig.value;
+    if (titulo.innerText.trim() === "") {
+      titulo.innerHTML = "cuestionario";
+    }
+  });
 }
 
-function ponerNombre()
-{
-    const inputTitulo = document.getElementById("inputIngresarTitulo");
-    const titulo = document.getElementById("tituloCuestionario");
-    const inputTituloconfig = document.getElementById("inputTitulo")
-    const btnListo = document.getElementById("btnListo");
-
-    inputTitulo.addEventListener("input", ()=>
-        {
-            titulo.innerHTML= inputTitulo.value;
-        })
-    btnListo.addEventListener("click", ()=>
-        {
-            titulo.innerHTML = inputTituloconfig.value;
-            if(titulo.innerText.trim() === "")
-                {
-                    titulo.innerHTML = "cuestionario";
-                }
-        })
-}
-
-function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
+function crearBotonPregunta(preguntaId, titulo) {
     const div = document.createElement("div");
     div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light", "btnPregunta");
     div.id = preguntaId;
@@ -233,7 +225,7 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
     return div;
 }
 
-function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = []) {
+function crearFormularioPregunta(preguntaId, titulo, opciones) {
     const panelPrincipal = document.getElementById("panelPrincipal");
 
     const container = document.createElement("div");
@@ -248,8 +240,33 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
     cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
 
     const inputPregunta = document.createElement("input");
+
+    
+// --- buscador de imagen Unsplash ---
+const divBusqueda = document.createElement("div");
+divBusqueda.classList.add("mb-3", "card-pregunta");
+
+const inputBusqueda = document.createElement("input");
+inputBusqueda.type = "text";
+inputBusqueda.placeholder = "Buscar imagen (ej: guerra, ciencia...)";
+inputBusqueda.classList.add("form-control", "mb-2");
+
+const btnBuscar = document.createElement("button");
+btnBuscar.textContent = "Buscar imagen";
+btnBuscar.classList.add("btn", "btn-secondary", "mb-3");
+
+const contenedorImagenes = document.createElement("div");
+contenedorImagenes.classList.add("d-flex", "flex-wrap", "justify-content-center", "gap-2");
+
+divBusqueda.appendChild(inputBusqueda);
+divBusqueda.appendChild(btnBuscar);
+divBusqueda.appendChild(contenedorImagenes);
+cardBody.appendChild(divBusqueda);
+//
+
+
     inputPregunta.type = "text";
-    inputPregunta.classList.add("form-control", "text-center", "fw-bold");
+    inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
     inputPregunta.value = titulo;
     inputPregunta.placeholder = "Escribe aquí la pregunta...";
     inputPregunta.id = `inputPregunta-${preguntaId}`;
@@ -270,19 +287,19 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
         const col = document.createElement("div");
         col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
 
-        const btnOpcion = document.createElement("button");
+        const btnOpcion = document.createElement("div");
         btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = opciones;
 
         const cardRespuesta = document.createElement("div");
-        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
-        cardRespuesta.id = "OpcionRespuesta";
+        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "opcionRespuesta");
+        
 
 
         const radioCorrecta = document.createElement("input");
         radioCorrecta.type="radio";
-        radioCorrecta.name= "radioCorrecto";
+        radioCorrecta.name = `radioCorrecto-${preguntaId}`;
         radioCorrecta.classList.add("form-check-input");
 
         cardRespuesta.appendChild(radioCorrecta);
@@ -291,10 +308,44 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = [])
         row.appendChild(col);
     });
 
+    // Escuchar busquedad 
+btnBuscar.addEventListener("click", async () => {
+  contenedorImagenes.innerHTML = "Cargando...";
+  const imagenes = await buscarImagenesUnsplash(inputBusqueda.value);
+  contenedorImagenes.innerHTML = "";
+
+  imagenes.forEach(img => {
+    const imgEl = document.createElement("img");
+    imgEl.src = img.urls.thumb;
+    imgEl.alt = img.alt_description;
+    imgEl.style.cursor = "pointer";
+    imgEl.style.borderRadius = "10px";
+    imgEl.width = 100;
+    imgEl.height = 100;
+
+    imgEl.addEventListener("click", () => {
+      mostrarImagenSeleccionada(cardBody, img.urls.small);
+    });
+
+    contenedorImagenes.appendChild(imgEl);
+  });
+});
+//
+
     card.appendChild(cardBody);
     card.appendChild(row);
     container.appendChild(card);
     panelPrincipal.appendChild(container);
+
+    inputPregunta.addEventListener("input", ()=>
+    {
+        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
+        tituloPregunta.innerText = inputPregunta.value;
+        if(tituloPregunta.innerText.trim() === "")
+                {
+                    tituloPregunta.innerText = "Pregunta";
+                }
+    })
 }
 
 function añadirPregunta(cantidadPreguntas) {
@@ -312,7 +363,7 @@ function añadirPregunta(cantidadPreguntas) {
     return cantidadPreguntas;
 }
 
-function inicializarPreguntasHardcodeadas() {
+/*function inicializarPreguntasHardcodeadas() {
     const preguntas = [
         { titulo: "¿En qué año comenzó la Segunda Guerra Mundial?", opciones: ["1914", "1939", "1945", "1929"] },
         { titulo: "¿Quién fue el líder del movimiento de independencia de la India?", opciones: ["Mahatma Gandhi", "Nelson Mandela", "Simón Bolívar", "Martin Luther King Jr."] },
@@ -325,4 +376,261 @@ function inicializarPreguntasHardcodeadas() {
         contenedor.appendChild(crearBotonPregunta(id, p.titulo));
         crearFormularioPregunta(id, p.titulo, p.opciones);
     });
+}*/
+
+
+//API
+// ========== UNSPLASH API ==========
+const UNSPLASH_ACCESS_KEY = "lDb4UKPmw_gnTXieod-jR_pWtDpRszsGNSuPlOpyudc";
+
+async function buscarImagenesUnsplash(query) {
+  const url = `https://api.unsplash.com/search/photos?query=${query}&per_page=6&client_id=${UNSPLASH_ACCESS_KEY}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data.results;
+}
+
+// Mostrar la imagen seleccionada en la tarjeta
+function mostrarImagenSeleccionada(cardBody, url) {
+  let imgPreview = cardBody.querySelector(".img-preview");
+  if (!imgPreview) {
+    imgPreview = document.createElement("img");
+    imgPreview.classList.add("img-preview", "mb-3");
+    imgPreview.style.maxWidth = "300px";
+    imgPreview.style.borderRadius = "10px";
+    cardBody.insertBefore(imgPreview, cardBody.firstChild);
+  }
+  imgPreview.src = url;
+}
+
+async function obtenerPlantilla(cantidadPreguntas){
+
+    const idVersion = document.body.dataset.idversion;
+
+
+    const version = idVersion;
+    console.log("ID version obtenido:", version);
+
+    if(version === null){
+        return error;
+    }
+    try{
+        const response2 = await fetch("obtenerPlantillas.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idVersion: version
+            })
+        });
+        
+        const data = await response2.json();
+        if (data.status === "error") {
+            alert(data.message);
+            return;
+        }
+
+        if (data.status === "warning") {
+            console.warn(data.message);
+            alert(data.message);
+            //si el cuestionario no esta disponible para plantilla redirige a administrador
+            window.location.href = "../administrador/administrador.php";
+            // igual puedes mostrar los datos si quieres
+        }
+        if(data === null){
+            return error;
+        }else{
+            console.log(data);
+            llenarCampos(data, cantidadPreguntas);
+        }    
+    } catch (error) {
+        console.error("Error al enviar id version:", error);
+    }
+}
+
+async function llenarCampos(data, cantidadPreguntas) {
+  //Llena los campos con los datos del cuestionario ya insertado
+
+  //Declaro todos los inputs
+    const inputTitulo = document.getElementById("inputTitulo");
+    const inputDescripcion = document.getElementById("descripcion");
+    const inputCodAcceso = document.getElementById("inputCodigoAcceso");
+    const selectCategoria = document.getElementById("selectCategoria").value;
+    const publico = document.getElementById("radiopublico");
+    const privado = document.getElementById("radioPrivado");
+    
+    //lleno los inputs con la informacion de la tabla cuestionario
+    const c = data.cuestionario;
+
+    inputTitulo.value = c.NOMBRE_CUESTIONARIO;
+    selectCategoria.value = c.ID_CATEGORIA;
+
+    if (c.VISIBILIDAD === "Publico") {
+        publico.checked = true;
+    } else {
+        privado.checked = true;
+    }
+    //lleno los inputs con la informacion de la tabla version_cuestionario
+    const v = data.version;
+    inputDescripcion.value = v.DESCRIPCION;
+    inputCodAcceso.value = v.COD_ACCESO;
+
+    console.log("campos llenos");
+    cargarPreguntasDesdeBD(v, cantidadPreguntas);
+    
+}
+
+async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
+    const idVersionCuestionario = version.ID_VERSION;
+    
+    try {
+
+    const response2 = await fetch("../AgregarPregunta/obtenerPreguntas.php", {
+        method: "POST",
+        headers: {"Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            idVersion: idVersionCuestionario
+        }),
+    });
+    
+    const data = await response2.json();
+
+    if(data === null){
+        return error;
+    }else{
+        console.log(data);
+    }  
+    
+    data.preguntas.forEach((p) => {
+            cantidadPreguntas++;
+            const id = `pregunta-${cantidadPreguntas}`;
+
+            const btn = crearBotonPregunta(id, p.ENUNCIADO);
+            document.getElementById("divPreguntas").appendChild(btn);
+
+            // OJO: opciones puede venir vacío
+            crearFormularioPregunta(id, p.ENUNCIADO, p.opciones ?? []);
+
+            const radios = document.querySelectorAll(
+                `#form-${id} input[type="radio"]`
+            );
+
+            if (radios.length && p.correcta !== undefined && radios[p.correcta]) {
+                radios[p.correcta].checked = true;
+            }
+        });
+    } catch (error) {
+        console.error("Error al enviar id version:", error);
+    }
+
+    
+
+}
+
+
+async function guardarCuestionario() {
+  //Se conecta con los php para guardar la informacion y las preguntas del cuestionario
+  const esValido = await ValidarForm();
+
+  if (!esValido) {
+    console.log("Hay errores, no guardo nada");
+    return;
+  }
+
+  try {
+    const form = document.getElementById("cuestionarioData");
+    const formData = new FormData(form);
+
+    //envio la info del cuestionario
+    const response = await fetch("../AgregarPregunta/InsertDatosCuestionario.php", {
+      method: "POST",
+      body: formData,
+    });
+    const raw = await response.text();
+    console.log("Respuesta cruda del servidor:", raw);
+    const data = JSON.parse(raw);
+    //const data = await response.json();
+    //se guardo la info del cuestionario y me trajo el id de la version
+    const idVersionGlobal = data.idVersion;
+    console.log("ID VERSION RECIBIDO:", idVersionGlobal);
+    //procedo a enviar las preguntas para guardarlas
+    EnviarPreguntas(idVersionGlobal);
+  } catch (error) {
+    console.error("Error al guardar el cuestionario:", error);
+  }
+}
+
+async function EnviarPreguntas(version) {
+  //Envia las preguntas al PHP, las inserta y llena el form nuevamente con el contenido
+  console.log("enviando preguntas...");
+  const preguntas = recolectarPreguntas();
+  console.log("preguntas contruidas", preguntas);
+  const idVersionGlobal = version;
+  try {
+    const response = await fetch("../AgregarPregunta/InsertPreguntas.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idVersion: idVersionGlobal,
+        preguntas: preguntas,
+      }),
+    });
+
+    const responseText = await response.text();
+
+    const data = JSON.parse(responseText);
+    alert(data.message);
+    console.log("llenando campos");
+    llenarCampos(idVersionGlobal);
+  } catch (error) {
+    console.error("Error al enviar las preguntas:", error);
+  }
+}
+
+function recolectarPreguntas() {
+  //Junta todas la Preguntas y opciones creadas en un array para enviar al PHP
+  const preguntas = [];
+  const formularios = document.querySelectorAll(".form-pregunta");
+
+  formularios.forEach((form, index) => {
+    const enunciado = form.querySelector(".input-pregunta").value.trim();
+
+    // Intentar obtener imagen seleccionada (si existe)
+    const imagenSeleccionada =
+      form.querySelector(".imagen-seleccionada")?.src || null;
+
+    // Recolectar las opciones
+    const opciones = [];
+    const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
+    const opcionesCorrectas = [];
+
+    opcionesDiv.forEach((div) => {
+      const texto = div.querySelector(".btnOpciones").textContent.trim();
+      const esCorrecta = div.querySelector("input[type='radio']").checked
+        ? 1
+        : 0;
+
+      if (esCorrecta === 1) {
+        opcionesCorrectas.push(esCorrecta);
+      }
+
+      opciones.push({
+        texto: texto,
+        esCorrecta: esCorrecta,
+      });
+    });
+
+    preguntas.push({
+      nro_orden: index + 1,
+      enunciado: enunciado,
+      imagen: imagenSeleccionada,
+      opciones: opciones,
+      opcionesCorrectas: opcionesCorrectas,
+    });
+  });
+
+  return preguntas;
 }

@@ -1,4 +1,4 @@
-/*function iniciarCarrusel() {
+function iniciarCarrusel() {
     const items = document.querySelectorAll('#rankingInner .carousel-item');
 
     let index = 0;
@@ -25,7 +25,7 @@
         index = (index + 1) % items.length;
         updateCarousel();
     }, 3000);
-}*/
+}
 
 document.addEventListener("DOMContentLoaded", function () {
    const params = new URLSearchParams(window.location.search);
@@ -90,7 +90,7 @@ async function cargarRanking(version) {
     const contRanking = document.getElementById("rankingInner");
     const contComentarios = document.getElementById("ContenedorComentarios");
 
-    const res = await fetch(`Comentarios.php?version=${version}`);
+    const res = await fetch(`Comentarios_ranking.php?version=${version}`);
     const data = await res.json();
 
     if (data.error) {

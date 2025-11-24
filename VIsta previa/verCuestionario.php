@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="verCuestionario.css">
   <script src="verCuestionario.js" defer></script>
 </head>
+
 <body>
-<?php
+  <?php
   require('../includesPHP/navGeneral.php');
-?>
+  ?>
 
  <h1 class="mt-3">VISTA PREVIA DEL CUESTIONARIO</h1><br><br>
 

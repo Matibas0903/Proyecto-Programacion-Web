@@ -84,7 +84,7 @@ if (!empty($errores)) {
 }
 
 
-//valido si no estan vacios y los guado para haceel update
+//valido si no estan vacios y los guado para haceer update
 if (!empty($input['nombre'])) {
     $campos[] = "NOMBRE = :nombre";
     $valores[':nombre'] = $input['nombre'];

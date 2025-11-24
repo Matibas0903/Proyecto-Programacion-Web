@@ -1,16 +1,29 @@
 *{
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+   
 }
 #navBarCrearPreg{
     background-color: #ffd0ae;
-    z-index: 4;
+    z-index: 1010;
     border-right: 2px solid #000000;
     border-left: 2px solid #000000;
     border-bottom: 5px solid #000000;
+    position: fixed;           
+    width: 100%; 
+    
 }
 
 body{
     background-color: #fff1be;
+     overflow-x: clip;
+}
+
+#panelPrincipal
+{
+    margin-top: 10px;
+    border: 2px solid  #c5b6a2;
+    border-radius: 10px;
+
 }
 
 #inputIngresarTitulo{
@@ -18,44 +31,89 @@ body{
 }
 
 #btnConfig{
-    background-color: #ef7131;
+    background-color: #edb51a;
+    border-top: 1px solid #af881b;
+    border-right: 1px solid #af881b;
+    border-bottom: 2px solid #af881b;
+    border-left: none; 
+    cursor:pointer;
+    transition:0.3s;
 }
+
+#btnConfig:hover
+{
+    color: white;
+    transform: scale(1.05);
+}
+
 #btnTemas{
     background-color: #4f9d86;
+    border:solid #36695a;
+    border-width:  1px 1px 3px 1px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#btnTemas:hover{
+    color: white;
+    transform: scale(1.05);
 }
 #btnGuardar{
     background-color: #a3d6c7;
+    border:solid #64887d;
+    border-width:  1px 1px 3px 1px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#btnGuardar:hover
+{
+    color: white;
+    transform: scale(1.05);
 }
 #btnSalir{
-    background-color: #d8eced;
+    background-color: #ac5e5e;
+    border:solid #5e3232;
+    border-width:  1px 1px 3px 1px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+#btnSalir:hover
+{
+    color: white;
+    transform: scale(1.05);
 }
 #panelIzq{
-    background-color: #ffded3;
+    position: relative;
+    bottom: 0;
+    background-color:#c0cfcb;
+    margin-top: 70px;
+    border: 2px solid #798380;
+    border-radius: 10px;
+    overflow-y: auto;  /* activa scroll vertical si hay contenido extra*/
 }
 #btnOpcion{
     background-color: #ef7131;
 }
-#panelDer{
-    background-color: #ffded3;
-}
+
 #btnAñadirPregunta{
-    background-color: #a3d6c7;
+     background-color: #3e7463;
+    border: solid #748283;
+    border-width: 1px 1px 3px 1px;
 }
 #btnAñadirDiapositiva{
     background-color: #d8eced;
 }
 
 #panelDer {
+    margin-top: 10px;
+    border: 2px solid #798380;
+    border-radius: 10px;
     position: fixed;
     top: 133.6px;
     right: -300px;       
     width: 300px;
-    height: calc(100vh - 133.6px);
-    background-color: #fff;
-    border-left: 1px solid #ddd;
-    padding: 20px;
+    background-color: #ffded3;
     transition: right 0.3s ease;
-    z-index: 1050;
+    z-index: 1008;
 }
 
 
@@ -73,11 +131,13 @@ body{
     width: 30px;
     height: 60px;
     border-radius: 15px;
-    background-color: #007bff;
+    background-color: #edb51a;
+    border-top: 2px solid #af881b;
+    border-right: 2px solid #af881b;
+    border-bottom: 2px solid #af881b;
     color: #fff;
-    border: none;
     cursor: pointer;
-    z-index: 1060;
+    z-index: 1008;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -87,18 +147,19 @@ body{
 
 #panelTemas
 {
+    margin-top: 10px;
+    border: 2px solid #798380;
+    border-radius: 10px;
     visibility: hidden;
     right: 0;
     position: fixed;
-    top: 133.6px; 
-    height: calc(100vh - 133.6px); 
-    background-color: #fff;
-    border-left: 1px solid #ddd;
+    top:  133.6px;
+    width: 300px;
+    background-color: #ffded3;
     padding: 20px;
     transition: right 0.3s ease;
-    z-index: 1080;
+    z-index: 1009;
 }
-
 
 
 #panelDer.active + #btnPanelDer {
@@ -119,6 +180,10 @@ border:2px solid black;
 }
 
 /* estilos navbar */
+.navbar-general
+{
+    z-index: 3000;
+}
 .navbar-cuestionarios {
     border-top: 2px solid #000000;
     border-right: 2px solid #000000;
@@ -126,20 +191,91 @@ border:2px solid black;
     border-bottom: 5px solid #000000;
 }
 .navbar_usuario {
+   
     width: 50px;
     height: 50px;
     border-radius: 50%;
     border: 3px solid #000000;
 }
 .navbar-dropdown-btn {
+     
     background-color: transparent;
     border: none;
+
 }
+
 .navbar-dropdown-btn:hover .navbar_usuario{
     border: 3px solid #80c4e9;
+}
+
+.cardPregunta
+{
+  background-color: rgba(0, 0, 0,0); 
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 20px 25px
+}
+
+.btnOpciones
+{
+    background-color: #ef7131;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;
+}
+.btnOpciones:hover
+{
+    color: white;
+    background-color: #f46958;
+}
+.cardBodyPregun
+{
+    background-color: #fca493;
+    padding: 35px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;
+}
+.cardBodyPregun input
+{
+   background-color: #fca493;
+   
+   margin-bottom: 10px;
+    border-radius: 8px;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;  
+}
+.cardBodyPregun input:focus
+{
+   background-color: #fca493;
+   border:0;
+}
+.btnPonerPreguntas
+{
+    background-color: #64887d;
+}
+
+.btnPregunta{
+
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;
 }
 
 .inputTitulo input
 {
 width: 10px;
+
+}
+.input-pregunta
+{
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: solid black;
+    border-width: 1px 1px 3px 1px;   
+}
+.modal
+{
+    z-index: 3000;
 }

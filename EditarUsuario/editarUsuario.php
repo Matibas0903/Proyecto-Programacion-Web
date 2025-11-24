@@ -11,6 +11,7 @@ session_start();
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
  <?php
       require('../includesPHP/head.php');
@@ -19,9 +20,10 @@ session_start();
 
   <script src="editarUsuario.js" defer></script>
 </head>
+
 <body>
   <?php
-    require('../includesPHP/navGeneral.php');
+  require('../includesPHP/navGeneral.php');
   ?>
 
   <div class="container mt-5 flex-column justify-content-center align-items-center">
@@ -106,4 +108,5 @@ session_start();
   </div>
 </div> 
 </body>
+
 </html>
