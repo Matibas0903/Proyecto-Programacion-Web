@@ -66,7 +66,7 @@ function inicializarModal() {
     const inputCorreo = document.getElementById("inputCorreo");
     const modalOlvide = document.getElementById("modalOlvide");
     const mensajeValido = modalOlvide.querySelector(".valid-feedback");
-    const mensajeError = modalOlvide.querySelector(".invalid-feedback");
+    const mensajeError = document.getElementById("mensajeError");
     const botonesFooter = modalOlvide.querySelectorAll(".modal-footer button");
 
     btnEnviarModal.addEventListener("click", function() {
@@ -83,13 +83,15 @@ function inicializarModal() {
             })
             .then(res => res.json())
             .then(data => {
+                console.log(data); // para verificar qué llega
                 if (data.success) {
                     inputCorreo.classList.add("is-valid");
+                    mensajeValido.textContent = data.mensaje; // texto dinámico
                     mensajeValido.classList.remove("d-none");
                     botonesFooter.forEach(btn => btn.disabled = true);
                 } else {
                     inputCorreo.classList.add("is-invalid");
-                    mensajeError.textContent = data.mensaje;
+                    mensajeError.textContent = data.mensaje; // texto dinámico
                     mensajeError.classList.remove("d-none");
                 }
             });
@@ -115,15 +117,4 @@ function inicializarModal() {
     });
 }
 
-
-
-/*
-function logueoCorrecto(){
-    const btnIniciarSesion = document.getElementById("botonEnviar");
-
-    btnIniciarSesion.addEventListener("click", function(){
-        window.location.href = "../administrador/administrador.html";
-    });
-    
-}*/
 
