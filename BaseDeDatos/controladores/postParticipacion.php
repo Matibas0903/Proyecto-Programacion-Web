@@ -3,12 +3,13 @@
     require('../conexion.php');
 
     header('Content-Type: application/json');
-    //OBTENER ID USUARIO DE LA SESSION
+    
     try {
         if(!isset($_SESSION['usuario_id'])){
             throw new Exception('Usuario no autenticado');
         }
-        $idParticipante = $_SESSION['usuario_id'];
+        
+        $idUsuario = (int) $_SESSION['usuario_id'];
         $body = json_decode(file_get_contents('php://input'), true);
 
         if (!isset($body['idVersion']) || !isset($body['puntaje']) || !isset($body['respuestas'])) {
@@ -16,12 +17,56 @@
         }
 
         $idVersion = (int) $body['idVersion'];
-        $idUsuario = (int) $_SESSION['usuario_id'];
         $puntaje = (int) $body['puntaje'];
         $respuestas = $body['respuestas'];
-        $fechaActual = date('Y-m-d');
 
         $conn->beginTransaction();
+
+        //Obtener información del cuestionario (visibilidad)
+        $stmtCuestionario = $conn->prepare("
+            SELECT c.VISIBILIDAD
+            FROM version_cuestionario v
+            INNER JOIN cuestionario c ON v.ID_CUESTIONARIO = c.ID_CUESTIONARIO
+            WHERE v.ID_VERSION = :idVersion
+        ");
+        $stmtCuestionario->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+        $stmtCuestionario->execute();
+        $cuestionario = $stmtCuestionario->fetch(PDO::FETCH_ASSOC);
+
+        if (!$cuestionario) {
+            throw new Exception('Cuestionario no encontrado.');
+        }
+
+        //Verificamos si es privado y si tiene invitación pendiente
+        if($cuestionario['VISIBILIDAD'] === 'Privado'){
+            $stmtInvitacion = $conn->prepare("
+                SELECT ID_INVITACION
+                FROM invitacion
+                WHERE ID_VERSION = :idVersion 
+                    AND ID_USUARIO = :idUsuario
+                    AND ESTADO = 'Pendiente'
+                    AND DATE(FECHA_VENCIMIENTO) >= CURDATE()
+                LIMIT 1
+            ");
+                
+            $stmtInvitacion->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+            $stmtInvitacion->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+            $stmtInvitacion->execute();
+            $invitacion = $stmtInvitacion->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$invitacion) {
+                throw new Exception('Acceso denegado. No posee invitación válida para este cuestionario.');
+            }
+
+            //Cambiamos estado de invitación
+            $stmtActualizarInvitacion = $conn->prepare("
+                UPDATE invitacion 
+                SET ESTADO = 'Aceptada'
+                WHERE ID_INVITACION = :idInvitacion
+            ");
+            $stmtActualizarInvitacion->bindParam(':idInvitacion', $invitacion['ID_INVITACION'], PDO::PARAM_INT);
+            $stmtActualizarInvitacion->execute();
+        }
 
         //Verificamos si el usuario ya participó en esta versión
         $stmtVerificar = $conn->prepare("
@@ -34,7 +79,6 @@
         $stmtVerificar->execute();
         $participacionExistente = $stmtVerificar->fetch(PDO::FETCH_ASSOC);
 
-        //Si ya participo, eliminamos respuestas y participación anterior
         if ($participacionExistente) {
             $idParticipacionAnterior = $participacionExistente['ID_PARTICIPACION'];
 
@@ -55,8 +99,8 @@
 
         //Insertamos la nueva participación
         $stmtParticipacion = $conn->prepare("
-            INSERT INTO participacion (ID_USUARIO, FECHA_PARTICIPACION, PUNTAJE, BANEADO, ID_VERSION)
-            VALUES (:idUsuario, NOW(), :puntaje, 0, :idVersion)
+            INSERT INTO participacion (ID_USUARIO, FECHA_PARTICIPACION, PUNTAJE, BANEADO, ID_VERSION, INVITADO)
+            VALUES (:idUsuario, NOW(), :puntaje, 0, :idVersion, 0)
         ");
         $stmtParticipacion->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmtParticipacion->bindParam(':puntaje', $puntaje, PDO::PARAM_INT);
@@ -83,13 +127,18 @@
             "status" => "success",
             "idParticipacion" => $idParticipacion
         ]);
+        
     } catch (PDOException $e) {
+        $conn->rollBack();
         echo json_encode([
             "status" => "error",
             "message" => "Error de base de datos",
             "error" => $e->getMessage()
         ]);
     } catch (Exception $e) {
+        if($conn->inTransaction()) {
+            $conn->rollBack();
+        }
         echo json_encode([
             "status" => "error",
             "message" => $e->getMessage()

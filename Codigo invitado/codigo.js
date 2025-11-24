@@ -3,14 +3,27 @@ window.onload = function() {
     const spinnerContainer = document.getElementById("spinnerContainer");
 
     // cuando se ingresa el codigo,y si es valido, muestro el cargando...
-    botonIngresar.addEventListener("click", function() {
+    botonIngresar.addEventListener("click", async function() {
         if (validarCodigo()) { 
             mostrarSpinner();
-            setTimeout(() => {
-                ocultarSpinner();  //muestro el spiner por 2 seg y lo oculto 
-                // Redirigir a la página de preguntas
-                window.location.href = "../Cuestionario invitado/preguntasInvitado.html";
-            }, 2000); 
+            //Consultar a base de datos
+            const inputCodigo = document.getElementById("codigoIngresado");
+            const codigo = inputCodigo.value.trim();
+            try {
+                const response = await fetch(`../BaseDeDatos/controladores/getVersionByCode.php?codigo=${codigo}`);
+                const result = await response.json();
+                if(result.status === 'success'){
+                    ocultarSpinner();
+                    // Redirigir a la página de preguntas
+                    sessionStorage.setItem('codigoVersion', codigo);
+                    window.location.href = `../Cuestionario invitado/preguntasInvitado.php?version=${result.data.ID_VERSION}`;
+                }
+                else if(result.status === 'error'){
+                  redirigirConError(result.message || 'Error al obtener el cuestionario');
+                }
+            } catch (error) {
+              redirigirConError('Error al obtener el cuestionario')
+            }
         }
     });
 }
@@ -46,6 +59,11 @@ function validarCodigo() {
       inputCodigo.classList.add("is-valid");
       return true;
  }
+}
+
+function redirigirConError(errorMensaje){
+      sessionStorage.setItem('mensajeError', errorMensaje);
+      window.location.href = "../Inicio/inicio.php";
 }
 
 

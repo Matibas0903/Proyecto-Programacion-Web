@@ -13,7 +13,13 @@
 <body>
 
     <?php
-    require('../includesPHP/navGeneral.php');
+        session_start();
+        $invitado = isset($_GET['invitado']) && $_GET['invitado'] === 'true';
+        if($invitado){
+            require('../includesPHP/navInvitado.php');
+        } else {
+            require('../includesPHP/navGeneral.php');
+        }
     ?>
 
     <div class="container micontainer mt-5">
