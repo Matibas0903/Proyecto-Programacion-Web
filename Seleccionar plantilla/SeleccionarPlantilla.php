@@ -151,7 +151,7 @@ try {
                 </div>
             </div>
         </div>
-
+        <!-- Modal Salir-->
     </div>
     <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
         <div class="modal-dialog">
@@ -164,8 +164,8 @@ try {
                     <p>¿Está seguro que desea salir sin guardar?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
-                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" id="btnSalirSinGuardar" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" id="btnGuardarYSalir" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -182,7 +182,6 @@ try {
                     <h4 class="modal-title"><i class="bi bi-gear"></i> Configuracion</h4>
                     <div class="ms-auto">
                         <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button>
                     </div>
 
                 </div>
@@ -278,6 +277,12 @@ try {
                                                 <div class="form-check form-switch mb-5">
                                                     <label class="fw-bold fs-6 form-check-label" for="SwitchEstado">Activar Cuestionario</label>
                                                     <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
+                                                    <div class="invalid-feedback"></div>
+
+                                                </div>
+                                                <div class="form-check form-switch mb-5">
+                                                    <label class="fw-bold fs-6 form-check-label" for="SwitchPlantilla">Habilitar como plantilla</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="SwitchPlantilla" name="plantilla" value="1" checked>
                                                     <div class="invalid-feedback"></div>
 
                                                 </div>

@@ -144,7 +144,7 @@ try {
                 </div>
             </div>
         </div>
-
+        <!-- Modal Salir-->
     </div>
     <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
         <div class="modal-dialog">
@@ -157,8 +157,8 @@ try {
                     <p>¿Está seguro que desea salir sin guardar?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
-                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" id="btnSalirSinGuardar" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" id="btnGuardarYSalir" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -194,8 +194,8 @@ try {
                                             <div class="d-flex flex-column">
 
                                                 <div class="mb-5">
-                                                    <label for="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
-                                                    <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
+                                                    <label for="inputTitulo" id="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
+                                                    <label for="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
                                                     <input type="text" id="inputTitulo" name="nombreCuestionario" class="form-control needs-validation">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
@@ -277,12 +277,17 @@ try {
                                                     <div class="invalid-feedback"></div>
 
                                                 </div>
+
+                                                <div class="form-check form-switch mb-5">
+                                                    <label class="fw-bold fs-6 form-check-label" for="SwitchPlantilla">Habilitar como plantilla</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="SwitchPlantilla" name="plantilla" value="1" checked>
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                     </form>
                 </div>

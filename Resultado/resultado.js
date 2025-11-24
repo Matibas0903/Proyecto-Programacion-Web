@@ -211,6 +211,10 @@ window.onload = async function() {
             volverAParticipante();
         }
     });
+
+    //Boton volver
+    const btnSalir = document.getElementById("btnSalir");
+    btnSalir.addEventListener("click", volverAParticipante);
 }
 
 async function cargarRanking(idVersion, idParticipacion, esInvitado){
