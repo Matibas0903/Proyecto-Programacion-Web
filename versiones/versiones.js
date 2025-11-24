@@ -174,7 +174,7 @@ function cargarVersiones(){
                     </div>
                     <div class="row row-cols-auto g-3">
                       <div class="col">
-                        <button type="button" id="button_ver" class="btn bg-btn1"><i class="bi bi-list-columns"></i> Ver</button>
+                        <button type="button" id="button_ver" class="btn bg-btn1 btn-ver"><i class="bi bi-list-columns"></i> Ver</button>
                       </div>
                       <div class="col">
                         <button type="button" id="button_editar" class="btn bg-btn2"><i class="bi bi-pencil-fill"></i> Editar</button>
@@ -189,7 +189,7 @@ function cargarVersiones(){
             </div>
             `;
         listaVersiones.appendChild(div);
-        div.querySelector("#button_ver").addEventListener("click", () => {
+        div.querySelector(".btn-ver").addEventListener("click", () => {
             ver(version.ID_VERSION)
         });
         div.querySelector("#button_editar").addEventListener("click", () => {
