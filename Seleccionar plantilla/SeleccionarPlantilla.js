@@ -1,19 +1,16 @@
 window.onload = function()
 {
-inicializarPreguntasHardcodeadas();
-let cantidadPreguntas = 3;
+let cantidadPreguntas = 0;
 
+obtenerPlantilla(cantidadPreguntas);
 abrirPanelDerecho();
 abrirPanelTemas();
 seleccionarTema();
 salirDeCreacion();
 mostrarConfiguracion();
-ponerNombre();
-validarTitulo();    
+/*ponerNombre();
+validarTitulo();*/    
 añadirPregunta(cantidadPreguntas);
-
-
-
 }
 
 function abrirPanelDerecho()
@@ -154,7 +151,7 @@ function mostrarConfiguracion()
         })
 }
 
-function validarTitulo() 
+/*function validarTitulo() 
 {
     const btnGuardar = document.getElementById("btnGuardar");
     const titulo = document.getElementById("tituloCuestionario");
@@ -175,9 +172,9 @@ function validarTitulo()
                 }
 
         });
-}
+}*/
 
-function ponerNombre()
+/*function ponerNombre()
 {
     const inputTitulo = document.getElementById("inputIngresarTitulo");
     const titulo = document.getElementById("tituloCuestionario");
@@ -196,9 +193,9 @@ function ponerNombre()
                     titulo.innerHTML = "cuestionario";
                 }
         })
-}
+}*/
 
-function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
+function crearBotonPregunta(preguntaId, titulo) {
     const div = document.createElement("div");
     div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light", "btnPregunta");
     div.id = preguntaId;
@@ -233,7 +230,7 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
     return div;
 }
 
-function crearFormularioPregunta(preguntaId, titulo = "Pregunta", opciones = []) {
+function crearFormularioPregunta(preguntaId, titulo, opciones) {
     const panelPrincipal = document.getElementById("panelPrincipal");
 
     const container = document.createElement("div");
@@ -295,19 +292,19 @@ cardBody.appendChild(divBusqueda);
         const col = document.createElement("div");
         col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
 
-        const btnOpcion = document.createElement("button");
+        const btnOpcion = document.createElement("div");
         btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
         btnOpcion.contentEditable = true;
         btnOpcion.textContent = opciones;
 
         const cardRespuesta = document.createElement("div");
-        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
-        cardRespuesta.id = "OpcionRespuesta";
+        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "opcionRespuesta");
+        
 
 
         const radioCorrecta = document.createElement("input");
         radioCorrecta.type="radio";
-        radioCorrecta.name= "radioCorrecto";
+        radioCorrecta.name = `radioCorrecto-${preguntaId}`;
         radioCorrecta.classList.add("form-check-input");
 
         cardRespuesta.appendChild(radioCorrecta);
@@ -371,7 +368,7 @@ function añadirPregunta(cantidadPreguntas) {
     return cantidadPreguntas;
 }
 
-function inicializarPreguntasHardcodeadas() {
+/*function inicializarPreguntasHardcodeadas() {
     const preguntas = [
         { titulo: "¿En qué año comenzó la Segunda Guerra Mundial?", opciones: ["1914", "1939", "1945", "1929"] },
         { titulo: "¿Quién fue el líder del movimiento de independencia de la India?", opciones: ["Mahatma Gandhi", "Nelson Mandela", "Simón Bolívar", "Martin Luther King Jr."] },
@@ -384,7 +381,7 @@ function inicializarPreguntasHardcodeadas() {
         contenedor.appendChild(crearBotonPregunta(id, p.titulo));
         crearFormularioPregunta(id, p.titulo, p.opciones);
     });
-}
+}*/
 
 
 //API
@@ -411,12 +408,116 @@ function mostrarImagenSeleccionada(cardBody, url) {
   imgPreview.src = url;
 }
 
-function leerRespuestaCorrecta()
-{
-    const respuestaCorrecta = document.querySelectorAll('input[name="radioCorrecto"]:checked');
-    if(!respuestaCorrecta) return null;
+async function obtenerPlantilla(cantidadPreguntas){
 
-    const cardSeleccionada = radioSeleccionado.closest(".card-body"); //obtiene la card que contiene el boton y el radio, y lo devuelve
-    return cardSeleccionada;
+    const idVersion = document.body.dataset.idversion;
+
+
+    const version = idVersion;
+
+
+    if(version === null){
+        return error;
+    }
+    try{
+        const response2 = await fetch("obtenerPlantillas.php", {
+            method: "POST",
+            headers: {"Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                idVersion: idVersion
+            })
+        });
+        
+        const data = await response2.json();
+
+        if(data === null){
+            return error;
+        }else{
+            console.log(data);
+            llenarCampos(data, cantidadPreguntas);
+        }    
+    } catch (error) {
+        console.error("Error al enviar id version:", error);
+    }
+}
+
+async function llenarCampos(data, cantidadPreguntas) {
+  //Llena los campos con los datos del cuestionario ya insertado
+
+  //Declaro todos los inputs
+    const inputTitulo = document.getElementById("inputTitulo");
+    const inputDescripcion = document.getElementById("descripcion");
+    const inputCodAcceso = document.getElementById("inputCodigoAcceso");
+    const selectCategoria = document.getElementById("selectCategoria").value;
+    const publico = document.getElementById("radiopublico");
+    const privado = document.getElementById("radioPrivado");
+    
+    //lleno los inputs con la informacion de la tabla cuestionario
+    const c = data.cuestionario;
+
+    inputTitulo.value = c.NOMBRE_CUESTIONARIO;
+    selectCategoria.value = c.ID_CATEGORIA;
+
+    if (c.VISIBILIDAD === "Publico") {
+        publico.checked = true;
+    } else {
+        privado.checked = true;
+    }
+    //lleno los inputs con la informacion de la tabla version_cuestionario
+    const v = data.version;
+    inputDescripcion.value = v.DESCRIPCION;
+    inputCodAcceso.value = v.COD_ACCESO;
+
+    console.log("campos llenos");
+    cargarPreguntasDesdeBD(v, cantidadPreguntas);
+    
+}
+
+async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
+    const idVersionCuestionario = version.ID_VERSION;
+    
+    try {
+
+    const response2 = await fetch("obtenerPreguntas.php", {
+        method: "POST",
+        headers: {"Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            idVersion: idVersionCuestionario
+        }),
+    });
+    
+    const data = await response2.json();
+
+    if(data === null){
+        return error;
+    }else{
+        console.log(data);
+    }  
+    
+    data.preguntas.forEach((p) => {
+            cantidadPreguntas++;
+            const id = `pregunta-${cantidadPreguntas}`;
+
+            const btn = crearBotonPregunta(id, p.ENUNCIADO);
+            document.getElementById("divPreguntas").appendChild(btn);
+
+            // OJO: opciones puede venir vacío
+            crearFormularioPregunta(id, p.ENUNCIADO, p.opciones ?? []);
+
+            const radios = document.querySelectorAll(
+                `#form-${id} input[type="radio"]`
+            );
+
+            if (radios.length && p.correcta !== undefined && radios[p.correcta]) {
+                radios[p.correcta].checked = true;
+            }
+        });
+    } catch (error) {
+        console.error("Error al enviar id version:", error);
+    }
+
+    
 
 }

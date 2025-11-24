@@ -1,55 +1,62 @@
-window.onload = function () 
-{   
-   const miForm = document.getElementById("miform");
-    
-    miForm.addEventListener("submit", function (event) 
-    {
+window.onload = function () {   
+    const miForm = document.getElementById("miform");
+    const mensaje = document.getElementById("mensajeJS");
+
+   miForm.addEventListener("submit", function (event) {
+    // Limpiar mensaje antes de validar
+    if (mensaje) {
+        mensaje.classList.add("d-none");
+        mensaje.textContent = ""; // limpia el texto
+    }
+
+    let correoValido = validarGmail("gmail");
+    let contraValido = validarContra();
+
+    if (!correoValido || !contraValido) {
         event.preventDefault();
-
-        const correoValido = validarGmail("gmail");
-        const contraValido = validarContra();
-
-        if (!correoValido || !contraValido) {
-             return; 
+        if (mensaje) {
+           mensaje.textContent = "Por favor, ingrese datos validos.";
+            mensaje.classList.remove("d-none");
         }
-
-        
-        });
-    
-     inicializarModal();
-     logueoCorrecto();
+    }
+});
+    inicializarModal();
 };
 
-function validarContra() 
-{
+function validarContra() {
     const contra = document.getElementById("contraseña");
-    const valorIngresado = contra.value.trim();
-    const reglaContra = /^[A-Za-z0-9_]{6,8}$/;
+    const valor = contra.value.trim();
+    const regex = /^[A-Za-z0-9_]{6,12}$/;
 
-    if (!reglaContra.test(valorIngresado) || valorIngresado === "") {
-        contra.classList.add("is-invalid");
-        contra.classList.remove("is-valid");
+    if (!regex.test(valor) || valor === "") {
+        if (!contra.classList.contains("is-invalid")) {
+            contra.classList.add("is-invalid");
+        }
         return false;
     } else {
-        contra.classList.remove("is-invalid");
-        contra.classList.add("is-valid");
-         return true;
+        // Solo eliminar is-invalid si no hay error de PHP
+        if (!contra.dataset.phperror) {
+            contra.classList.remove("is-invalid");
+        }
+        return true;
     }
 }
 
-function validarGmail(idCampo)
-{
-    const campo = document.getElementById(idCampo);
-    const valorIngresado = campo.value.trim();
-    const reglaGmail = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
+// Valida el correo (JS solo verifica formato y vacío)
+function validarGmail(id) {
+    const campo = document.getElementById(id);
+    const valor = campo.value.trim();
+    const regex = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
 
-    if (!reglaGmail.test(valorIngresado) || valorIngresado === "") {
-        campo.classList.add("is-invalid");
-        campo.classList.remove("is-valid");
+    if (!regex.test(valor) || valor === "") {
+        if (!campo.classList.contains("is-invalid")) {
+            campo.classList.add("is-invalid");
+        }
         return false;
-     } else {
-        campo.classList.remove("is-invalid");
-        campo.classList.add("is-valid");
+    } else {
+        if (!campo.dataset.phperror) {
+            campo.classList.remove("is-invalid");
+        }
         return true;
     }
 }
@@ -59,30 +66,58 @@ function inicializarModal() {
     const inputCorreo = document.getElementById("inputCorreo");
     const modalOlvide = document.getElementById("modalOlvide");
     const mensajeValido = modalOlvide.querySelector(".valid-feedback");
+    const mensajeError = modalOlvide.querySelector(".invalid-feedback");
     const botonesFooter = modalOlvide.querySelectorAll(".modal-footer button");
 
-    // Al enviar correo desde el modal
     btnEnviarModal.addEventListener("click", function() {
-        if (validarGmail(inputCorreo.id)) {
-            // Mostrar mensaje de éxito
-            mensajeValido.classList.remove("d-none");
+        // Limpiar clases anteriores
+        inputCorreo.classList.remove("is-valid", "is-invalid");
+        mensajeValido.classList.add("d-none");
+        mensajeError.classList.add("d-none");
 
-            // Deshabilitar botones
-            botonesFooter.forEach(btn => btn.disabled = true);
+        // Validar formato de correo
+        if (validarGmail(inputCorreo.id)) {
+            fetch('recuperar_contraseña.php', {
+                method: 'POST',
+                body: new URLSearchParams({ correo: inputCorreo.value })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    inputCorreo.classList.add("is-valid");
+                    mensajeValido.classList.remove("d-none");
+                    botonesFooter.forEach(btn => btn.disabled = true);
+                } else {
+                    inputCorreo.classList.add("is-invalid");
+                    mensajeError.textContent = data.mensaje;
+                    mensajeError.classList.remove("d-none");
+                }
+            });
+        } else {
+            inputCorreo.classList.add("is-invalid");
+            mensajeError.textContent = "Ingrese un correo válido (@gmail.com)";
+            mensajeError.classList.remove("d-none");
         }
     });
 
-    // Al cancelar el modal
     const btnCancelar = document.getElementById("btnCancelar");
-    btnCancelar.addEventListener("click", function() {
-        btnCancelar.blur() ; //quita el foco del boton
-        inputCorreo.value = "";             // limpiar input
-        mensajeValido.classList.add("d-none"); // ocultar mensaje
-        // Rehabilitar botones
-        botonesFooter.forEach(btn => btn.disabled = false);
+    const btnCerrar = document.getElementById("btnCerrar");
+
+    // Limpiar input y mensajes al cerrar modal
+    [btnCancelar, btnCerrar].forEach(btn => {
+        btn.addEventListener("click", function() {
+            inputCorreo.value = "";
+            inputCorreo.classList.remove("is-valid", "is-invalid");
+            mensajeValido.classList.add("d-none");
+            mensajeError.classList.add("d-none");
+            botonesFooter.forEach(btn => btn.disabled = false);
+        });
     });
 }
 
+
+
+/*
 function logueoCorrecto(){
     const btnIniciarSesion = document.getElementById("botonEnviar");
 
@@ -90,5 +125,5 @@ function logueoCorrecto(){
         window.location.href = "../administrador/administrador.html";
     });
     
-}
+}*/
 
