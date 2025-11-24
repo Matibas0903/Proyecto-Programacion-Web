@@ -156,7 +156,7 @@ let idCuestionarioActual = null;
         const inputValid = nombreCuest.value && nombreCuest.value.length <= 300;
         if (inputValid){
             nombreCuest.classList.remove('is-invalid')
-            const cuestFiltrados = cuestionarios.filter(c => c.nombre.toLowerCase().includes(nombreCuest.value.toLowerCase()));
+            const cuestFiltrados = cuestionarios.filter(c => c.NOMBRE_CUESTIONARIO.toLowerCase().includes(nombreCuest.value.toLowerCase()));
             if(cuestFiltrados.length){
                 verMasCuestionarios(cuestFiltrados);
                 formCuestionarios.reset();

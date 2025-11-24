@@ -2,21 +2,6 @@
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
 }
-<<<<<<< Updated upstream
-#navBarCrearPreg{
-    background-color: #ffd0ae;
-    z-index: 1010;
-    border-right: 2px solid #000000;
-    border-left: 2px solid #000000;
-    border-bottom: 5px solid #000000;
-    position: fixed;           
-    width: 100%; 
-}
-
-body{
-    background-color: #fff1be;
-    overflow-x: clip;
-=======
 #navBarCrearPreg {
   background-color: #ffd0ae;
   z-index: 1010;
@@ -30,24 +15,14 @@ body{
 body {
   background-color: #fff1be;
   overflow-x: clip;
->>>>>>> Stashed changes
 }
 #panelPrincipal {
   margin-top: 10px;
   border: 2px solid #c5b6a2;
   border-radius: 10px;
 }
-<<<<<<< Updated upstream
-#inputIngresarTitulo{
-    background-color: #fff6e9;
-    border-top: 1px solid #af881b;
-    border-left: 1px solid #af881b;
-    border-bottom: 2px solid #af881b;
-    border-right: none; 
-=======
 #inputIngresarTitulo {
   background-color: #fff6e9;
->>>>>>> Stashed changes
 }
 
 #btnConfig {
@@ -58,6 +33,7 @@ body {
   border-left: none;
   cursor: pointer;
   transition: 0.3s;
+
 }
 #btnConfig:hover {
   color: white;
@@ -73,6 +49,7 @@ body {
 #btnTemas:hover {
   color: white;
   transform: scale(1.05);
+
 }
 #btnGuardar {
   background-color: #a3d6c7;
@@ -80,10 +57,12 @@ body {
   border-width: 1px 1px 3px 1px;
   cursor: pointer;
   transition: 0.3s;
+
 }
 #btnGuardar:hover {
   color: white;
   transform: scale(1.05);
+
 }
 #btnSalir {
   background-color: #ac5e5e;
@@ -91,21 +70,13 @@ body {
   border-width: 1px 1px 3px 1px;
   cursor: pointer;
   transition: 0.3s;
+
 }
 #btnSalir:hover {
   color: white;
   transform: scale(1.05);
+
 }
-<<<<<<< Updated upstream
-#panelIzq{
-    position: relative;
-    bottom: 0;
-    background-color:#c0cfcb;
-    margin-top: 70px;
-    border: 2px solid #798380;
-    border-radius: 10px;
-    overflow-y: auto;  /* activa scroll vertical si hay contenido extra*/
-=======
 #panelIzq {
   position: relative;
   bottom: 0;
@@ -114,34 +85,24 @@ body {
   border: 2px solid #798380;
   border-radius: 10px;
   overflow-y: auto; /* activa scroll vertical si hay contenido extra*/
->>>>>>> Stashed changes
 }
 #btnOpcion {
   background-color: #ef7131;
+
 }
 
 #btnAñadirPregunta {
   background-color: #3e7463;
   border: solid #748283;
   border-width: 1px 1px 3px 1px;
+
 }
 #btnAñadirDiapositiva {
   background-color: #d8eced;
+
 }
 
 #panelDer {
-<<<<<<< Updated upstream
-    margin-top: 10px;
-    border: 2px solid #798380;
-    border-radius: 10px;
-    position: fixed;
-    top: 133.6px;
-    right: -300px;       
-    width: 300px;
-    background-color: #ffded3;
-    transition: right 0.3s ease;
-    z-index: 1050;
-=======
   margin-top: 10px;
   border: 2px solid #798380;
   border-radius: 10px;
@@ -152,51 +113,14 @@ body {
   background-color: #ffded3;
   transition: right 0.3s ease;
   z-index: 1008;
->>>>>>> Stashed changes
 }
 
 #panelDer.active {
   right: 0;
+  right: 0;
 }
 
 #btnPanelDer {
-<<<<<<< Updated upstream
-    position: absolute;
-    top: 50%;
-    right: 0;                   
-    transform: translateY(-50%);
-    width: 30px;
-    height: 60px;
-    border-radius: 15px;
-    background-color: #edb51a;
-    border-top: 2px solid #af881b;
-    border-right: 2px solid #af881b;
-    border-bottom: 2px solid #af881b;
-    color: #fff;
-    cursor: pointer;
-    z-index: 1060;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    transition: right 0.3s ease, transform 0.3s ease;
-}
-
-#panelTemas
-{
-    margin-top: 10px;
-    border: 2px solid #798380;
-    border-radius: 10px;
-    visibility: hidden;
-    right: 0;
-    position: fixed;
-    top:  133.6px;
-    width: 300px;
-    background-color: #ffded3;
-    padding: 20px;
-    transition: right 0.3s ease;
-    z-index: 1080;
-=======
   position: fixed;
   top: 50%;
   right: 0;
@@ -231,14 +155,15 @@ body {
   padding: 20px;
   transition: right 0.3s ease;
   z-index: 1009;
->>>>>>> Stashed changes
 }
 
 #panelDer.active + #btnPanelDer {
   right: 300px;
+  right: 300px;
 }
 
 #btnPanelDer.open {
+  transform: translateY(-50%) rotate(180deg);
   transform: translateY(-50%) rotate(180deg);
 }
 
@@ -247,13 +172,19 @@ body {
   height: 100px;
   background-color: #fff1be;
   border: 2px solid black;
+
 }
 
 /* estilos navbar */
 .navbar-general {
   z-index: 3000;
+
 }
 .navbar-cuestionarios {
+  border-top: 2px solid #000000;
+  border-right: 2px solid #000000;
+  border-left: 2px solid #000000;
+  border-bottom: 5px solid #000000;
   border-top: 2px solid #000000;
   border-right: 2px solid #000000;
   border-left: 2px solid #000000;
@@ -264,8 +195,14 @@ body {
   height: 50px;
   border-radius: 50%;
   border: 3px solid #000000;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid #000000;
 }
 .navbar-dropdown-btn {
+  background-color: transparent;
+  border: none;
   background-color: transparent;
   border: none;
 }
@@ -277,6 +214,7 @@ body {
   background-color: rgba(0, 0, 0, 0);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 20px 25px;
   padding: 20px 25px;
 }
 
@@ -319,12 +257,6 @@ body {
   border-width: 1px 1px 3px 1px;
 }
 
-<<<<<<< Updated upstream
-.modal
-{
-    z-index: 5000;
-}
-=======
 .inputTitulo input {
   width: 10px;
 }
@@ -337,4 +269,3 @@ body {
 .modal {
   z-index: 3000;
 }
->>>>>>> Stashed changes

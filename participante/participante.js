@@ -6,6 +6,11 @@ let paginaActual = 1;
 const cuestionariosPorPagina = 20;
 
 async function onloadParticipante(){
+    const mensaje = sessionStorage.getItem('mensajeError');
+    if (mensaje) {
+        mostrarMensajeError(mensaje);
+        sessionStorage.removeItem('mensajeError');
+    }
     //Buscador cuestionarios
     const formCuestionarios = document.getElementById("formId");
     formCuestionarios.addEventListener("submit", (e) => {

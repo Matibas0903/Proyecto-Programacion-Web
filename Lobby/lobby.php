@@ -16,19 +16,24 @@
     ?>
     <!--Barra lateral izquierda-->
     <div class="container-fluid">
-        <div class="row">
-            <div id="panelIzq" class="col-3 p-3 vh-100">
-                <h4 class="fw-bold">Jugadores</h4>
+        <div class="row flex-column-reverse flex-md-row">
+            <div id="panelIzq" class="col-12 col-md-4 col-lg-3 p-3 min-vh-md-100">
+                <div>
+                    <p id="calificacionCuestionario" class="rating"></p>
+                    <h4 class="fw-bold">Descripción</h4>
+                    <p id="descripcionCuestionario"></p>
+                </div>
+                <h4 class="fw-bold">Ranking</h4>
                 <div class="rounded shadow overflow-hidden">
-                    <table id="tablaUsuarios" class="table table-bordered table-hover table-striped table-sm align-middle mb-0">
+                    <table id="tablaUsuarios" class="table table-bordered table-hover table-striped table-sm align-middle mb-0 d-none">
                         <thead class="table-dark">
                             <tr>
                                 <th>Nombre</th>
                                 <th>Posicion</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
+                        <tbody id="cuerpoRanking">
+                            <!-- <tr>
                                 <td>Marco</td>
                                 <td>1</td>
                             </tr>
@@ -47,28 +52,29 @@
                             <tr>
                                 <td>Griselda</td>
                                 <td>5</td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
+                <p id="sinRanking" class="d-none">No disponible</p>
             </div>
 
-
-
             <!--Contenedor principal-->
-            <div class="col-9 d-flex flex-column justify-content-center align-items-center vh-100">
-                <div>
+            <div id="background_image" class="col-12 col-md-8 col-lg-9 d-flex flex-column justify-content-center align-items-center">
+                <div class="mb-3">
+                    <h3 id="tituloCuestionario" class="text-center"></h3>
+                </div>
+                <div class="d-flex gap-3">
+                    <button class="btn" id="btnSalirLobby">Volver</button>
                     <button class="btn" id="btnIniciarCuestionario">Iniciar cuestionario</button>
-                </div>
-                <div>
-                    <button class="btn" id="btnSalirLobby">Salir</button>
-                </div>
-                <div id="tituloCuestionario">
-                    <h3>Cuestionario de Historia</h3>
                 </div>
             </div>
         </div>
     </div>
+
+    <?php
+      include('../mensajeError/mensajeError.php');
+    ?>
 </body>
 
 </html>

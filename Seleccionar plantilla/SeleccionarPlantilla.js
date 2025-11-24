@@ -1,6 +1,5 @@
+let cantidadPreguntas = 0;
 window.onload = function () {
-  let cantidadPreguntas = 0;
-
   const btnGuardar = document.getElementById("btnGuardar");
   btnGuardar.addEventListener("click", () => {
     const idVersion = document.body.dataset.idversion;
@@ -28,7 +27,7 @@ window.onload = function () {
   const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
   btnGuardarYSalir.addEventListener("click", guardarCuestionario);
 */
-  obtenerPlantilla(cantidadPreguntas);
+  obtenerPlantilla();
   abrirPanelDerecho();
   abrirPanelTemas();
   seleccionarTema();
@@ -36,7 +35,7 @@ window.onload = function () {
 
   ponerNombre();
 
-  añadirPregunta(cantidadPreguntas);
+  añadirPregunta();
 };
 
 function abrirPanelDerecho() {
@@ -163,9 +162,8 @@ function mostrarConfiguracion() {
                 }
 
         });
-<<<<<<< Updated upstream
 }
-
+*/
 function ponerNombre() {
   //Escribo en el titulo el nombre ingresado en el modal
   const titulo = document.getElementById("tituloCuestionario");
@@ -176,177 +174,6 @@ function ponerNombre() {
       titulo.innerHTML = "cuestionario";
     }
   });
-}
-
-function crearBotonPregunta(preguntaId, titulo) {
-    const div = document.createElement("div");
-    div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light", "btnPregunta");
-    div.id = preguntaId;
-
-
-        const pTitulo = document.createElement("p");
-        pTitulo.classList.add("text-center", "text-muted", "mb-0","fs-6", "fs-md-5", "fs-lg-4"); /*responsive al texto de los btn*/
-        pTitulo.textContent = titulo;
-        pTitulo.id = `tituloPregunta-${preguntaId}`;
-
-    const btnEliminar = document.createElement("button");
-    btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
-    const icono = document.createElement("i");
-    icono.classList.add("bi", "bi-trash-fill");
-    btnEliminar.appendChild(icono);
-
-    btnEliminar.addEventListener("click", (e) => {
-        e.stopPropagation();
-        div.remove();
-        document.getElementById(`form-${preguntaId}`)?.remove();
-    });
-
-    div.addEventListener("click", () => {
-        
-        document.querySelectorAll(".form-pregunta").forEach(f => f.style.display = "none");
-        const form = document.getElementById(`form-${preguntaId}`);
-        if (form) form.style.display = "block";
-    });
-
-    div.appendChild(pTitulo);
-    div.appendChild(btnEliminar);
-    return div;
-}
-
-function crearFormularioPregunta(preguntaId, titulo, opciones) {
-    const panelPrincipal = document.getElementById("panelPrincipal");
-
-    const container = document.createElement("div");
-    container.classList.add("container", "mt-4", "form-pregunta");
-    container.id = `form-${preguntaId}`;
-    container.style.display = "none";
-
-    const card = document.createElement("div");
-    card.classList.add("card", "mb-4","cardPregunta"); //card que contiene las preguntas/respuestas
-
-    const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
-
-    const inputPregunta = document.createElement("input");
-
-    
-// --- buscador de imagen Unsplash ---
-const divBusqueda = document.createElement("div");
-divBusqueda.classList.add("mb-3", "card-pregunta");
-
-const inputBusqueda = document.createElement("input");
-inputBusqueda.type = "text";
-inputBusqueda.placeholder = "Buscar imagen (ej: guerra, ciencia...)";
-inputBusqueda.classList.add("form-control", "mb-2");
-
-const btnBuscar = document.createElement("button");
-btnBuscar.textContent = "Buscar imagen";
-btnBuscar.classList.add("btn", "btn-secondary", "mb-3");
-
-const contenedorImagenes = document.createElement("div");
-contenedorImagenes.classList.add("d-flex", "flex-wrap", "justify-content-center", "gap-2");
-
-divBusqueda.appendChild(inputBusqueda);
-divBusqueda.appendChild(btnBuscar);
-divBusqueda.appendChild(contenedorImagenes);
-cardBody.appendChild(divBusqueda);
-//
-
-
-    inputPregunta.type = "text";
-    inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
-    inputPregunta.value = titulo;
-    inputPregunta.placeholder = "Escribe aquí la pregunta...";
-    inputPregunta.id = `inputPregunta-${preguntaId}`;
-
-    inputPregunta.addEventListener("input", () => {
-        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
-        tituloPregunta.innerText = inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
-    });
-
-    cardBody.appendChild(inputPregunta);
-
-    // Opciones
-    const row = document.createElement("div");
-    row.classList.add("row", "g-3");
-
-    const opcionesDef = opciones.length ? opciones : ["Opción 1", "Opción 2", "Opción 3", "Opción 4"];
-    opcionesDef.forEach((opciones) => {
-        const col = document.createElement("div");
-        col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
-
-        const btnOpcion = document.createElement("div");
-        btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
-        btnOpcion.contentEditable = true;
-        btnOpcion.textContent = opciones;
-
-        const cardRespuesta = document.createElement("div");
-        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "opcionRespuesta");
-        
-
-
-        const radioCorrecta = document.createElement("input");
-        radioCorrecta.type="radio";
-        radioCorrecta.name = `radioCorrecto-${preguntaId}`;
-        radioCorrecta.classList.add("form-check-input");
-
-        cardRespuesta.appendChild(radioCorrecta);
-        cardRespuesta.appendChild(btnOpcion);
-        col.appendChild(cardRespuesta);
-        row.appendChild(col);
-    });
-
-    // Escuchar busquedad 
-btnBuscar.addEventListener("click", async () => {
-  contenedorImagenes.innerHTML = "Cargando...";
-  const imagenes = await buscarImagenesUnsplash(inputBusqueda.value);
-  contenedorImagenes.innerHTML = "";
-
-  imagenes.forEach(img => {
-    const imgEl = document.createElement("img");
-    imgEl.src = img.urls.thumb;
-    imgEl.alt = img.alt_description;
-    imgEl.style.cursor = "pointer";
-    imgEl.style.borderRadius = "10px";
-    imgEl.width = 100;
-    imgEl.height = 100;
-
-    imgEl.addEventListener("click", () => {
-      mostrarImagenSeleccionada(cardBody, img.urls.small);
-    });
-
-    contenedorImagenes.appendChild(imgEl);
-  });
-});
-//
-
-    card.appendChild(cardBody);
-    card.appendChild(row);
-    container.appendChild(card);
-    panelPrincipal.appendChild(container);
-
-    inputPregunta.addEventListener("input", ()=>
-    {
-        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
-        tituloPregunta.innerText = inputPregunta.value;
-        if(tituloPregunta.innerText.trim() === "")
-                {
-                    tituloPregunta.innerText = "Pregunta";
-                }
-    })
-}
-
-=======
-}*/
-
-function ponerNombre() {
-  //Escribo en el titulo el nombre ingresado en el modal
-  const titulo = document.getElementById("tituloCuestionario");
-  const inputTituloconfig = document.getElementById("inputTitulo");
-  titulo.innerHTML = inputTituloconfig.value;
-  if (titulo.innerText.trim() === "") {
-    titulo.innerHTML = "cuestionario";
-  }
 }
 
 function crearBotonPregunta(preguntaId, titulo) {
@@ -440,7 +267,6 @@ function crearFormularioPregunta(preguntaId, titulo, opciones) {
   divBusqueda.appendChild(btnBuscar);
   divBusqueda.appendChild(contenedorImagenes);
   cardBody.appendChild(divBusqueda);
-  //
 
   inputPregunta.type = "text";
   inputPregunta.classList.add(
@@ -466,18 +292,18 @@ function crearFormularioPregunta(preguntaId, titulo, opciones) {
   // Opciones
   const row = document.createElement("div");
   row.classList.add("row", "g-3");
-
+  opciones = Array.isArray(opciones) ? opciones : [];
   const opcionesDef = opciones.length
     ? opciones
     : ["Opción 1", "Opción 2", "Opción 3", "Opción 4"];
-  opcionesDef.forEach((opciones) => {
+  opcionesDef.forEach((opcionTexto, index) => {
     const col = document.createElement("div");
-    col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
+    col.classList.add("col-12", "col-md-6");
 
     const btnOpcion = document.createElement("div");
-    btnOpcion.classList.add("btn", "w-100", "btnOpciones"); //le clase clase de btrp y puse uno  nuevo
+    btnOpcion.classList.add("btn", "w-100", "btnOpciones");
     btnOpcion.contentEditable = true;
-    btnOpcion.textContent = opciones;
+    btnOpcion.textContent = opcionTexto; // <- variable clara
 
     const cardRespuesta = document.createElement("div");
     cardRespuesta.classList.add(
@@ -490,36 +316,14 @@ function crearFormularioPregunta(preguntaId, titulo, opciones) {
 
     const radioCorrecta = document.createElement("input");
     radioCorrecta.type = "radio";
-    radioCorrecta.name = `radioCorrecto-${preguntaId}`;
+    radioCorrecta.name = `radioCorrecto-${preguntaId}`; // único por pregunta
+    radioCorrecta.id = `radio-${preguntaId}-${index}`; // único por opción
     radioCorrecta.classList.add("form-check-input");
 
     cardRespuesta.appendChild(radioCorrecta);
     cardRespuesta.appendChild(btnOpcion);
     col.appendChild(cardRespuesta);
     row.appendChild(col);
-  });
-
-  // Escuchar busquedad
-  btnBuscar.addEventListener("click", async () => {
-    contenedorImagenes.innerHTML = "Cargando...";
-    const imagenes = await buscarImagenesUnsplash(inputBusqueda.value);
-    contenedorImagenes.innerHTML = "";
-
-    imagenes.forEach((img) => {
-      const imgEl = document.createElement("img");
-      imgEl.src = img.urls.thumb;
-      imgEl.alt = img.alt_description;
-      imgEl.style.cursor = "pointer";
-      imgEl.style.borderRadius = "10px";
-      imgEl.width = 100;
-      imgEl.height = 100;
-
-      imgEl.addEventListener("click", () => {
-        mostrarImagenSeleccionada(cardBody, img.urls.small);
-      });
-
-      contenedorImagenes.appendChild(imgEl);
-    });
   });
   //
 
@@ -539,11 +343,16 @@ function crearFormularioPregunta(preguntaId, titulo, opciones) {
   });
 }
 
->>>>>>> Stashed changes
-function añadirPregunta(cantidadPreguntas) {
+function añadirPregunta() {
   const btn = document.getElementById("btnAñadirPregunta");
   const contenedor = document.getElementById("divPreguntas");
 
+  btn.addEventListener("click", () => {
+    cantidadPreguntas++;
+    const id = `pregunta-${cantidadPreguntas}`;
+    contenedor.appendChild(crearBotonPregunta(id));
+    crearFormularioPregunta(id);
+  });
   btn.addEventListener("click", () => {
     cantidadPreguntas++;
     const id = `pregunta-${cantidadPreguntas}`;
@@ -567,7 +376,7 @@ function añadirPregunta(cantidadPreguntas) {
         contenedor.appendChild(crearBotonPregunta(id, p.titulo));
         crearFormularioPregunta(id, p.titulo, p.opciones);
     });
-}
+}*/
 
 //API
 // ========== UNSPLASH API ==========
@@ -593,18 +402,7 @@ function mostrarImagenSeleccionada(cardBody, url) {
   imgPreview.src = url;
 }
 
-<<<<<<< Updated upstream
-function leerRespuestaCorrecta()
-{
-    const respuestaCorrecta = document.querySelectorAll('input[name="radioCorrecto"]:checked');
-    if(!respuestaCorrecta) return null;
-
-    const cardSeleccionada = radioSeleccionado.closest(".card-body"); //obtiene la card que contiene el boton y el radio, y lo devuelve
-    return cardSeleccionada;
-
-}
-=======
-async function obtenerPlantilla(cantidadPreguntas) {
+async function obtenerPlantilla() {
   const idVersion = document.body.dataset.idversion;
 
   const version = idVersion;
@@ -639,14 +437,14 @@ async function obtenerPlantilla(cantidadPreguntas) {
       return error;
     } else {
       console.log(data);
-      llenarCampos(data, cantidadPreguntas);
+      llenarCampos(data);
     }
   } catch (error) {
     console.error("Error al enviar id version:", error);
   }
 }
 
-async function llenarCampos(data, cantidadPreguntas) {
+async function llenarCampos(data) {
   //Llena los campos con los datos del cuestionario ya insertado
 
   //Declaro todos los inputs
@@ -674,10 +472,10 @@ async function llenarCampos(data, cantidadPreguntas) {
   inputCodAcceso.value = v.COD_ACCESO;
 
   console.log("campos llenos");
-  cargarPreguntasDesdeBD(v, cantidadPreguntas);
+  cargarPreguntasDesdeBD(v);
 }
 
-async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
+async function cargarPreguntasDesdeBD(version) {
   const idVersionCuestionario = version.ID_VERSION;
 
   try {
@@ -690,30 +488,67 @@ async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
     });
 
     const data = await response2.json();
-
+    console.log("Preguntas recibidas:", data.preguntas);
     if (data === null) {
       return error;
     } else {
       console.log(data);
     }
-
-    data.preguntas.forEach((p) => {
+    data.preguntas.forEach((p, idxPregunta) => {
       cantidadPreguntas++;
       const id = `pregunta-${cantidadPreguntas}`;
+      console.log(`--- Procesando pregunta #${idxPregunta + 1} ---`);
+      console.log("ID formulario:", id);
+      console.log("Enunciado:", p.ENUNCIADO);
+      console.log("Opciones recibidas:", p.opciones);
 
       const btn = crearBotonPregunta(id, p.ENUNCIADO);
       document.getElementById("divPreguntas").appendChild(btn);
 
-      // OJO: opciones puede venir vacío
-      crearFormularioPregunta(id, p.ENUNCIADO, p.opciones ?? []);
+      // Convertir opciones a texto
+      const opcionesTexto = p.opciones.map((opt) => opt.TEXTO);
+      console.log("OpcionesTexto:", opcionesTexto);
 
-      const radios = document.querySelectorAll(
-        `#form-${id} input[type="radio"]`
-      );
+      // Crear formulario
+      crearFormularioPregunta(id, p.ENUNCIADO, opcionesTexto ?? []);
 
-      if (radios.length && p.correcta !== undefined && radios[p.correcta]) {
-        radios[p.correcta].checked = true;
+      // Seleccionamos el formulario recién creado
+      const form = document.getElementById(`form-${id}`);
+      console.log("Formulario creado:", form);
+
+      if (!form) {
+        console.warn("No se encontró el formulario recién creado");
+        return;
       }
+
+      const opcionesDivs = form.querySelectorAll(".btnOpciones");
+      const radios = form.querySelectorAll('input[type="radio"]');
+
+      p.opciones.forEach((opcion, index) => {
+        console.log(
+          `Opción ${index}:`,
+          opcion.TEXTO,
+          "Correcta?",
+          opcion.ES_CORRECTA
+        );
+
+        if (opcionesDivs[index]) {
+          opcionesDivs[index].textContent = opcion.TEXTO;
+        } else {
+          console.warn(`No existe div para opción ${index}`);
+        }
+
+        if (opcion.ES_CORRECTA == 1) {
+          if (radios[index]) {
+            radios[index].checked = true;
+            console.log(`Marcada como correcta la opción ${index}`);
+          } else {
+            console.warn(`No existe radio para opción ${index}`);
+          }
+        }
+      });
+
+      console.log(`--- Fin pregunta #${idxPregunta + 1} ---`);
     });
   } catch (error) {
     console.error("Error al enviar id version:", error);
@@ -798,17 +633,15 @@ function recolectarPreguntas() {
 
     // Recolectar las opciones
     const opciones = [];
-    const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
-    const opcionesCorrectas = [];
+    const opcionesDiv = form.querySelectorAll(".opcionRespuesta");
+    let opcionCorrecta = null;
 
-    opcionesDiv.forEach((div) => {
+    opcionesDiv.forEach((div, indexOpcion) => {
       const texto = div.querySelector(".btnOpciones").textContent.trim();
-      const esCorrecta = div.querySelector("input[type='radio']").checked
-        ? 1
-        : 0;
+      const esCorrecta = div.querySelector("input[type='radio']").checked;
 
-      if (esCorrecta === 1) {
-        opcionesCorrectas.push(esCorrecta);
+      if (esCorrecta) {
+        opcionCorrecta = indexOpcion;
       }
 
       opciones.push({
@@ -822,10 +655,10 @@ function recolectarPreguntas() {
       enunciado: enunciado,
       imagen: imagenSeleccionada,
       opciones: opciones,
-      opcionesCorrectas: opcionesCorrectas,
+      opcionCorrecta: opcionCorrecta ? 1 : 0,
     });
   });
-
+  console.log(preguntas);
   return preguntas;
 }
 
@@ -855,13 +688,13 @@ async function actualizarPlantilla() {
   for (let [key, value] of formData.entries()) {
     cuestionario[key] = value;
   }
-
+  console.log(recolectarPreguntas());
   // Recolectar preguntas (reutilizar recolectarPreguntas)
   const preguntas = recolectarPreguntas();
 
   try {
     // Enviar a actualizarPreguntas.php
-    const response = await fetch("actualizarPreguntas.php", {
+    const response = await fetch("actualizarPreguntas2.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -953,4 +786,3 @@ function mostrarErrores(data) {
     }
   });
 }
->>>>>>> Stashed changes
