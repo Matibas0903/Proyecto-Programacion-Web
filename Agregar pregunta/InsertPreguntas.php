@@ -1,6 +1,9 @@
 <?php
+<<<<<<< Updated upstream
 //este archivo los escribio chatgpt se supone que recibe el idversion,vpero falta la logica de escribir la informacion del cuestionario, podria modificar la forma en la que se envian esos datos y hacerlo con ajax, significa tener un archi para la info del cuestionario y otro para el guardado de preguntas, mañana sigo, el id version ya se esta psando el problema no era la session, aun asi hay que leer el codigo de gpt y verificarlo
 
+=======
+>>>>>>> Stashed changes
 session_start();
 
 header("Content-Type: application/json");
@@ -72,12 +75,7 @@ try {
             $sqlOpcion->execute([
                 ":idp" => $idPregunta,
                 ":txt" => $op["texto"],
-            ]);
-        }
-
-        foreach ($pregunta["opcionesCorrectas"] as $opCor) {
-            $sqlOpcion->execute([
-                ":cor" => $opCor["esCorrecta"]
+                ":cor" => $op["esCorrecta"] ?? 0
             ]);
         }
     }

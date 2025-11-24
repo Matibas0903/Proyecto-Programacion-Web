@@ -2,8 +2,13 @@ window.onload = function() {
     const botonIngresar = document.getElementById("btingresar");
     const spinnerContainer = document.getElementById("spinnerContainer");
 
+<<<<<<< Updated upstream
     // cuando se ingresa el codigo,y si es valido, muestro el cargando...
     botonIngresar.addEventListener("click", function() {
+=======
+    // cuando se ingresa el codigo,y si es valido, muestro el cargando
+    botonIngresar.addEventListener("click", async function() {
+>>>>>>> Stashed changes
         if (validarCodigo()) { 
             mostrarSpinner();
             setTimeout(() => {

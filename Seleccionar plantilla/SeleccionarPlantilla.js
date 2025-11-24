@@ -13,6 +13,25 @@ validarTitulo();
 añadirPregunta(cantidadPreguntas);
 
 
+<<<<<<< Updated upstream
+=======
+
+const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
+  btnSalirSinGuardar.addEventListener("click", () => {
+    window.location.href = "../administrador/administrador.php";
+  });
+
+  const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
+  btnGuardarYSalir.addEventListener("click",() => {
+    actualizarPlantilla();
+     window.location.href = "../administrador/administrador.php";
+  } );
+  obtenerPlantilla();
+  abrirPanelDerecho();
+  abrirPanelTemas();
+  seleccionarTema();
+  salirDeCreacion();
+>>>>>>> Stashed changes
 
 }
 
@@ -360,6 +379,7 @@ function añadirPregunta(cantidadPreguntas) {
     const btn = document.getElementById("btnAñadirPregunta");
     const contenedor = document.getElementById("divPreguntas");
 
+<<<<<<< Updated upstream
     btn.addEventListener("click", () => {
         cantidadPreguntas++;
         const id = `pregunta-${cantidadPreguntas}`;
@@ -369,6 +389,15 @@ function añadirPregunta(cantidadPreguntas) {
     });
 
     return cantidadPreguntas;
+=======
+  btn.addEventListener("click", () => {
+    cantidadPreguntas++;
+    const id = `pregunta-${cantidadPreguntas}`;
+    contenedor.appendChild(crearBotonPregunta(id));
+    crearFormularioPregunta(id);
+  });
+  return cantidadPreguntas;
+>>>>>>> Stashed changes
 }
 
 function inicializarPreguntasHardcodeadas() {

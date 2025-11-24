@@ -63,7 +63,7 @@
                 </button>
             </div>
 
-            <!-- ÁREA PRINCIPAL -->
+            <!-- AREA PRINCIPAL -->
             <!--Le puse lo del responsive aca y en la del panel izquierdo-->
             <div class="col-12 col-md-8 col-lg-10 p-4 position-relative" id="panelPrincipal">
 

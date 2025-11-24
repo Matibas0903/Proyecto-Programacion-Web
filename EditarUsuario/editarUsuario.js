@@ -27,6 +27,7 @@ function validarNombre(input) {
 //Email
 function validarEmail(input){
   const valorEmail = input.value.trim();
+<<<<<<< Updated upstream
   const condicionEmail = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
 
   const valido = condicionEmail.test(valorEmail);
@@ -37,6 +38,20 @@ function validarEmail(input){
 }
 //Contraseña
 function validarContrasena(input){
+=======
+
+  const valido =
+    valorEmail === "" ||
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(valorEmail);
+
+  input.classList.toggle("is-invalid", !valido && valorEmail !== "");
+  input.classList.toggle("is-valid", valido && valorEmail !== "");
+
+  return valido;
+}
+
+function validarContrasena(input) {
+>>>>>>> Stashed changes
   const valor = input.value.trim();
   const re = /^[A-Za-z0-9_]{6,8}$/;
   const valido = re.test(valor);
@@ -66,7 +81,30 @@ function validarFoto(select) {
   select.classList.toggle("is-invalid", !valido);
   select.classList.toggle("is-valid", valido);
 
+<<<<<<< Updated upstream
   return valido;
+=======
+  fetch("traerDatos.php")
+    .then(res => res.json())
+    .then(data => {
+      if (data.NOMBRE) nombre.value = data.NOMBRE;
+      if (data.EMAIL) mail.value = data.EMAIL;
+      if (data.FECHA_NACIMIENTO)
+        fechaNacimiento.value = data.FECHA_NACIMIENTO.split(" ")[0];
+
+      if (data.FOTO_PERFIL && data.FOTO_PERFIL.trim() !== "") {
+        fotoPerfil.src = data.FOTO_PERFIL;
+        fotoSelect.value = data.FOTO_PERFIL;  // selecciona la opción correcta
+        if (preview) preview.src = data.FOTO_PERFIL;
+
+        fotoInicial = data.FOTO_PERFIL; // guardamos la foto inicial
+          console.log("FOTO_PERFIL recibido:", data.FOTO_PERFIL);
+      } else {
+        fotoInicial = fotoSelect.value; // si no hay foto guardada
+      }
+    })
+    .catch(err => console.error("Error al cargar datos:", err));
+>>>>>>> Stashed changes
 }
 
 
@@ -101,8 +139,21 @@ function guardarCambios() {
 
     if (!nombreValido || !emailValido || !contrasenaValida || !fechaValida || !fotoValida) return;
 
+<<<<<<< Updated upstream
     // Actualizar datos visualmente
     preview.src = fotoSelect.value;
+=======
+    // Armar objeto con los campos modificados
+    const datos = {};
+   if (nombre !== "") datos.nombre = nombre;
+    if (email !== "") datos.mail = email;
+    if (pass1 !== "") datos.contrasena = pass1;
+    if (fecha !== "") datos.fechaNacimiento = fecha;
+
+    // SIEMPRE ENVIAR LA FOTO:
+    datos.fotoPerfil = fotoSelect.value;
+
+>>>>>>> Stashed changes
 
     // Mostrar modal Bootstrap
     const modal = new bootstrap.Modal(document.getElementById("edicionExitosa"));

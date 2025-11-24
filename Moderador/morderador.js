@@ -1,7 +1,15 @@
+<<<<<<< Updated upstream
 window.onload = function()
 {
 EnlazarComentariosACuestionarios();
 const btnReportar = document.querySelectorAll(".btn-reportes");
+=======
+window.onload = function () {
+  // Agregar todos los cuestionarios dinámicamente
+  //cuestionarios.forEach((c) => agregarCuestionario(c));
+  EnlazarComentariosACuestionarios();
+  const btnReportar = document.querySelectorAll(".btn-reportes");
+>>>>>>> Stashed changes
 
 btnReportar.forEach(boton => {
   boton.addEventListener("click", () => {
@@ -228,4 +236,89 @@ function expulsarComentario(index) {
     alert(`Expulsando usuario del comentario en índice ${index}`);
      //agregar funcionalidad cuando este conectado con bbdd
 }
+<<<<<<< Updated upstream
                             
+=======
+// Función para agregar un cuestionario dinámicamente
+function agregarCuestionario(cuestionario) {
+  const contenedor = document.getElementById("custionarios");
+
+  // Crear columna
+  const col = document.createElement("div");
+  col.className = "col-md-4 mb-4";
+
+  // Crear card
+  const card = document.createElement("div");
+  card.className = "card carta-cuestionario h-100";
+
+  const cardBody = document.createElement("div");
+  cardBody.className = "card-body";
+
+  // Título
+  const titulo = document.createElement("h5");
+  titulo.className = "card-title";
+  titulo.textContent = cuestionario.titulo;
+
+  // Texto del admin, fecha y jugadores
+  const texto = document.createElement("p");
+  texto.className = "card-text";
+  texto.innerHTML = `
+        <small class="text-muted">
+            <i class="bi bi-person-fill"></i> Admin: ${cuestionario.admin}<br>
+            <i class="bi bi-calendar-date"></i> Fecha: ${cuestionario.fecha}<br>
+            Jugadores: ${cuestionario.jugadores}
+        </small>
+    `;
+
+  // Estado
+  const estado = document.createElement("span");
+  estado.className = `state ${cuestionario.estadoClase}`; // activo, finalizado, esperando
+  estado.textContent = cuestionario.estado;
+
+  // Valoración
+  const valoracion = document.createElement("div");
+  valoracion.className = "rating";
+  valoracion.innerHTML = `
+        <i class="bi bi-star-fill"></i>
+        ${cuestionario.valoracion}
+    `;
+
+  // Botones
+  const botones = document.createElement("div");
+  botones.className = "d-flex flex-wrap gap-2";
+  botones.innerHTML = `
+        <button class="btn btn-moderar" data-cuestionario="${cuestionario.titulo}">
+            <i class="bi bi-incognito"></i> Modera
+        </button>
+        <button class="btn btn-detalles"
+            data-titulo="${cuestionario.titulo}"
+            data-admin="${cuestionario.admin}"
+            data-fecha="${cuestionario.fecha}"
+            data-jugadores="${cuestionario.jugadores}"
+            data-estado="${cuestionario.estado}"
+            data-valoracion="${cuestionario.valoracion}"
+            data-descripcion="${cuestionario.descripcion}">
+            <i class="bi bi-list-columns"></i> Detalles
+        </button>
+        <button class="btn btn-reportes">
+            <i class="bi bi-exclamation-diamond-fill"></i> Reportar
+        </button>
+    `;
+
+  // Armar card
+  cardBody.appendChild(titulo);
+  cardBody.appendChild(texto);
+  cardBody.appendChild(estado);
+  cardBody.appendChild(valoracion);
+  cardBody.appendChild(botones);
+  card.appendChild(cardBody);
+  col.appendChild(card);
+
+  // Agregar al contenedor
+  contenedor.appendChild(col);
+}
+
+// Ejemplo de uso con datos
+
+*/
+>>>>>>> Stashed changes

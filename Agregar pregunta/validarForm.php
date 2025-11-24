@@ -23,7 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $visibilidad  = trim($_POST["Visibilidad"] ?? "");
     $activo       = trim($_POST["estado"] ?? "");
 
+<<<<<<< Updated upstream
     // --- Validación: Título ---
+=======
+    // --- Validacion: Titulo ---
+>>>>>>> Stashed changes
     if (empty($titulo)) {
         $errores["inputTitulo"] = "El título no puede estar vacío";
     } else {
@@ -57,7 +61,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data["tipoPregunta"] = htmlspecialchars($tipoPregunta);
     }
 
+<<<<<<< Updated upstream
     // --- Validación: Visibilidad ---
+=======
+    if (!preg_match("/^\d{6,10}$/", $cod_acceso)) {
+        $errores["codigoAcceso"] = "El codigo debe tener 6 digitos";
+    }
+
+    // --- Validacion: Visibilidad ---
+>>>>>>> Stashed changes
     if (empty($visibilidad)) {
         $errores["radioPrivado"] = "";
         $errores["radiopublico"] = "Seleccione una visibilidad";
