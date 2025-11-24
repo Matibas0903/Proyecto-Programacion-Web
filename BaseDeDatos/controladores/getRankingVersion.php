@@ -8,17 +8,25 @@
         }
         $idVersion = (int) $_GET['version'];
     
+        // Query que incluye tanto usuarios registrados como invitados
         $stmtRanking = $conn->prepare("
             SELECT 
                 p.ID_PARTICIPACION,
                 p.FECHA_PARTICIPACION,
                 p.PUNTAJE,
                 p.ID_VERSION,
+                p.INVITADO,
                 u.ID_USUARIO,
-                u.NOMBRE,
-                u.FOTO_PERFIL
+                CASE 
+                    WHEN p.INVITADO = 1 THEN p.NOMBRE_INVITADO
+                    ELSE u.NOMBRE
+                END AS NOMBRE,
+                CASE 
+                    WHEN p.INVITADO = 1 THEN ''
+                    ELSE u.FOTO_PERFIL
+                END AS FOTO_PERFIL
             FROM participacion p
-            INNER JOIN usuario u ON p.ID_USUARIO = u.ID_USUARIO
+            LEFT JOIN usuario u ON p.ID_USUARIO = u.ID_USUARIO
             WHERE p.ID_VERSION = :idVersion
                 AND p.BANEADO = 0
             ORDER BY p.PUNTAJE DESC

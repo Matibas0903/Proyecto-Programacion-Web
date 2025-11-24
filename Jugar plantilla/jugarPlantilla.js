@@ -157,11 +157,18 @@ function mostrarPreguntas() {
 
 async function cargarVersion(){
     const idVersion = new URLSearchParams(window.location.search).get('version');
-    if(!idVersion){
-      redirigirConError('ID de versión inválido.');
+    const invitado = new URLSearchParams(window.location.search).get('invitado');
+    const codigoVersion = sessionStorage.getItem('codigoVersion');
+    if(!invitado && !idVersion){
+      redirigirConError('ID de versión inválido.', false);
     } else {
         try {
-            const response = await fetch(`../BaseDeDatos/controladores/getVersionById.php?version=${idVersion}&jugador=true`);
+            let response;
+            if (invitado === 'true' && codigoVersion) {
+                response = await fetch(`../BaseDeDatos/controladores/getVersionByCode.php?codigo=${codigoVersion}&invitado=true`);
+            } else {
+                response = await fetch(`../BaseDeDatos/controladores/getVersionById.php?version=${idVersion}&jugador=true`);
+            }
             const result = await response.json();
             if(result.status === 'success'){
                 version = result.data;
@@ -181,17 +188,17 @@ async function cargarVersion(){
                 }
             }
             else if(result.status === 'error'){
-              redirigirConError(result.message || 'Error al obtener el cuestionario');
+              redirigirConError(result.message || 'Error al obtener el cuestionario', invitado);
             }
         } catch (error) {
-          redirigirConError('Error al obtener el cuestionario')
+          redirigirConError('Error al obtener el cuestionario', invitado)
         }
     }
 }
 
 async function finalizarJuego(respuestasCorrectas, totalPreguntas) {
     clearInterval(intervaloCronometro);
-    
+    const invitado = new URLSearchParams(window.location.search).get('invitado') === 'true';
     const idVersion = new URLSearchParams(window.location.search).get('version');
     
     // Calcular tiempo transcurrido en segundos
@@ -201,33 +208,56 @@ async function finalizarJuego(respuestasCorrectas, totalPreguntas) {
     const puntajeFinal = calcularPuntaje(respuestasCorrectas, totalPreguntas, segundosTranscurridos);
 
     try {
-        const response = await fetch('../BaseDeDatos/controladores/postParticipacion.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                idVersion: idVersion,
-                puntaje: puntajeFinal,
-                respuestas: respuestasSeleccionadas
-            })
-        });
-
+        let response;
+        if(invitado){
+            const nombreInvitado = sessionStorage.getItem('nombreInvitado') || 'Invitado';
+            response = await fetch('../BaseDeDatos/controladores/postParticipacionInvitado.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idVersion: idVersion,
+                    puntaje: puntajeFinal,
+                    respuestas: respuestasSeleccionadas,
+                    nombre_invitado: nombreInvitado
+                })
+            });
+        } else {
+            response = await fetch('../BaseDeDatos/controladores/postParticipacion.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    idVersion: idVersion,
+                    puntaje: puntajeFinal,
+                    respuestas: respuestasSeleccionadas
+                })
+            });
+        }
         const result = await response.json();
 
         if (result.status === 'success') {
-            window.location.href = `../Resultado/resultado.php?participacion=${result.idParticipacion}`;
+            window.location.href = `../Resultado/resultado.php?participacion=${result.idParticipacion}&invitado=${invitado}`;
         } else {
-            mostrarMensajeError(result.message || 'Error al guardar participación');
+            redirigirConError(result.message || 'Error al guardar participación', invitado);
         }
     } catch (error) {
-        mostrarMensajeError('Error al guardar participación');
+        redirigirConError('Error al guardar participación', invitado);
     }
 }
 
-function redirigirConError(errorMensaje){
+function redirigirConError(errorMensaje, invitado = false){
       sessionStorage.setItem('mensajeError', errorMensaje);
-      window.location.href = "../participante/participante.php";
+      if(invitado){
+        //borrar el codigo de la session
+        sessionStorage.removeItem('codigoVersion');
+        sessionStorage.removeItem('nombreInvitado');
+        window.location.href = "../Inicio/inicio.php";
+      }else{
+        window.location.href = "../participante/participante.php";
+      }
 }
 
 function mostrarMensajeError(mensaje){

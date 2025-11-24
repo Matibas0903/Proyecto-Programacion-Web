@@ -5,15 +5,16 @@
     header('Content-Type: application/json');
 
     try {
+        $invitado = isset($_GET['invitado']) && $_GET['invitado'] === 'true';
         //obtenemos el parametro id de usuario
-        if(!isset($_SESSION['usuario_id'])){
+        if(!isset($_SESSION['usuario_id']) && !$invitado){
              throw new Exception('Usuario no autenticado');
         }
         if (!isset($_GET['participacion'])) {
             throw new Exception('ID de participación inválido.');
         }
         $participacion = (int) $_GET['participacion'];
-        $idUsuario = (int) $_SESSION['usuario_id'];
+        $idUsuario = isset($_SESSION['usuario_id']) ? (int) $_SESSION['usuario_id'] : null;
         //consultamos la participacion
         $stmt = $conn->prepare("
             SELECT 
@@ -24,10 +25,9 @@
             FROM participacion p
             INNER JOIN version_cuestionario v ON p.ID_VERSION = v.ID_VERSION
             INNER JOIN cuestionario c ON v.ID_CUESTIONARIO = c.ID_CUESTIONARIO
-            WHERE p.ID_PARTICIPACION = :participacion AND p.ID_USUARIO = :idUsuario
+            WHERE p.ID_PARTICIPACION = :participacion
         ");
         $stmt->bindParam(':participacion', $participacion, PDO::PARAM_INT);
-        $stmt->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
         $stmt->execute();
         $participacionData = $stmt->fetch(PDO::FETCH_ASSOC);
         if (!$participacionData) {

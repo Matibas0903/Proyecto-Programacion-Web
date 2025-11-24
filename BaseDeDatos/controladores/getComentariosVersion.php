@@ -13,11 +13,18 @@
                 p.COMENTARIO,
                 p.VALORACION_CUESTIONARIO,
                 p.FECHA_PARTICIPACION,
+                p.INVITADO,
                 u.ID_USUARIO,
-                u.NOMBRE,
-                u.FOTO_PERFIL
+                CASE 
+                    WHEN p.INVITADO = 1 THEN p.NOMBRE_INVITADO
+                    ELSE u.NOMBRE
+                END AS NOMBRE,
+                CASE 
+                    WHEN p.INVITADO = 1 THEN NULL
+                    ELSE u.FOTO_PERFIL
+                END AS FOTO_PERFIL
             FROM participacion p
-            INNER JOIN usuario u ON p.ID_USUARIO = u.ID_USUARIO
+            LEFT JOIN usuario u ON p.ID_USUARIO = u.ID_USUARIO
             WHERE p.ID_VERSION = :idVersion
                 AND p.BANEADO = 0
                 AND p.COMENTARIO IS NOT NULL
