@@ -1,3 +1,30 @@
+<?php
+session_start();
+
+$nombreInvitado=$nombreErr="";
+if($_SERVER["REQUEST_METHOD"] == "POST")
+{
+    if(empty($_POST["nombreInvitado"]))
+    {
+      $nombreErr="Ingrese un nombre";
+    }
+    else
+    {
+      $nombreInvitado=trim($_POST["nombreInvitado"]);
+      $nombreInvitado=htmlspecialchars($nombreInvitado);
+
+      if(!preg_match("/^[A-Za-z0-9_]+$/",$nombreInvitado))
+      {
+        $nombreErr="ingrese un nombre valido";
+      }
+      else
+      {
+        $_SESSION['nombre_Invitado'] = $nombreInvitado;
+      }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
