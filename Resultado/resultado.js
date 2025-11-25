@@ -1,5 +1,80 @@
+<<<<<<< Updated upstream
 window.onload = function() {
     //selecciono todos los elem que estan dentro del div con class estrella
+=======
+window.onload = async function() {
+    const invitado = new URLSearchParams(window.location.search).get('invitado') === 'true';
+    const idParticipacion = new URLSearchParams(window.location.search).get('participacion');
+    let usuario = null;
+    let nombreUsuario = '';
+    let fotoUsuario = '';
+    //borrar session invitado
+    sessionStorage.removeItem('codigoVersion');
+    sessionStorage.removeItem('nombreInvitado');
+    
+    if(!idParticipacion){
+        if(invitado){
+            window.location.href = "../Inicio/inicio.php";
+        } else {
+            window.location.href = "../participante/participante.php";
+        }
+    } else {
+        try {
+            // Si NO es invitado, cargamos el usuario registrado
+            if(!invitado){
+                const responseParticipacion = await fetch("../BaseDeDatos/controladores/getParticipacion.php?participacion=${idParticipacion}&invitado=${invitado}");
+                const resultUsuario = await responseUsuario.json();
+                if(resultUsuario.status === 'success'){
+                    usuario = resultUsuario.data;
+                    nombreUsuario = usuario.NOMBRE;
+                    fotoUsuario = usuario.FOTO_PERFIL;
+                    document.getElementById("usuarioNombre").innerHTML = nombreUsuario;
+                    document.getElementById("usuarioAvatar").src = fotoUsuario;
+                } else if(resultUsuario.status === 'error'){
+                    mostrarMensajeError(resultUsuario.message || 'Error al obtener el usuario');
+                }
+            }
+
+            const responseParticipacion = await fetch(`../BaseDeDatos/controladores/getParticipacion.php?participacion=${idParticipacion}`);
+            const resultParticipacion = await responseParticipacion.json();
+            
+            if(resultParticipacion.status === 'success'){
+                const participacion = resultParticipacion.data;
+                
+                // Si es invitado, usar datos de la participación
+                if(invitado){
+                    nombreUsuario = participacion.NOMBRE_INVITADO || 'Invitado';
+                    fotoUsuario = '../images/invitado.png'; // Imagen por defecto
+                    document.getElementById("usuarioNombre").textContent = nombreUsuario;
+                    document.getElementById("usuarioAvatar").src = fotoUsuario;
+                }
+                
+                let correctas = 0;
+                participacion.respuestas.forEach(respuesta => {
+                    if(respuesta.CORRECTA === '1'){
+                        correctas++;
+                    }
+                });
+                
+                document.getElementById("respCorrectas").textContent = correctas + " / " + participacion.cantidad_preguntas;
+                document.getElementById("respPuntuacion").textContent = participacion.PUNTAJE;
+                
+                const idVersion = participacion.ID_VERSION;
+                if(idVersion){
+                    // Pasar ID_PARTICIPACION para ranking (funciona para ambos)
+                    cargarRanking(idVersion, idParticipacion, invitado);
+                    cargarComentarios(idVersion);
+                }
+            } else if(resultParticipacion.status === 'error'){
+                mostrarMensajeError(resultParticipacion.message || 'Error al obtener la participación');
+            }
+        } catch (error) {
+            mostrarMensajeError('Ocurrió un error al obtener la participación');
+        }
+    }
+
+    // Resto del código de estrellas...
+>>>>>>> Stashed changes
     const misEstrellas = document.querySelectorAll("#selectEstrellas .estrella");
     const menErr= document.getElementById("menErr"); 
 
@@ -87,4 +162,18 @@ window.onload = function() {
             comentario.value = "";
         }
     });
+<<<<<<< Updated upstream
+=======
+
+    // Botón volver
+    const btnSalir = document.getElementById("btnSalir");
+    btnSalir.addEventListener("click", function() {
+        if(invitado){
+            window.location.href = "../Inicio/inicio.php";
+        } else {
+            volverAParticipante();
+        }
+    });
+
+>>>>>>> Stashed changes
 }

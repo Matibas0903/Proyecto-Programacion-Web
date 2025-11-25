@@ -24,7 +24,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Asigno la fehca de HOY
     $fecha_creacion = trim(date("Y-m-d") ?? "");
     $cod_acceso = trim($_POST["codigoAcceso"] ?? "");
+<<<<<<< Updated upstream
     $activo = trim($_POST["estado"]);
+=======
+    $activo = $_POST["estado"];
+    $plantilla       = trim($_POST["plantilla"] ?? "");
+>>>>>>> Stashed changes
 
     //borro los otros que estan abajo?
 
@@ -70,8 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $descripcionErr = "La descripcion puede tener tan solo 300 caracteres";
     }
-
-
 
     //si el custionario es privado le exijo un codigo de acceso sino no
     if (!empty($_POST["codigoAcceso"]) && $visibilidad != "Privado") {

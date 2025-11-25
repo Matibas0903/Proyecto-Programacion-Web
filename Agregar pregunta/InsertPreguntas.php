@@ -71,12 +71,7 @@ try {
             $sqlOpcion->execute([
                 ":idp" => $idPregunta,
                 ":txt" => $op["texto"],
-            ]);
-        }
-
-        foreach ($pregunta["opcionesCorrectas"] as $opCor) {
-            $sqlOpcion->execute([
-                ":cor" => $opCor["esCorrecta"]
+                ":cor" => $op["esCorrecta"] ?? 0
             ]);
         }
     }

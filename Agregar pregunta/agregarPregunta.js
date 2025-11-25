@@ -1,17 +1,29 @@
+let cantidadPreguntas = 0;
 window.onload = function () {
   const btnGuardar = document.getElementById("btnGuardar");
   btnGuardar.addEventListener("click", guardarCuestionario);
-  let cantidadPreguntas = 0;
+  
   const btnConfig = document.getElementById("btnConfig");
 
   btnConfig.addEventListener("click", mostrarConfiguracion);
 
+<<<<<<< Updated upstream
+=======
+  const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
+  btnSalirSinGuardar.addEventListener("click", () => {
+    window.location.href = "../administrador/administrador.php";
+  });
+
+  const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
+  btnGuardarYSalir.addEventListener("click", guardarCuestionario);
+
+>>>>>>> Stashed changes
   abrirPanelDerecho();
   abrirPanelTemas();
   seleccionarTema();
   salirDeCreacion();
   ponerNombre();
-  añadirPregunta(cantidadPreguntas);
+  añadirPregunta();
 };
 
 function abrirPanelDerecho() {
@@ -129,7 +141,7 @@ function ponerNombre() {
   });
 }
 
-function añadirPregunta(cantidadPreguntas) {
+function añadirPregunta() {
   //Agrega una diapositiva en el panel izquierdo
   const btnAñadirPregunta = document.getElementById("btnAñadirPregunta");
   const divContenedor = document.getElementById("divPreguntas");
@@ -357,10 +369,10 @@ async function guardarCuestionario() {
       method: "POST",
       body: formData,
     });
-    const raw = await response.text();
-    console.log("Respuesta cruda del servidor:", raw);
-    const data = JSON.parse(raw);
-    //const data = await response.json();
+    //const raw = await response.text();
+    //console.log("Respuesta cruda del servidor:", raw);
+    //const data = JSON.parse(raw);
+    const data = await response.json();
     //se guardo la info del cuestionario y me trajo el id de la version
     const idVersionGlobal = data.idVersion;
     console.log("ID VERSION RECIBIDO:", idVersionGlobal);

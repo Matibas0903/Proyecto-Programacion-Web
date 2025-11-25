@@ -10,11 +10,15 @@
     border-bottom: 5px solid #000000;
     position: fixed;           
     width: 100%; 
+<<<<<<< Updated upstream
     
+=======
+>>>>>>> Stashed changes
 }
 
 body{
     background-color: #fff1be;
+<<<<<<< Updated upstream
      overflow-x: clip;
 }
 
@@ -28,6 +32,17 @@ body{
 
 #inputIngresarTitulo{
     background-color: #fff6e9;
+=======
+    overflow-x: clip;
+}
+#panelPrincipal {
+  margin-top: 10px;
+  border: 2px solid #c5b6a2;
+  border-radius: 10px;
+}
+#inputIngresarTitulo {
+  background-color: #fff6e9;
+>>>>>>> Stashed changes
 }
 
 #btnConfig{
@@ -39,11 +54,62 @@ body{
     cursor:pointer;
     transition:0.3s;
 }
+<<<<<<< Updated upstream
 
 #btnConfig:hover
 {
     color: white;
     transform: scale(1.05);
+=======
+#btnConfig:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#btnTemas {
+  background-color: #4f9d86;
+  border: solid #36695a;
+  border-width: 1px 1px 3px 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#btnTemas:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#btnGuardar {
+  background-color: #a3d6c7;
+  border: solid #64887d;
+  border-width: 1px 1px 3px 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#btnGuardar:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#btnSalir {
+  background-color: #ac5e5e;
+  border: solid #5e3232;
+  border-width: 1px 1px 3px 1px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+#btnSalir:hover {
+  color: white;
+  transform: scale(1.05);
+}
+#panelIzq {
+  position: relative;
+  bottom: 0;
+  background-color: #c0cfcb;
+  margin-top: 70px;
+  border: 2px solid #798380;
+  border-radius: 10px;
+  overflow-y: auto; /* activa scroll vertical si hay contenido extra*/
+}
+#btnOpcion {
+  background-color: #ef7131;
+>>>>>>> Stashed changes
 }
 
 #btnTemas{
@@ -53,6 +119,7 @@ body{
     cursor: pointer;
     transition: 0.3s;
 }
+<<<<<<< Updated upstream
 #btnTemas:hover{
     color: white;
     transform: scale(1.05);
@@ -103,6 +170,10 @@ body{
 }
 #btnAñadirDiapositiva{
     background-color: #d8eced;
+=======
+#btnAñadirDiapositiva {
+  background-color: #d8eced;
+>>>>>>> Stashed changes
 }
 
 #panelDer {
@@ -205,9 +276,14 @@ border:2px solid black;
     border: none;
 
 }
+<<<<<<< Updated upstream
 
 .navbar-dropdown-btn:hover .navbar_usuario{
     border: 3px solid #80c4e9;
+=======
+.navbar-dropdown-btn:hover .navbar_usuario {
+  border: 3px solid #80c4e9;
+>>>>>>> Stashed changes
 }
 
 .cardPregunta
@@ -238,6 +314,7 @@ border:2px solid black;
     border: solid black;
     border-width: 1px 1px 3px 1px;
 }
+<<<<<<< Updated upstream
 .cardBodyPregun input
 {
    background-color: #fca493;
@@ -246,6 +323,14 @@ border:2px solid black;
     border-radius: 8px;
     border: solid black;
     border-width: 1px 1px 3px 1px;  
+=======
+.cardBodyPregun input {
+  background-color: #fca493;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: solid black;
+  border-width: 1px 1px 3px 1px;
+>>>>>>> Stashed changes
 }
 .cardBodyPregun input:focus
 {
@@ -270,6 +355,7 @@ border:2px solid black;
 width: 10px;
 
 }
+<<<<<<< Updated upstream
 .input-pregunta
 {
     margin-bottom: 10px;
@@ -280,4 +366,14 @@ width: 10px;
 .modal
 {
     z-index: 3000;
+=======
+.input-pregunta {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: solid black;
+  border-width: 1px 1px 3px 1px;
+}
+.modal {
+  z-index: 3000;
+>>>>>>> Stashed changes
 }

@@ -167,7 +167,7 @@ function cuestionarioInvitado() {
                 estrellas += i <= calificacion ? "★" : "☆";
             }
             card.innerHTML = `
-              <img src="${cuestionario.IMAGEN}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
+            <img src="${cuestionario.IMAGEN || '../images/fondo_default.jpg'}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
               <div class="card-header">
                   <h5 class="card-title text-center card_titulo">${cuestionario.NOMBRE_CUESTIONARIO}</h5>
               </div>
@@ -218,7 +218,7 @@ function listaCuestionarios(arrCuest = null, scroll = true) {
                 estrellas += i <= calificacion ? "★" : "☆";
             }
             card.innerHTML = `
-              <img src="${cuestionario.IMAGEN}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
+             <img src="${cuestionario.IMAGEN || '../images/fondo_default.jpg'}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
               <div class="card-header">
                   <h5 class="card-title text-center card_titulo">${cuestionario.NOMBRE_CUESTIONARIO}</h5>
               </div>

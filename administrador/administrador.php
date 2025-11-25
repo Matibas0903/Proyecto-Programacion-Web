@@ -13,7 +13,6 @@ require('../BaseDeDatos/conexion.php');
   <link rel="stylesheet" href="./administrador.css">
   <title>Administrador</title>
 </head>
-
 <body>
   <?php
   require('../includesPHP/navGeneral.php');

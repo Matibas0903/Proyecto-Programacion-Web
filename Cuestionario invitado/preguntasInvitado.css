@@ -23,7 +23,7 @@
   background-color: #d65f20;
 }
 
-/* Contador centrado y grande */
+
 #contador{
   position: absolute;
   top: 50%;
@@ -36,7 +36,7 @@
   z-index: 1000;
 }
 
-/* Estilos para botones correctos/incorrectos */
+
 .btnRespuestas.correcta {
   background-color: #198754; 
   color: white;
