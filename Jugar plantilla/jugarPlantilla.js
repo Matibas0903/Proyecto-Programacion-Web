@@ -2,7 +2,7 @@ let version = null;
 let tiempoRestante = null;
 let intervaloCronometro = null;
 let respuestasSeleccionadas = [];
-let tiempoInicio = null; // Nuevo: para calcular tiempo transcurrido
+let tiempoInicio = null;
 
 window.onload = function(){
     cargarVersion();

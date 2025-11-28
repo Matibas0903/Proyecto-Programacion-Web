@@ -92,7 +92,6 @@ body {
   border: solid #748283;
   border-width: 1px 1px 3px 1px;
 }
-<<<<<<< Updated upstream
 #btnTemas:hover{
     color: white;
     transform: scale(1.05);
@@ -141,10 +140,6 @@ body {
 }
 #btnAñadirDiapositiva{
     background-color: #d8eced;
-=======
-#btnAñadirDiapositiva {
-  background-color: #d8eced;
->>>>>>> Stashed changes
 }
 
 #panelDer {
