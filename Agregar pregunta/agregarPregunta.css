@@ -126,9 +126,7 @@ body {
   border-radius: 10px;
   overflow-y: auto; /* activa scroll vertical si hay contenido extra*/
 }
-#btnOpcion {
-  background-color: #ef7131;
-}
+
 #panelDer {
   background-color: #ffded3;
 }
@@ -245,6 +243,12 @@ body {
   background-color: #ef7131;
   border: solid black;
   border-width: 1px 1px 3px 1px;
+  color: #000000;
+}
+.btnOpciones::placeholder {
+  /*NUEVO*/
+  color: #333333;
+  opacity: 1;
 }
 .btnOpciones:hover {
   color: white;

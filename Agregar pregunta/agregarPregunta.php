@@ -54,7 +54,7 @@ try {
     ?>
 
     <!-- navbar crear cuestionario -->
-    <nav id="navBarCrearPreg" class="navbar navbar-expand-lg ">
+    <nav id="navBarCrearPreg" class="navbar navbar-expand-md">
         <div class="container-fluid">
             <a class="navbar-brand" href="#" id="tituloCuestionario">Cuestionario</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -64,27 +64,37 @@ try {
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Izquierda -->
-                <form class="d-flex">
-                    <div class="input-group">
-                        <button id="btnConfig" class="btn me-2" type="button">
+                <!-- Izquierda: Configuración -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item mb-2">
+                        <button id="btnConfig" class="btn btn-outline-secondary nav-link" type="button">
                             Configuración
                         </button>
-                    </div>
-                </form>
+                    </li>
+                </ul>
 
-                <!-- Derecha -->
-                <div class="d-flex ms-auto">
-                    <button id="btnTemas" class="btn me-3">
-                        <i class="bi bi-palette-fill"></i>
-                        Temas</button>
-                    <div class="me-3" aria-readonly="true">|</div>
-                    <button id="btnGuardar" class="btn me-2" type="submit">Guardar</button>
-                    <button id="btnSalir" class="btn me-2" type="submit">Salir</button>
-                </div>
+                <!-- Derecha: Temas, Guardar, Salir -->
+                <ul class="navbar-nav">
+                    <li class="nav-item mb-2">
+                        <button id="btnTemas" class="btn btn-outline-primary nav-link me-3" type="button">
+                            <i class="bi bi-palette-fill"></i> Temas
+                        </button>
+                    </li>
+                    <li class="nav-item d-none d-md-inline">
+                        <span class="navbar-text me-3">|</span>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <button id="btnGuardar" class="btn btn-primary nav-link me-3" type="button">Guardar</button>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <button id="btnSalir" class="btn btn-secondary nav-link" type="button">Salir</button>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
+
+
     <!--Barra lateral izquierda-->
     <div class="container-fluid">
         <div class="row">
@@ -127,6 +137,27 @@ try {
                     <option class="dropdown-item" value="3" disabled>20 segundos(Proximamente)</option>
                 </select>
             </div>
+
+            <h5>
+                <i class="bi bi-question-square-fill"></i>
+                Tipo de pregunta
+            </h5>
+            <div class="mb-5">
+                <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
+                    <option class="dropdown-item" value>Tipo de pregunta</option>
+                    <?php //llenar el select
+                    foreach ($tipoPreguntas as $cat): ?>
+                        <option value="<?= htmlspecialchars($cat['ID_TIPO_PREGUNTA']) ?>">
+                            <?= htmlspecialchars($cat['TIPO']) ?>
+
+                        </option>
+                    <?php endforeach;
+                    ?>
+                </select>
+                <div class="invalid-feedback"></div>
+            </div>
+
+
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
 
@@ -155,8 +186,8 @@ try {
                     <p>¿Está seguro que desea salir sin guardar?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
-                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" id="btnSalirSinGuardar" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" id="btnGuardarYSalir" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -225,25 +256,7 @@ try {
                                                     </select>
                                                     <div class="invalid-feedback"></div>
                                                 </div>
-                                                <h5>
-                                                    <i class="bi bi-question-square-fill"></i>
-                                                    Tipo de pregunta
-                                                </h5>
-                                                <div class="mb-5">
-                                                    <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
-                                                        <option class="dropdown-item" value>Tipo de pregunta</option>
-                                                        <?php //llenar el select
-                                                        foreach ($tipoPreguntas as $cat): ?>
-                                                            <option value="<?= htmlspecialchars($cat['ID_TIPO_PREGUNTA']) ?>">
-                                                                <?= htmlspecialchars($cat['TIPO']) ?>
 
-                                                            </option>
-                                                        <?php endforeach;
-                                                        ?>
-                                                    </select>
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
-                                                <h5>
                                             </div>
                                         </div>
                                     </div>

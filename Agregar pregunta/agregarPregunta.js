@@ -1,14 +1,30 @@
 let cantidadPreguntas = 0;
+let preguntaActivaId = null; /*NUEVO*/
 window.onload = function () {
+  // Nuevo: Event listener para el select de tipo de pregunta
+
+  /*NUEVO*/
+  const selectTipoPregunta = document.getElementById("selectTipoPregunta");
+  selectTipoPregunta.addEventListener("change", () => {
+    if (!preguntaActivaId) return; // Si no hay pregunta activa, no hacer nada
+    const form = document.getElementById(`form-${preguntaActivaId}`);
+    if (!form) return; // Verificación extra por si acaso
+    const existingRow = form.querySelector(".row.g-3");
+    if (existingRow) existingRow.remove(); // Limpiar opciones previas
+    const newRow = CrearOpciones(preguntaActivaId);
+    if (newRow) {
+      // Verificar que newRow sea un Node válido
+      form.querySelector(".cardPregunta").appendChild(newRow);
+    }
+  });
+
   const btnGuardar = document.getElementById("btnGuardar");
   btnGuardar.addEventListener("click", guardarCuestionario);
-  
+
   const btnConfig = document.getElementById("btnConfig");
 
   btnConfig.addEventListener("click", mostrarConfiguracion);
 
-<<<<<<< Updated upstream
-=======
   const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
   btnSalirSinGuardar.addEventListener("click", () => {
     window.location.href = "../administrador/administrador.php";
@@ -17,7 +33,6 @@ window.onload = function () {
   const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
   btnGuardarYSalir.addEventListener("click", guardarCuestionario);
 
->>>>>>> Stashed changes
   abrirPanelDerecho();
   abrirPanelTemas();
   seleccionarTema();
@@ -189,6 +204,9 @@ function añadirPregunta() {
         .forEach((f) => (f.style.display = "none"));
       const form = document.getElementById(`form-${preguntaId}`);
       if (form) form.style.display = "block";
+
+      /*NUEVO*/
+      preguntaActivaId = preguntaId;
     });
 
     preguntaDiv.appendChild(p);
@@ -257,34 +275,18 @@ function crearPregunta(preguntaId) {
   inputPregunta.id = `pregunta-${preguntaId}`;
 
   cardBody.appendChild(inputPregunta);
-
-  // Opciones 2x2
-  const row = document.createElement("div");
-  row.classList.add("row", "g-3");
-
-  //Creo las 4 opciones con sus respectivas cards
-  for (let i = 1; i <= 4; i++) {
-    const col = document.createElement("div");
-    col.classList.add("col-12", "col-md-6");
-    const cardRespuesta = document.createElement("div");
-    cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
-    cardRespuesta.classList.add("OpcionRespuesta");
-
-    const btnOpcion = document.createElement("div");
-    btnOpcion.classList.add("btn", "w-100", "btnOpciones");
-    btnOpcion.contentEditable = true;
-    btnOpcion.textContent = `Opción ${i}`;
-    const radioCorrecta = document.createElement("input");
-    radioCorrecta.type = "radio";
-    radioCorrecta.name = `radioCorrecto-${preguntaId}`;
-    radioCorrecta.classList.add("form-check-input");
-
-    //asigno la opcion correcta a opciones
-    cardRespuesta.appendChild(radioCorrecta);
-    cardRespuesta.appendChild(btnOpcion);
-    col.appendChild(cardRespuesta);
-    row.appendChild(col);
+  /*NUEVO*/
+  const row = CrearOpciones(preguntaId);
+  if (row) {
+    // Solo appendear si row existe
+    card.appendChild(cardBody);
+    card.appendChild(row);
+  } else {
+    card.appendChild(cardBody); // Si no hay row, al menos appendear el body
   }
+
+  container.appendChild(card);
+  panelPrincipal.appendChild(container);
   // Escuchar busquedad
   btnBuscar.addEventListener("click", async () => {
     contenedorImagenes.innerHTML = "Cargando...";
@@ -560,4 +562,127 @@ function mostrarErrores(data) {
       divError.classList.remove("d-none");
     }
   });
+}
+
+/*NUEVO*/
+function CrearOpciones(preguntaId) {
+  const tipoOpcion = document.getElementById("selectTipoPregunta").value;
+  const row = document.createElement("div"); // Siempre crear row
+  row.classList.add("row", "g-3");
+
+  if (tipoOpcion == 1) {
+    //Verdareo o Falso
+    {
+      const col = document.createElement("div");
+      col.classList.add("col-12", "col-md-6");
+
+      const cardRespuesta = document.createElement("div");
+      cardRespuesta.classList.add(
+        "card-body",
+        "d-flex",
+        "flex-row",
+        "mb-3",
+        "OpcionRespuesta"
+      );
+
+      const btnVerdadero = document.createElement("div");
+      btnVerdadero.classList.add("btn", "w-100", "btnOpciones");
+      btnVerdadero.textContent = "Verdadero";
+
+      cardRespuesta.appendChild(btnVerdadero);
+      col.appendChild(cardRespuesta);
+      row.appendChild(col);
+    }
+
+    // Falso
+    {
+      const col = document.createElement("div");
+      col.classList.add("col-12", "col-md-6");
+
+      const cardRespuesta = document.createElement("div");
+      cardRespuesta.classList.add(
+        "card-body",
+        "d-flex",
+        "flex-row",
+        "mb-3",
+        "OpcionRespuesta"
+      );
+
+      const btnFalso = document.createElement("div");
+      btnFalso.classList.add("btn", "w-100", "btnOpciones");
+      btnFalso.textContent = "Falso";
+
+      cardRespuesta.appendChild(btnFalso);
+      col.appendChild(cardRespuesta);
+      row.appendChild(col);
+    }
+  } else if (tipoOpcion == 2) {
+    // Respuesta unica
+    for (let i = 1; i <= 4; i++) {
+      const col = document.createElement("div");
+      col.classList.add("col-12", "col-md-6");
+      const cardRespuesta = document.createElement("div");
+      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
+      cardRespuesta.classList.add("OpcionRespuesta");
+
+      const btnOpcion = document.createElement("div");
+      btnOpcion.classList.add("btn", "w-100", "btnOpciones");
+      btnOpcion.contentEditable = true;
+      btnOpcion.textContent = `Opción ${i}`;
+      const radioCorrecta = document.createElement("input");
+      radioCorrecta.type = "radio";
+      radioCorrecta.name = `radioCorrecto-${preguntaId}`; // Unique por pregunta
+      radioCorrecta.classList.add("form-check-input");
+
+      cardRespuesta.appendChild(radioCorrecta);
+      cardRespuesta.appendChild(btnOpcion);
+      col.appendChild(cardRespuesta);
+      row.appendChild(col);
+    }
+  } else if (tipoOpcion == 3) {
+    // Respuesta abierta
+
+    const cardRespuesta = document.createElement("div");
+    cardRespuesta.classList.add(
+      "card-body",
+      "d-flex",
+      "flex-row",
+      "justify-content-center",
+      "align-items-center",
+      "mb-3"
+    );
+    cardRespuesta.classList.add("OpcionRespuesta");
+    const btnOpcion = document.createElement("input");
+    btnOpcion.classList.add("btnOpciones");
+    btnOpcion.type = "text";
+    btnOpcion.style.width = "800px";
+    btnOpcion.placeholder = "Escribe la opción aquí";
+    cardRespuesta.appendChild(btnOpcion);
+
+    row.appendChild(cardRespuesta);
+  } else if (tipoOpcion == 4) {
+    // Eleccion multiple
+    for (let i = 1; i <= 4; i++) {
+      const col = document.createElement("div");
+      col.classList.add("col-12", "col-md-6");
+      const cardRespuesta = document.createElement("div");
+      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
+      cardRespuesta.classList.add("OpcionRespuesta");
+
+      const btnOpcion = document.createElement("div");
+      btnOpcion.classList.add("btn", "w-100", "btnOpciones");
+      btnOpcion.contentEditable = true;
+      btnOpcion.textContent = `Opción ${i}`;
+      const radioCorrecta = document.createElement("input");
+      radioCorrecta.type = "radio";
+      radioCorrecta.classList.add("form-check-input");
+
+      cardRespuesta.appendChild(radioCorrecta);
+      cardRespuesta.appendChild(btnOpcion);
+      col.appendChild(cardRespuesta);
+      row.appendChild(col);
+    }
+  }
+
+  return row;
 }
