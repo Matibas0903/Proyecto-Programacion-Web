@@ -1,176 +1,137 @@
-window.onload = function()
-{
-let cantidadPreguntas = 0;
+window.onload = function () {
+  let cantidadPreguntas = 0;
 
-obtenerPlantilla(cantidadPreguntas);
-abrirPanelDerecho();
-abrirPanelTemas();
-seleccionarTema();
-salirDeCreacion();
-mostrarConfiguracion();
-/*ponerNombre();
-validarTitulo();*/    
-añadirPregunta(cantidadPreguntas);
+  obtenerPlantilla(cantidadPreguntas);
+  abrirPanelDerecho();
+  abrirPanelTemas();
+  seleccionarTema();
+  salirDeCreacion();
+  mostrarConfiguracion();
+  /*ponerNombre();
+validarTitulo();*/
+  añadirPregunta(cantidadPreguntas);
 
-
-<<<<<<< Updated upstream
-=======
-
-const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
+  const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
   btnSalirSinGuardar.addEventListener("click", () => {
     window.location.href = "../administrador/administrador.php";
   });
 
   const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
-  btnGuardarYSalir.addEventListener("click",() => {
+  btnGuardarYSalir.addEventListener("click", () => {
     actualizarPlantilla();
-     window.location.href = "../administrador/administrador.php";
-  } );
+    window.location.href = "../administrador/administrador.php";
+  });
   obtenerPlantilla();
   abrirPanelDerecho();
   abrirPanelTemas();
   seleccionarTema();
   salirDeCreacion();
->>>>>>> Stashed changes
+};
 
-}
+function abrirPanelDerecho() {
+  const panelDer = document.getElementById("panelDer");
+  const btnPanelDer = document.getElementById("btnPanelDer");
+  const main = document.getElementById("panelPrincipal");
 
-function abrirPanelDerecho()
-{
-const panelDer = document.getElementById('panelDer');
-const btnPanelDer = document.getElementById('btnPanelDer');
-const main = document.getElementById("panelPrincipal");
+  // Toggle al presionar la flecha
+  btnPanelDer.addEventListener("click", () => {
+    panelDer.classList.toggle("active");
+    btnPanelDer.classList.toggle("open");
 
-// Toggle al presionar la flecha
-btnPanelDer.addEventListener('click', () => {
-    panelDer.classList.toggle('active');
-    btnPanelDer.classList.toggle('open');
-
-    if(panelDer.classList.contains('active') && main.classList.contains('col-9'))
-    {
-        main.classList.remove('col-9');
-        main.classList.add('col-7');
+    if (
+      panelDer.classList.contains("active") &&
+      main.classList.contains("col-9")
+    ) {
+      main.classList.remove("col-9");
+      main.classList.add("col-7");
+    } else {
+      main.classList.remove("col-7");
+      main.classList.add("col-9");
     }
-else
-    {
-        main.classList.remove('col-7');
-        main.classList.add('col-9');
+  });
+}
+
+function abrirPanelTemas() {
+  const panelTemas = document.getElementById("panelTemas");
+  const btnCerrarTemas = document.getElementById("btnCerrarTemas");
+  const panelDer = document.getElementById("panelDer");
+  const main = document.getElementById("panelPrincipal");
+
+  btnTemas.addEventListener("click", () => {
+    const esVisible = panelTemas.style.visibility === "visible";
+    if (!esVisible) {
+      if (panelDer.classList.contains("active")) {
+        panelTemas.style.visibility = "visible";
+      } else {
+        panelTemas.style.visibility = "visible";
+        main.classList.remove("col-9");
+        main.classList.add("col-7");
+      }
+    } else {
+      if (panelDer.classList.contains("active")) {
+        panelTemas.style.visibility = "hidden";
+      } else {
+        panelTemas.style.visibility = "hidden";
+        main.classList.remove("col-7");
+        main.classList.add("col-9");
+      }
     }
 
-});
-
+    btnCerrarTemas.addEventListener("click", () => {
+      if (panelDer.classList.contains("active")) {
+        panelTemas.style.visibility = "hidden";
+      } else {
+        panelTemas.style.visibility = "hidden";
+        main.classList.remove("col-7");
+        main.classList.add("col-9");
+      }
+    });
+  });
 }
 
-function abrirPanelTemas()
-{
-const panelTemas = document.getElementById("panelTemas");
-const btnCerrarTemas = document.getElementById("btnCerrarTemas");
-const panelDer = document.getElementById('panelDer');
-const main = document.getElementById("panelPrincipal");
+function seleccionarTema() {
+  const btntema1 = document.getElementById("tema1");
+  const btntema2 = document.getElementById("tema2");
+  const btntema3 = document.getElementById("tema3");
+  const fondo = document.getElementById("panelPrincipal");
+  const tema1 = "url(./Recursos/temaHistoria.jpg)";
+  const tema2 = "url(./Recursos/temaHistoria2.jpg)";
 
+  fondo.style.backgroundImage = tema2;
 
-btnTemas.addEventListener('click', () => { 
-    const esVisible = panelTemas.style.visibility==="visible";
-        if(!esVisible)
-            {
-                if(panelDer.classList.contains('active'))
-                    {
-                        panelTemas.style.visibility="visible";
-                    }
-                else
-                    {
-                    panelTemas.style.visibility="visible";
-                    main.classList.remove('col-9');
-                    main.classList.add('col-7');
-                    }
-            }
-          
-        else 
-            {
-                
-                 if(panelDer.classList.contains('active'))
-                    {
-                        panelTemas.style.visibility="hidden";
-                    }
-                else
-                    {
-                        
-                        panelTemas.style.visibility="hidden";
-                        main.classList.remove('col-7');
-                        main.classList.add('col-9');
-                    }
-            
-            }
-              
-        btnCerrarTemas.addEventListener('click', () =>
-        {
-              if(panelDer.classList.contains('active'))
-                    {
-                        panelTemas.style.visibility="hidden";
-                    }
-                else
-                    {
-                        panelTemas.style.visibility="hidden";
-                        main.classList.remove('col-7');
-                        main.classList.add('col-9');
-                    }
-            
-        })
-
-});
+  btntema1.addEventListener("click", () => {
+    fondo.style.backgroundImage = tema1;
+  });
+  btntema2.addEventListener("click", () => {
+    fondo.style.backgroundImage = tema2;
+  });
+  btntema3.addEventListener("click", () => {
+    fondo.style.backgroundImage = "none";
+  });
 }
 
-function seleccionarTema()
-{
-     
-    const btntema1 = document.getElementById("tema1");
-    const btntema2 = document.getElementById("tema2");
-    const btntema3 = document.getElementById("tema3");
-    const fondo = document.getElementById("panelPrincipal");
-    const tema1 = "url(./Recursos/temaHistoria.jpg)";
-    const tema2 = "url(./Recursos/temaHistoria2.jpg)";
+function mostrarAlertaGuardado() {}
 
-     fondo.style.backgroundImage = tema2;
+function salirDeCreacion() {
+  const btnSalir = document.getElementById("btnSalir");
 
-    btntema1.addEventListener("click", ()=>
-        {
-            fondo.style.backgroundImage = tema1;
-        });
-    btntema2.addEventListener("click", () => 
-        {
-             fondo.style.backgroundImage = tema2;
-        });
-    btntema3.addEventListener("click", () => 
-        {
-            fondo.style.backgroundImage = "none";
-            
-        });
-}
-    
-function mostrarAlertaGuardado()
-{
-
+  btnSalir.addEventListener("click", function () {
+    const modalSalirSinGuardar = new bootstrap.Modal(
+      document.getElementById("modalSalirSinGuardar")
+    );
+    modalSalirSinGuardar.show();
+  });
 }
 
-function salirDeCreacion(){
-    const btnSalir = document.getElementById("btnSalir");
-    
-    btnSalir.addEventListener("click", function(){
-        const modalSalirSinGuardar = new bootstrap.Modal(document.getElementById("modalSalirSinGuardar"));
-        modalSalirSinGuardar.show();
-    })
-}
+function mostrarConfiguracion() {
+  const btnConfig = document.getElementById("btnConfig");
 
-
-function mostrarConfiguracion()
-{
-    const btnConfig = document.getElementById("btnConfig");
-
-    btnConfig.addEventListener("click", ()=>
-        {
-            const modalConfig = new bootstrap.Modal(document.getElementById('modalConfiguracion'))
-            modalConfig.show();
-        })
+  btnConfig.addEventListener("click", () => {
+    const modalConfig = new bootstrap.Modal(
+      document.getElementById("modalConfiguracion")
+    );
+    modalConfig.show();
+  });
 }
 
 /*function validarTitulo() 
@@ -218,178 +179,199 @@ function mostrarConfiguracion()
 }*/
 
 function crearBotonPregunta(preguntaId, titulo) {
-    const div = document.createElement("div");
-    div.classList.add("d-flex", "justify-content-between", "align-items-center", "mb-2", "btn", "btn-light", "btnPregunta");
-    div.id = preguntaId;
+  const div = document.createElement("div");
+  div.classList.add(
+    "d-flex",
+    "justify-content-between",
+    "align-items-center",
+    "mb-2",
+    "btn",
+    "btn-light",
+    "btnPregunta"
+  );
+  div.id = preguntaId;
 
+  const pTitulo = document.createElement("p");
+  pTitulo.classList.add(
+    "text-center",
+    "text-muted",
+    "mb-0",
+    "fs-6",
+    "fs-md-5",
+    "fs-lg-4"
+  ); /*responsive al texto de los btn*/
+  pTitulo.textContent = titulo;
+  pTitulo.id = `tituloPregunta-${preguntaId}`;
 
-        const pTitulo = document.createElement("p");
-        pTitulo.classList.add("text-center", "text-muted", "mb-0","fs-6", "fs-md-5", "fs-lg-4"); /*responsive al texto de los btn*/
-        pTitulo.textContent = titulo;
-        pTitulo.id = `tituloPregunta-${preguntaId}`;
+  const btnEliminar = document.createElement("button");
+  btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
+  const icono = document.createElement("i");
+  icono.classList.add("bi", "bi-trash-fill");
+  btnEliminar.appendChild(icono);
 
-    const btnEliminar = document.createElement("button");
-    btnEliminar.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
-    const icono = document.createElement("i");
-    icono.classList.add("bi", "bi-trash-fill");
-    btnEliminar.appendChild(icono);
+  btnEliminar.addEventListener("click", (e) => {
+    e.stopPropagation();
+    div.remove();
+    document.getElementById(`form-${preguntaId}`)?.remove();
+  });
 
-    btnEliminar.addEventListener("click", (e) => {
-        e.stopPropagation();
-        div.remove();
-        document.getElementById(`form-${preguntaId}`)?.remove();
-    });
+  div.addEventListener("click", () => {
+    document
+      .querySelectorAll(".form-pregunta")
+      .forEach((f) => (f.style.display = "none"));
+    const form = document.getElementById(`form-${preguntaId}`);
+    if (form) form.style.display = "block";
+  });
 
-    div.addEventListener("click", () => {
-        
-        document.querySelectorAll(".form-pregunta").forEach(f => f.style.display = "none");
-        const form = document.getElementById(`form-${preguntaId}`);
-        if (form) form.style.display = "block";
-    });
-
-    div.appendChild(pTitulo);
-    div.appendChild(btnEliminar);
-    return div;
+  div.appendChild(pTitulo);
+  div.appendChild(btnEliminar);
+  return div;
 }
 
 function crearFormularioPregunta(preguntaId, titulo, opciones) {
-    const panelPrincipal = document.getElementById("panelPrincipal");
+  const panelPrincipal = document.getElementById("panelPrincipal");
 
-    const container = document.createElement("div");
-    container.classList.add("container", "mt-4", "form-pregunta");
-    container.id = `form-${preguntaId}`;
-    container.style.display = "none";
+  const container = document.createElement("div");
+  container.classList.add("container", "mt-4", "form-pregunta");
+  container.id = `form-${preguntaId}`;
+  container.style.display = "none";
 
-    const card = document.createElement("div");
-    card.classList.add("card", "mb-4","cardPregunta"); //card que contiene las preguntas/respuestas
+  const card = document.createElement("div");
+  card.classList.add("card", "mb-4", "cardPregunta"); //card que contiene las preguntas/respuestas
 
-    const cardBody = document.createElement("div");
-    cardBody.classList.add("card-body", "text-center","cardBodyPregun");//le puse una clase para darle estilo
+  const cardBody = document.createElement("div");
+  cardBody.classList.add("card-body", "text-center", "cardBodyPregun"); //le puse una clase para darle estilo
 
-    const inputPregunta = document.createElement("input");
+  const inputPregunta = document.createElement("input");
 
-    
-// --- buscador de imagen Unsplash ---
-const divBusqueda = document.createElement("div");
-divBusqueda.classList.add("mb-3", "card-pregunta");
+  // --- buscador de imagen Unsplash ---
+  const divBusqueda = document.createElement("div");
+  divBusqueda.classList.add("mb-3", "card-pregunta");
 
-const inputBusqueda = document.createElement("input");
-inputBusqueda.type = "text";
-inputBusqueda.placeholder = "Buscar imagen (ej: guerra, ciencia...)";
-inputBusqueda.classList.add("form-control", "mb-2");
+  const inputBusqueda = document.createElement("input");
+  inputBusqueda.type = "text";
+  inputBusqueda.placeholder = "Buscar imagen (ej: guerra, ciencia...)";
+  inputBusqueda.classList.add("form-control", "mb-2");
 
-const btnBuscar = document.createElement("button");
-btnBuscar.textContent = "Buscar imagen";
-btnBuscar.classList.add("btn", "btn-secondary", "mb-3");
+  const btnBuscar = document.createElement("button");
+  btnBuscar.textContent = "Buscar imagen";
+  btnBuscar.classList.add("btn", "btn-secondary", "mb-3");
 
-const contenedorImagenes = document.createElement("div");
-contenedorImagenes.classList.add("d-flex", "flex-wrap", "justify-content-center", "gap-2");
+  const contenedorImagenes = document.createElement("div");
+  contenedorImagenes.classList.add(
+    "d-flex",
+    "flex-wrap",
+    "justify-content-center",
+    "gap-2"
+  );
 
-divBusqueda.appendChild(inputBusqueda);
-divBusqueda.appendChild(btnBuscar);
-divBusqueda.appendChild(contenedorImagenes);
-cardBody.appendChild(divBusqueda);
-//
+  divBusqueda.appendChild(inputBusqueda);
+  divBusqueda.appendChild(btnBuscar);
+  divBusqueda.appendChild(contenedorImagenes);
+  cardBody.appendChild(divBusqueda);
+  //
 
+  inputPregunta.type = "text";
+  inputPregunta.classList.add(
+    "form-control",
+    "text-center",
+    "fw-bold",
+    "input-pregunta"
+  );
+  inputPregunta.value = titulo;
+  inputPregunta.placeholder = "Escribe aquí la pregunta...";
+  inputPregunta.id = `inputPregunta-${preguntaId}`;
 
-    inputPregunta.type = "text";
-    inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
-    inputPregunta.value = titulo;
-    inputPregunta.placeholder = "Escribe aquí la pregunta...";
-    inputPregunta.id = `inputPregunta-${preguntaId}`;
-
-    inputPregunta.addEventListener("input", () => {
-        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
-        tituloPregunta.innerText = inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
-    });
-
-    cardBody.appendChild(inputPregunta);
-
-    // Opciones
-    const row = document.createElement("div");
-    row.classList.add("row", "g-3");
-
-    const opcionesDef = opciones.length ? opciones : ["Opción 1", "Opción 2", "Opción 3", "Opción 4"];
-    opcionesDef.forEach((opciones) => {
-        const col = document.createElement("div");
-        col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
-
-        const btnOpcion = document.createElement("div");
-        btnOpcion.classList.add("btn", "w-100","btnOpciones");//le clase clase de btrp y puse uno  nuevo
-        btnOpcion.contentEditable = true;
-        btnOpcion.textContent = opciones;
-
-        const cardRespuesta = document.createElement("div");
-        cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "opcionRespuesta");
-        
-
-
-        const radioCorrecta = document.createElement("input");
-        radioCorrecta.type="radio";
-        radioCorrecta.name = `radioCorrecto-${preguntaId}`;
-        radioCorrecta.classList.add("form-check-input");
-
-        cardRespuesta.appendChild(radioCorrecta);
-        cardRespuesta.appendChild(btnOpcion);
-        col.appendChild(cardRespuesta);
-        row.appendChild(col);
-    });
-
-    // Escuchar busquedad 
-btnBuscar.addEventListener("click", async () => {
-  contenedorImagenes.innerHTML = "Cargando...";
-  const imagenes = await buscarImagenesUnsplash(inputBusqueda.value);
-  contenedorImagenes.innerHTML = "";
-
-  imagenes.forEach(img => {
-    const imgEl = document.createElement("img");
-    imgEl.src = img.urls.thumb;
-    imgEl.alt = img.alt_description;
-    imgEl.style.cursor = "pointer";
-    imgEl.style.borderRadius = "10px";
-    imgEl.width = 100;
-    imgEl.height = 100;
-
-    imgEl.addEventListener("click", () => {
-      mostrarImagenSeleccionada(cardBody, img.urls.small);
-    });
-
-    contenedorImagenes.appendChild(imgEl);
+  inputPregunta.addEventListener("input", () => {
+    const tituloPregunta = document.getElementById(
+      `tituloPregunta-${preguntaId}`
+    );
+    tituloPregunta.innerText =
+      inputPregunta.value.trim() === "" ? "Pregunta" : inputPregunta.value;
   });
-});
-//
 
-    card.appendChild(cardBody);
-    card.appendChild(row);
-    container.appendChild(card);
-    panelPrincipal.appendChild(container);
+  cardBody.appendChild(inputPregunta);
 
-    inputPregunta.addEventListener("input", ()=>
-    {
-        const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
-        tituloPregunta.innerText = inputPregunta.value;
-        if(tituloPregunta.innerText.trim() === "")
-                {
-                    tituloPregunta.innerText = "Pregunta";
-                }
-    })
+  // Opciones
+  const row = document.createElement("div");
+  row.classList.add("row", "g-3");
+
+  const opcionesDef = opciones.length
+    ? opciones
+    : ["Opción 1", "Opción 2", "Opción 3", "Opción 4"];
+  opcionesDef.forEach((opciones) => {
+    const col = document.createElement("div");
+    col.classList.add("col-12", "col-md-6"); //le puse lo del responsive
+
+    const btnOpcion = document.createElement("div");
+    btnOpcion.classList.add("btn", "w-100", "btnOpciones"); //le clase clase de btrp y puse uno  nuevo
+    btnOpcion.contentEditable = true;
+    btnOpcion.textContent = opciones;
+
+    const cardRespuesta = document.createElement("div");
+    cardRespuesta.classList.add(
+      "card-body",
+      "d-flex",
+      "flex-row",
+      "mb-3",
+      "opcionRespuesta"
+    );
+
+    const radioCorrecta = document.createElement("input");
+    radioCorrecta.type = "radio";
+    radioCorrecta.name = `radioCorrecto-${preguntaId}`;
+    radioCorrecta.classList.add("form-check-input");
+
+    cardRespuesta.appendChild(radioCorrecta);
+    cardRespuesta.appendChild(btnOpcion);
+    col.appendChild(cardRespuesta);
+    row.appendChild(col);
+  });
+
+  // Escuchar busquedad
+  btnBuscar.addEventListener("click", async () => {
+    contenedorImagenes.innerHTML = "Cargando...";
+    const imagenes = await buscarImagenesUnsplash(inputBusqueda.value);
+    contenedorImagenes.innerHTML = "";
+
+    imagenes.forEach((img) => {
+      const imgEl = document.createElement("img");
+      imgEl.src = img.urls.thumb;
+      imgEl.alt = img.alt_description;
+      imgEl.style.cursor = "pointer";
+      imgEl.style.borderRadius = "10px";
+      imgEl.width = 100;
+      imgEl.height = 100;
+
+      imgEl.addEventListener("click", () => {
+        mostrarImagenSeleccionada(cardBody, img.urls.small);
+      });
+
+      contenedorImagenes.appendChild(imgEl);
+    });
+  });
+  //
+
+  card.appendChild(cardBody);
+  card.appendChild(row);
+  container.appendChild(card);
+  panelPrincipal.appendChild(container);
+
+  inputPregunta.addEventListener("input", () => {
+    const tituloPregunta = document.getElementById(
+      `tituloPregunta-${preguntaId}`
+    );
+    tituloPregunta.innerText = inputPregunta.value;
+    if (tituloPregunta.innerText.trim() === "") {
+      tituloPregunta.innerText = "Pregunta";
+    }
+  });
 }
 
 function añadirPregunta(cantidadPreguntas) {
-    const btn = document.getElementById("btnAñadirPregunta");
-    const contenedor = document.getElementById("divPreguntas");
+  const btn = document.getElementById("btnAñadirPregunta");
+  const contenedor = document.getElementById("divPreguntas");
 
-<<<<<<< Updated upstream
-    btn.addEventListener("click", () => {
-        cantidadPreguntas++;
-        const id = `pregunta-${cantidadPreguntas}`;
-        contenedor.appendChild(crearBotonPregunta(id));
-        crearFormularioPregunta(id);
-        
-    });
-
-    return cantidadPreguntas;
-=======
   btn.addEventListener("click", () => {
     cantidadPreguntas++;
     const id = `pregunta-${cantidadPreguntas}`;
@@ -397,7 +379,6 @@ function añadirPregunta(cantidadPreguntas) {
     crearFormularioPregunta(id);
   });
   return cantidadPreguntas;
->>>>>>> Stashed changes
 }
 
 /*function inicializarPreguntasHardcodeadas() {
@@ -414,7 +395,6 @@ function añadirPregunta(cantidadPreguntas) {
         crearFormularioPregunta(id, p.titulo, p.opciones);
     });
 }*/
-
 
 //API
 // ========== UNSPLASH API ==========
@@ -440,116 +420,106 @@ function mostrarImagenSeleccionada(cardBody, url) {
   imgPreview.src = url;
 }
 
-async function obtenerPlantilla(cantidadPreguntas){
+async function obtenerPlantilla(cantidadPreguntas) {
+  const idVersion = document.body.dataset.idversion;
 
-    const idVersion = document.body.dataset.idversion;
+  const version = idVersion;
 
+  if (version === null) {
+    return error;
+  }
+  try {
+    const response2 = await fetch("obtenerPlantillas.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idVersion: idVersion,
+      }),
+    });
 
-    const version = idVersion;
+    const data = await response2.json();
 
-
-    if(version === null){
-        return error;
+    if (data === null) {
+      return error;
+    } else {
+      console.log(data);
+      llenarCampos(data, cantidadPreguntas);
     }
-    try{
-        const response2 = await fetch("obtenerPlantillas.php", {
-            method: "POST",
-            headers: {"Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                idVersion: idVersion
-            })
-        });
-        
-        const data = await response2.json();
-
-        if(data === null){
-            return error;
-        }else{
-            console.log(data);
-            llenarCampos(data, cantidadPreguntas);
-        }    
-    } catch (error) {
-        console.error("Error al enviar id version:", error);
-    }
+  } catch (error) {
+    console.error("Error al enviar id version:", error);
+  }
 }
 
 async function llenarCampos(data, cantidadPreguntas) {
   //Llena los campos con los datos del cuestionario ya insertado
 
   //Declaro todos los inputs
-    const inputTitulo = document.getElementById("inputTitulo");
-    const inputDescripcion = document.getElementById("descripcion");
-    const inputCodAcceso = document.getElementById("inputCodigoAcceso");
-    const selectCategoria = document.getElementById("selectCategoria").value;
-    const publico = document.getElementById("radiopublico");
-    const privado = document.getElementById("radioPrivado");
-    
-    //lleno los inputs con la informacion de la tabla cuestionario
-    const c = data.cuestionario;
+  const inputTitulo = document.getElementById("inputTitulo");
+  const inputDescripcion = document.getElementById("descripcion");
+  const inputCodAcceso = document.getElementById("inputCodigoAcceso");
+  const selectCategoria = document.getElementById("selectCategoria").value;
+  const publico = document.getElementById("radiopublico");
+  const privado = document.getElementById("radioPrivado");
 
-    inputTitulo.value = c.NOMBRE_CUESTIONARIO;
-    selectCategoria.value = c.ID_CATEGORIA;
+  //lleno los inputs con la informacion de la tabla cuestionario
+  const c = data.cuestionario;
 
-    if (c.VISIBILIDAD === "Publico") {
-        publico.checked = true;
-    } else {
-        privado.checked = true;
-    }
-    //lleno los inputs con la informacion de la tabla version_cuestionario
-    const v = data.version;
-    inputDescripcion.value = v.DESCRIPCION;
-    inputCodAcceso.value = v.COD_ACCESO;
+  inputTitulo.value = c.NOMBRE_CUESTIONARIO;
+  selectCategoria.value = c.ID_CATEGORIA;
 
-    console.log("campos llenos");
-    cargarPreguntasDesdeBD(v, cantidadPreguntas);
-    
+  if (c.VISIBILIDAD === "Publico") {
+    publico.checked = true;
+  } else {
+    privado.checked = true;
+  }
+  //lleno los inputs con la informacion de la tabla version_cuestionario
+  const v = data.version;
+  inputDescripcion.value = v.DESCRIPCION;
+  inputCodAcceso.value = v.COD_ACCESO;
+
+  console.log("campos llenos");
+  cargarPreguntasDesdeBD(v, cantidadPreguntas);
 }
 
 async function cargarPreguntasDesdeBD(version, cantidadPreguntas) {
-    const idVersionCuestionario = version.ID_VERSION;
-    
-    try {
+  const idVersionCuestionario = version.ID_VERSION;
 
+  try {
     const response2 = await fetch("obtenerPreguntas.php", {
-        method: "POST",
-        headers: {"Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            idVersion: idVersionCuestionario
-        }),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        idVersion: idVersionCuestionario,
+      }),
     });
-    
+
     const data = await response2.json();
 
-    if(data === null){
-        return error;
-    }else{
-        console.log(data);
-    }  
-    
-    data.preguntas.forEach((p) => {
-            cantidadPreguntas++;
-            const id = `pregunta-${cantidadPreguntas}`;
-
-            const btn = crearBotonPregunta(id, p.ENUNCIADO);
-            document.getElementById("divPreguntas").appendChild(btn);
-
-            // OJO: opciones puede venir vacío
-            crearFormularioPregunta(id, p.ENUNCIADO, p.opciones ?? []);
-
-            const radios = document.querySelectorAll(
-                `#form-${id} input[type="radio"]`
-            );
-
-            if (radios.length && p.correcta !== undefined && radios[p.correcta]) {
-                radios[p.correcta].checked = true;
-            }
-        });
-    } catch (error) {
-        console.error("Error al enviar id version:", error);
+    if (data === null) {
+      return error;
+    } else {
+      console.log(data);
     }
 
-    
+    data.preguntas.forEach((p) => {
+      cantidadPreguntas++;
+      const id = `pregunta-${cantidadPreguntas}`;
 
+      const btn = crearBotonPregunta(id, p.ENUNCIADO);
+      document.getElementById("divPreguntas").appendChild(btn);
+
+      // OJO: opciones puede venir vacío
+      crearFormularioPregunta(id, p.ENUNCIADO, p.opciones ?? []);
+
+      const radios = document.querySelectorAll(
+        `#form-${id} input[type="radio"]`
+      );
+
+      if (radios.length && p.correcta !== undefined && radios[p.correcta]) {
+        radios[p.correcta].checked = true;
+      }
+    });
+  } catch (error) {
+    console.error("Error al enviar id version:", error);
+  }
 }

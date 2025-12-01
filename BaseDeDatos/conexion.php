@@ -2,7 +2,8 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$db = "proyecto_prog_web_2";
+// $db = "proyecto_prog_web_3";
+$db = "proyecto_prog_web";
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$db;charset=utf8", $username, $password);

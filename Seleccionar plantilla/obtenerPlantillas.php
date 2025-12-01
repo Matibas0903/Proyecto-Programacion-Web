@@ -12,7 +12,7 @@ $input = json_decode(file_get_contents("php://input"), true);
 if (!$input) {
     echo json_encode([
         "status" => "error",
-        "message" => "No se recibió JSON válido."
+        "message" => "No se recibio JSON valido."
     ]);
     exit;
 }
@@ -29,14 +29,29 @@ if (!$idVersion) {
     exit;
 }
 
-// 1) Traer versión
-$stmt = $conn->prepare("SELECT * FROM version_cuestionario WHERE ID_VERSION = :id AND plantilla = 1");
+// 1) Traer versión sin filtrar por plantilla todavía
+$stmt = $conn->prepare("SELECT * FROM version_cuestionario WHERE ID_VERSION = :id");
 $stmt->bindValue(":id", $idVersion, PDO::PARAM_INT);
 $stmt->execute();
 $version = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$version) {
-    echo json_encode(["error" => "No se encontró la versión"]);
+    // No se encontró ningún registro con ese ID
+    echo json_encode([
+        "status" => "error",
+        "message" => "No se encontró la versión con ID $idVersion."
+    ]);
+    exit;
+}
+
+// Verificar si es plantilla
+if ($version['PLANTILLA'] != 1) {
+    // Existe la versión pero no es una plantilla
+    echo json_encode([
+        "status" => "warning",
+        "message" => "La versión con ID $idVersion existe, pero no es una plantilla.",
+        "version" => $version
+    ]);
     exit;
 }
 

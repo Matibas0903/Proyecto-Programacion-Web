@@ -22,18 +22,9 @@ $pantallaActual = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);
         <li>
           <hr class="dropdown-divider">
         </li>
-        <li>
-          <a class="dropdown-item <?= $pantallaActual === 'editarUsuario' ? 'active' : '' ?>" href=<?= $pantallaActual === 'editarUsuario' ? '#' : '"../EditarUsuario/editarUsuario.php"' ?>>
-            Editar usuario
-          </a>
-        </li>
+        <li><a class="dropdown-item" href="../EditarUsuario/editarUsuario.php">Editar usuario</a></li>
         <!-- link a pantalla administrador si estan en una carpeta ../administrador/administrador.html
           A su pantalla ponganle # y class active -->
-        <li><a class="dropdown-item active" href="../administrador/administrador.php">Panel de administrador</a></li>
-        <li><a class="dropdown-item" href="../participante/participante.php">Panel de participante</a></li>
-        <li><a class="dropdown-item" href="../Estadisticas/estadisticas.php">Ver estadísticas</a></li>
-        <li><a class="dropdown-item" href="../Registro/logout.php">Logout</a></li>
-        =======
         <li>
           <a class="dropdown-item <?= $pantallaActual === 'administrador' ? 'active' : '' ?>" href=<?= $pantallaActual === 'administrador' ? '#' : '"../administrador/administrador.php"' ?>>
             Panel de administrador
@@ -54,7 +45,6 @@ $pantallaActual = pathinfo($_SERVER['PHP_SELF'], PATHINFO_FILENAME);
             Logout
           </a>
         </li>
-        >>>>>>> Stashed changes
       </ul>
     </div>
   </div>

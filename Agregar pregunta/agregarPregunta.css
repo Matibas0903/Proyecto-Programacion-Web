@@ -10,29 +10,10 @@
     border-bottom: 5px solid #000000;
     position: fixed;           
     width: 100%; 
-<<<<<<< Updated upstream
-    
-=======
->>>>>>> Stashed changes
 }
 
 body{
     background-color: #fff1be;
-<<<<<<< Updated upstream
-     overflow-x: clip;
-}
-
-#panelPrincipal
-{
-    margin-top: 10px;
-    border: 2px solid  #c5b6a2;
-    border-radius: 10px;
-
-}
-
-#inputIngresarTitulo{
-    background-color: #fff6e9;
-=======
     overflow-x: clip;
 }
 #panelPrincipal {
@@ -54,13 +35,6 @@ body{
     cursor:pointer;
     transition:0.3s;
 }
-<<<<<<< Updated upstream
-
-#btnConfig:hover
-{
-    color: white;
-    transform: scale(1.05);
-=======
 #btnConfig:hover {
   color: white;
   transform: scale(1.05);
@@ -173,7 +147,6 @@ body{
 =======
 #btnAñadirDiapositiva {
   background-color: #d8eced;
->>>>>>> Stashed changes
 }
 
 #panelDer {
@@ -276,11 +249,6 @@ border:2px solid black;
     border: none;
 
 }
-<<<<<<< Updated upstream
-
-.navbar-dropdown-btn:hover .navbar_usuario{
-    border: 3px solid #80c4e9;
-=======
 .navbar-dropdown-btn:hover .navbar_usuario {
   border: 3px solid #80c4e9;
 >>>>>>> Stashed changes

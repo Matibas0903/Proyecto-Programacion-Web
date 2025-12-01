@@ -192,8 +192,8 @@ try {
                                             <div class="d-flex flex-column">
 
                                                 <div class="mb-5">
-                                                    <label for="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
-                                                    <label for="inputTitulo" id="lblTitulo" class="subtitulo form-label">Escriba un titulo para su custionario</label>
+                                                    <label for="inputTitulo" id="lblTitulo" class="fw-bold fs-5 form-label">Titulo</label>
+                                                    <label for="lblTitulo" class="subtitulo form-label">Escriba un titulo para su cuestionario</label>
                                                     <input type="text" id="inputTitulo" name="nombreCuestionario" class="form-control needs-validation">
                                                     <div class="invalid-feedback"></div>
                                                 </div>

@@ -27,18 +27,6 @@ function validarNombre(input) {
 //Email
 function validarEmail(input){
   const valorEmail = input.value.trim();
-<<<<<<< Updated upstream
-  const condicionEmail = /^[A-Za-z0-9._%+-]+@gmail\.com$/;
-
-  const valido = condicionEmail.test(valorEmail);
-  input.classList.toggle("is-invalid", !valido);
-  input.classList.toggle("is-valid", valido);
-
-  return valido;
-}
-//Contraseña
-function validarContrasena(input){
-=======
 
   const valido =
     valorEmail === "" ||
@@ -51,7 +39,7 @@ function validarContrasena(input){
 }
 
 function validarContrasena(input) {
->>>>>>> Stashed changes
+
   const valor = input.value.trim();
   const re = /^[A-Za-z0-9_]{6,8}$/;
   const valido = re.test(valor);
@@ -81,9 +69,9 @@ function validarFoto(select) {
   select.classList.toggle("is-invalid", !valido);
   select.classList.toggle("is-valid", valido);
 
-<<<<<<< Updated upstream
+
   return valido;
-=======
+
   fetch("traerDatos.php")
     .then(res => res.json())
     .then(data => {
@@ -104,7 +92,7 @@ function validarFoto(select) {
       }
     })
     .catch(err => console.error("Error al cargar datos:", err));
->>>>>>> Stashed changes
+
 }
 
 
@@ -139,10 +127,9 @@ function guardarCambios() {
 
     if (!nombreValido || !emailValido || !contrasenaValida || !fechaValida || !fotoValida) return;
 
-<<<<<<< Updated upstream
     // Actualizar datos visualmente
     preview.src = fotoSelect.value;
-=======
+
     // Armar objeto con los campos modificados
     const datos = {};
    if (nombre !== "") datos.nombre = nombre;
@@ -153,10 +140,34 @@ function guardarCambios() {
     // SIEMPRE ENVIAR LA FOTO:
     datos.fotoPerfil = fotoSelect.value;
 
->>>>>>> Stashed changes
 
-    // Mostrar modal Bootstrap
-    const modal = new bootstrap.Modal(document.getElementById("edicionExitosa"));
+    try {
+      const res = await fetch("GuardarDatosNuevos.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(datos),
+      });
+
+        const result = await res.json();
+
+  // contenedor del mensaje del backend
+    const contenedorErrores = document.getElementById("mensajeBackend");
+    contenedorErrores.innerHTML = ""; // limpio primero
+    if (!result.exito) {
+        contenedorErrores.innerHTML = `
+            <div class="alert alert-danger" role="alert">
+                ${result.mensaje}
+            </div>
+        `;
+        emailInput.classList.remove("is-valid");
+        emailInput.classList.add("is-invalid");
+
+
+        return;
+    }
+
+    //sii salió bien, muestro el modal
+    const modal = new bootstrap.Modal(document.getElementById('edicionExitosa'));
     modal.show();
 
     // Resetear formulario y limpiar
@@ -164,6 +175,9 @@ function guardarCambios() {
     [nombreInput, emailInput, contrasenaInput, fechaInput, fotoSelect].forEach(input => {
       input.classList.remove("is-valid");
     });
+     } catch (error) {
+      console.error("Error al guardar cambios:", error);
+    }
   });
 }
 
