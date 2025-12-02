@@ -19,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $descripcion  = trim($_POST["txtDescripcion"] ?? "");
     $cod_acceso   = trim($_POST["codigoAcceso"] ?? "");
     $categoria    = trim($_POST["selectCategoria"] ?? "");
-    $tipoPregunta = trim($_POST["selectTipoPregunta"] ?? "");
     $visibilidad  = trim($_POST["Visibilidad"] ?? "");
     $activo       = trim($_POST["estado"] ?? "");
 
@@ -46,20 +45,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errores["selectCategoria"] = "Debe seleccionar una categoría";
     } else {
         $data["categoria"] = htmlspecialchars($categoria);
-    }
-
-    // --- Validación: Tipo de Pregunta ---
-    if (empty($tipoPregunta)) {
-        $errores["selectTipoPregunta"] = "Seleccione un tipo de pregunta";
-    } else {
-        if ($tipoPregunta !== "2") {
-            $errores["selectTipoPregunta"] = "Ese tipo de pregunta no esta disponible en esta version";
-        }
-        $data["tipoPregunta"] = htmlspecialchars($tipoPregunta);
-    }
-
-    if (!preg_match("/^\d{6,10}$/", $cod_acceso)) {
-        $errores["codigoAcceso"] = "El codigo debe tener 6 digitos";
     }
 
 

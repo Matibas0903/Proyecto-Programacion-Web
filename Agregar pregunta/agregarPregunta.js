@@ -1,19 +1,30 @@
 let cantidadPreguntas = 0;
 let preguntaActivaId = null; /*NUEVO*/
+let preguntasData = {}; /*NUEVO*/
 window.onload = function () {
   // Nuevo: Event listener para el select de tipo de pregunta
 
-  /*NUEVO*/
+  /* NUEVO */
   const selectTipoPregunta = document.getElementById("selectTipoPregunta");
+  /*NUEVO*/
   selectTipoPregunta.addEventListener("change", () => {
     if (!preguntaActivaId) return; // Si no hay pregunta activa, no hacer nada
+
+    // Guardar el tipo en preguntasData
+    preguntasData[preguntaActivaId].tipo = selectTipoPregunta.value;
+
     const form = document.getElementById(`form-${preguntaActivaId}`);
-    if (!form) return; // Verificación extra por si acaso
+    if (!form) return;
+
+    // Eliminar las opciones anteriores
     const existingRow = form.querySelector(".row.g-3");
-    if (existingRow) existingRow.remove(); // Limpiar opciones previas
+    if (existingRow) existingRow.remove();
+
+    // Crear opciones nuevas según el tipo seleccionado
     const newRow = CrearOpciones(preguntaActivaId);
+
+    // Agregar al formulario
     if (newRow) {
-      // Verificar que newRow sea un Node válido
       form.querySelector(".cardPregunta").appendChild(newRow);
     }
   });
@@ -160,6 +171,7 @@ function añadirPregunta() {
   //Agrega una diapositiva en el panel izquierdo
   const btnAñadirPregunta = document.getElementById("btnAñadirPregunta");
   const divContenedor = document.getElementById("divPreguntas");
+  const selectTipo = document.getElementById("selectTipoPregunta");
 
   btnAñadirPregunta.addEventListener("click", () => {
     cantidadPreguntas++;
@@ -195,7 +207,10 @@ function añadirPregunta() {
       preguntaDiv.remove();
       document.getElementById(`form-${preguntaId}`)?.remove(); // borrar el formulario también
     });
-
+    /*NUEVO*/
+    preguntasData[preguntaId] = {
+      tipo: "",
+    };
     // Al hacer clic en el botón lateral, mostrar el formulario correspondiente
     preguntaDiv.addEventListener("click", () => {
       // ocultar todos los formularios
@@ -204,6 +219,8 @@ function añadirPregunta() {
         .forEach((f) => (f.style.display = "none"));
       const form = document.getElementById(`form-${preguntaId}`);
       if (form) form.style.display = "block";
+      /*NUEVO*/
+      selectTipo.value = preguntasData[preguntaId].tipo; //asigno el tipo de pregunta a la pregunta activa
 
       /*NUEVO*/
       preguntaActivaId = preguntaId;
@@ -214,6 +231,7 @@ function añadirPregunta() {
     divContenedor.appendChild(preguntaDiv);
 
     // Crear el formulario asociado
+    selectTipo.value = "";
     crearPregunta(preguntaId);
   });
 }
@@ -226,6 +244,8 @@ function crearPregunta(preguntaId) {
   container.classList.add("container", "mt-4", "form-pregunta");
   container.id = `form-${preguntaId}`;
   container.style.display = "none"; // inicialmente oculto
+
+  container.dataset.id = preguntaId;
 
   const card = document.createElement("div");
   card.classList.add("card", "mb-4", "cardPregunta");
@@ -310,10 +330,6 @@ function crearPregunta(preguntaId) {
     });
   });
   //
-  card.appendChild(cardBody);
-  card.appendChild(row);
-  container.appendChild(card);
-  panelPrincipal.appendChild(container);
 
   inputPregunta.addEventListener("input", () => {
     const tituloPregunta = document.getElementById(
@@ -406,49 +422,72 @@ async function EnviarPreguntas(version) {
     const responseText = await response.text();
 
     const data = JSON.parse(responseText);
-    alert(data.message);
+    alert(data.message); //cambiar por una etiqueta que hizo griselda
     console.log("llenando campos");
     llenarCampos(idVersionGlobal);
   } catch (error) {
     console.error("Error al enviar las preguntas:", error);
   }
 }
-
 function recolectarPreguntas() {
-  //Junta todas la Preguntas y opciones creadas en un array para enviar al PHP
+  /*NUEVO*/
   const preguntas = [];
   const formularios = document.querySelectorAll(".form-pregunta");
 
   formularios.forEach((form, index) => {
-    const enunciado = form.querySelector(".input-pregunta").value.trim();
+    const preguntaId = form.dataset.id;
+    if (!preguntaId) {
+      console.warn("formulario sin data-id encontrado, se saltea", form);
+      return;
+    }
+    const entry = preguntasData[preguntaId];
+    if (!entry) {
+      console.warn("preguntasData no contiene la clave:", preguntaId);
+      return;
+    }
 
-    // Intentar obtener imagen seleccionada (si existe)
+    const tipoPregunta = parseInt(entry.tipo) || 0;
+
+    const enunciado = form.querySelector(".input-pregunta").value.trim();
     const imagenSeleccionada =
       form.querySelector(".imagen-seleccionada")?.src || null;
 
-    // Recolectar las opciones
-    const opciones = [];
-    const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
-    const opcionesCorrectas = [];
+    let opciones = [];
+    let opcionesCorrectas = [];
 
-    opcionesDiv.forEach((div) => {
-      const texto = div.querySelector(".btnOpciones").textContent.trim();
-      const esCorrecta = div.querySelector("input[type='radio']").checked
-        ? 1
-        : 0;
+    // -----------------------------------
+    // Recolectar segun tipo de pregunta
+    // -----------------------------------
+    switch (tipoPregunta) {
+      case 1:
+      case 2:
+      case 4:
+        const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
 
-      if (esCorrecta === 1) {
-        opcionesCorrectas.push(esCorrecta);
-      }
+        opcionesDiv.forEach((div) => {
+          const texto = div.querySelector(".btnOpciones").textContent.trim();
+          const inputCorrecto = div.querySelector("input");
+          const esCorrecta = inputCorrecto.checked ? 1 : 0;
 
-      opciones.push({
-        texto: texto,
-        esCorrecta: esCorrecta,
-      });
-    });
+          opciones.push({
+            texto: texto,
+            esCorrecta: esCorrecta,
+          });
+
+          if (esCorrecta) opcionesCorrectas.push(texto);
+        });
+        break;
+
+      case 3: // Respuesta abierta
+        opciones = [];
+        opcionesCorrectas = [];
+        break;
+    }
 
     preguntas.push({
+      id: preguntaId,
       nro_orden: index + 1,
+      tipo: tipoPregunta,
       enunciado: enunciado,
       imagen: imagenSeleccionada,
       opciones: opciones,
@@ -465,7 +504,7 @@ async function llenarCampos(idVersionGlobal) {
   //Declaro todos los inputs
   const inputTitulo = document.getElementById("inputTitulo");
   const inputDescripcion = document.getElementById("descripcion");
-  const inputCodAcceso = document.getElementById("inputCodigoAcceso");
+  const inputCodAcceso = document.getElementById("codigoAcceso"); /*NUEVO*/
   const selectCategoria = document.getElementById("selectCategoria").value;
   const publico = document.getElementById("radiopublico");
   const privado = document.getElementById("radioPrivado");
@@ -588,7 +627,12 @@ function CrearOpciones(preguntaId) {
       const btnVerdadero = document.createElement("div");
       btnVerdadero.classList.add("btn", "w-100", "btnOpciones");
       btnVerdadero.textContent = "Verdadero";
+      const radioCorrecta = document.createElement("input");
+      radioCorrecta.type = "radio";
+      radioCorrecta.name = `radioCorrecto-${preguntaId}`; // Unique por pregunta
+      radioCorrecta.classList.add("form-check-input");
 
+      cardRespuesta.appendChild(radioCorrecta);
       cardRespuesta.appendChild(btnVerdadero);
       col.appendChild(cardRespuesta);
       row.appendChild(col);
@@ -611,7 +655,12 @@ function CrearOpciones(preguntaId) {
       const btnFalso = document.createElement("div");
       btnFalso.classList.add("btn", "w-100", "btnOpciones");
       btnFalso.textContent = "Falso";
+      const radioCorrecta = document.createElement("input");
+      radioCorrecta.type = "radio";
+      radioCorrecta.name = `radioCorrecto-${preguntaId}`; // Unique por pregunta
+      radioCorrecta.classList.add("form-check-input");
 
+      cardRespuesta.appendChild(radioCorrecta);
       cardRespuesta.appendChild(btnFalso);
       col.appendChild(cardRespuesta);
       row.appendChild(col);
@@ -682,6 +731,8 @@ function CrearOpciones(preguntaId) {
       col.appendChild(cardRespuesta);
       row.appendChild(col);
     }
+  } else {
+    /*NUEVO*/
   }
 
   return row;

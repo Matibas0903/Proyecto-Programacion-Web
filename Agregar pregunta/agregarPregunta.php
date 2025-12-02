@@ -237,7 +237,7 @@ try {
 
                                                 <div class="mb-5">
                                                     <label for="inputCodigoAcceso" id="lblCodigoAcceso" class="subtitulo form-label">Ingrese un codigo para acceder al cuestionario</label>
-                                                    <input type="number" id="inputCodigoAcceso" name="codigoAcceso" class="form-control needs-validation">
+                                                    <input type="number" id="codigoAcceso" name="codigoAcceso" class="form-control needs-validation">
                                                     <div class="invalid-feedback"></div>
                                                 </div>
                                                 <div class="mb-5">

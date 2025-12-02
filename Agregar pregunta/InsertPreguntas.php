@@ -47,8 +47,8 @@ try {
 
     // Preparar consultas
     $sqlPregunta = $conn->prepare("
-        INSERT INTO pregunta (ID_VERSION, NRO_ORDEN, ENUNCIADO, IMAGEN)
-        VALUES (:idv, :nro, :enun, :img)
+        INSERT INTO pregunta (ID_VERSION, NRO_ORDEN, ENUNCIADO, ID_TIPO_PREGUNTA ,IMAGEN)
+        VALUES (:idv, :nro, :enun, :idtp,:img)
     ");
 
     $sqlOpcion = $conn->prepare("
@@ -56,12 +56,26 @@ try {
         VALUES (:idp, :txt, :cor)
     ");
 
+
+
     foreach ($preguntas as $pregunta) {
 
+        // --- VALIDACIÓN BÁSICA ---
+        if (empty($pregunta["tipo"]) || !is_numeric($pregunta["tipo"])) {
+            // Saltar sin guardar
+            continue;
+        }
+
+        if (empty($pregunta["enunciado"])) {
+            continue;
+        }
+
+        // Si pasa las validaciones, guardar
         $sqlPregunta->execute([
             ":idv" => $idVersion,
             ":nro" => $pregunta["nro_orden"],
             ":enun" => $pregunta["enunciado"],
+            ":idtp" => $pregunta["tipo"],
             ":img" => $pregunta["imagen"] ?? null,
         ]);
 
@@ -75,12 +89,12 @@ try {
             ]);
         }
     }
-
     $conn->commit();
 
     echo json_encode([
         "status" => "success",
-        "message" => "Preguntas guardadas correctamente."
+        "message" => "Preguntas guardadas correctamente.",
+
     ]);
 } catch (Exception $e) {
     $conn->rollBack();
