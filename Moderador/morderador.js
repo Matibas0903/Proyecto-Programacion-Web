@@ -1,8 +1,15 @@
+<<<<<<< Updated upstream
+window.onload = function()
+{
+EnlazarComentariosACuestionarios();
+const btnReportar = document.querySelectorAll(".btn-reportes");
+=======
 window.onload = function () {
   // Agregar todos los cuestionarios dinámicamente
-  cuestionarios.forEach((c) => agregarCuestionario(c));
+  //cuestionarios.forEach((c) => agregarCuestionario(c));
   EnlazarComentariosACuestionarios();
   const btnReportar = document.querySelectorAll(".btn-reportes");
+>>>>>>> Stashed changes
 
   btnReportar.forEach((boton) => {
     boton.addEventListener("click", () => {
@@ -227,6 +234,9 @@ function expulsarComentario(index) {
   alert(`Expulsando usuario del comentario en índice ${index}`);
   //agregar funcionalidad cuando este conectado con bbdd
 }
+<<<<<<< Updated upstream
+                            
+=======
 // Función para agregar un cuestionario dinámicamente
 function agregarCuestionario(cuestionario) {
   const contenedor = document.getElementById("custionarios");
@@ -307,26 +317,6 @@ function agregarCuestionario(cuestionario) {
 }
 
 // Ejemplo de uso con datos
-const cuestionarios = [
-  {
-    titulo: "Matemática",
-    admin: "Ana Gómez",
-    fecha: "01/12/2025",
-    jugadores: 12,
-    estado: "Activo",
-    estadoClase: "activo",
-    valoracion: "★★★★★",
-    descripcion: "Prueba tus conocimientos matemáticos.",
-  },
-  {
-    titulo: "Física",
-    admin: "Luis Ramírez",
-    fecha: "05/12/2025",
-    jugadores: 8,
-    estado: "Finalizado",
-    estadoClase: "finalizado",
-    valoracion: "★★★☆☆",
-    descripcion: "Cuestionario sobre conceptos básicos de física.",
-  },
-];
+
 */
+>>>>>>> Stashed changes

@@ -28,7 +28,7 @@ if (!$idVersion) {
     exit;
 }
 
-// 1) Traer versión
+// 1) Traer version
 $stmt = $conn->prepare("SELECT * FROM version_cuestionario WHERE ID_VERSION = :id");
 $stmt->bindValue(":id", $idVersion, PDO::PARAM_INT);
 $stmt->execute();

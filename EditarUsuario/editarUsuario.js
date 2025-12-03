@@ -30,6 +30,7 @@ function validarEmail(input) {
 }
 
 function validarContrasena(input) {
+
   const valor = input.value.trim();
   const valido = valor === "" || /^[A-Za-z0-9_]{6,8}$/.test(valor);
   input.classList.toggle("is-invalid", !valido && valor !== "");
@@ -61,19 +62,9 @@ function validarFoto(select) {
   const valido = valor !== "";
   select.classList.toggle("is-invalid", !valido);
   select.classList.toggle("is-valid", valido);
+
+
   return valido;
-}
-
-// Cargar datos actuales del usuario
-let fotoInicial = null; // variable global
-
-function cargarDatosInput() {
-  const nombre = document.getElementById("nombreNuevo");
-  const mail = document.getElementById("emailNuevo");
-  const fechaNacimiento = document.getElementById("fechaNueva");
-  const fotoPerfil = document.getElementById("icono");
-  const fotoSelect = document.getElementById("fotoSelect");
-  const preview = document.getElementById("vistaPreviaFoto");
 
   fetch("traerDatos.php")
     .then(res => res.json())
@@ -95,9 +86,11 @@ function cargarDatosInput() {
       }
     })
     .catch(err => console.error("Error al cargar datos:", err));
+
 }
 
-// Guardar cambios
+
+
 function guardarCambios() {
   const form = document.getElementById("editarForm");
   const nombreInput = document.getElementById("nombreNuevo");
@@ -132,9 +125,10 @@ function guardarCambios() {
     const fechaValida = validarFecha(fechaInput);
     const fotoValida = validarFoto(fotoSelect);
 
-    if (!nombreValido || !emailValido || !fechaValida || !fotoValida || !contrasenaValida) {
-      return;
-    }
+    if (!nombreValido || !emailValido || !contrasenaValida || !fechaValida || !fotoValida) return;
+
+    // Actualizar datos visualmente
+    preview.src = fotoSelect.value;
 
     // Armar objeto con los campos modificados
     const datos = {};
@@ -176,8 +170,12 @@ function guardarCambios() {
     const modal = new bootstrap.Modal(document.getElementById('edicionExitosa'));
     modal.show();
 
-
-    } catch (error) {
+    // Resetear formulario y limpiar
+    form.reset();
+    [nombreInput, emailInput, contrasenaInput, fechaInput, fotoSelect].forEach(input => {
+      input.classList.remove("is-valid");
+    });
+     } catch (error) {
       console.error("Error al guardar cambios:", error);
     }
   });

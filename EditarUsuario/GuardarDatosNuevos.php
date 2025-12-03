@@ -36,7 +36,7 @@ if (!empty($input['mail'])) {
         $errores[] = "El email no tiene un formato válido.";
     } else {
 
-        $sql= "SELECT ID_USUARIO FROM usuario WHERE EMAIL = :email AND ID_USUARIO != :id";
+        $sql = "SELECT ID_USUARIO FROM usuario WHERE EMAIL = :email AND ID_USUARIO != :id";
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':email' => $input['mail'],
@@ -49,7 +49,6 @@ if (!empty($input['mail'])) {
         if ($dato) {
             $errores[] = "El email ya está registrado por otro usuario.";
         }
-
     }
 }
 
@@ -116,7 +115,7 @@ if (empty($campos)) {
 
 
 try {
-     
+
     //cargo los datos a la base de datos
     $sql = "UPDATE usuario SET " . implode(", ", $campos) . " WHERE ID_USUARIO = :id";
     $valores[':id'] = $idUsuario;
@@ -130,13 +129,11 @@ try {
     if (!empty($input['mail'])) {
         $_SESSION['email'] = $input['mail'];
     }
-    if (!empty($input['fotoPerfil'])) {
+    if (empty($input['fotoPerfil'])) {
         $_SESSION['foto_perfil'] = $input['fotoPerfil'];
     }
 
     echo json_encode(["exito" => true, "mensaje" => "Perfil actualizado correctamente."]);
-
 } catch (PDOException $e) {
     echo json_encode(["exito" => false, "mensaje" => "Error al actualizar: " . $e->getMessage()]);
 }
-?>

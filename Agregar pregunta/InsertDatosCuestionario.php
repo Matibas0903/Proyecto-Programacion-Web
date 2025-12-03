@@ -72,8 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $descripcionErr = "La descripcion puede tener tan solo 300 caracteres";
     }
 
-
-
     //si el custionario es privado le exijo un codigo de acceso sino no
     if (!empty($_POST["codigoAcceso"]) && $visibilidad != "Privado") {
         if ($cod_acceso > 20) {

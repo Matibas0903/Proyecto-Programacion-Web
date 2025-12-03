@@ -20,19 +20,13 @@ function iniciarCarrusel() {
     // Inicializa
     updateCarousel();
 
-    // Cambio automático cada 3 segundos
-    setInterval(() => {
-        index = (index + 1) % items.length;
-        updateCarousel();
-    }, 3000);
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-   const params = new URLSearchParams(window.location.search);
-  const version = params.get("version");
-    cargarCuestionario(version);
-    cargarRanking(version);
-
+<<<<<<< Updated upstream
+// Cambio automático cada 3 segundos
+setInterval(() => {
+  index = (index + 1) % items.length;
+  updateCarousel();
+}, 3000);
+=======
 console.log("Versión recibida:", params.get("version"));
 
 });
@@ -167,3 +161,4 @@ function estrellasHTML(valor) {
   }
   return html;
 }
+>>>>>>> Stashed changes
