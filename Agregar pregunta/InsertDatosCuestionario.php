@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     //Asigno la fehca de HOY
     $fecha_creacion = trim(date("Y-m-d") ?? "");
     $cod_acceso = trim($_POST["codigoAcceso"] ?? "");
-    $activo = trim($_POST["estado"]);
+    $activo = $_POST["estado"];
     $plantilla       = trim($_POST["plantilla"] ?? "");
 
     //borro los otros que estan abajo?

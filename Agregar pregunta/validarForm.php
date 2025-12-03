@@ -58,6 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data["tipoPregunta"] = htmlspecialchars($tipoPregunta);
     }
 
+    if(!preg_match("/^\d{6,10}$/",$cod_acceso)){
+        $errores["codigoAcceso"] = "El codigo debe tener 6 digitos";
+    }
+
     // --- Validacion: Visibilidad ---
     if (empty($visibilidad)) {
         $errores["radioPrivado"] = "";

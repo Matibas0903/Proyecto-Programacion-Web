@@ -71,14 +71,10 @@ try {
             $sqlOpcion->execute([
                 ":idp" => $idPregunta,
                 ":txt" => $op["texto"],
+                ":cor" => $op["esCorrecta"] ?? 0
             ]);
         }
 
-        foreach ($pregunta["opcionesCorrectas"] as $opCor) {
-            $sqlOpcion->execute([
-                ":cor" => $opCor["esCorrecta"]
-            ]);
-        }
     }
 
     $conn->commit();

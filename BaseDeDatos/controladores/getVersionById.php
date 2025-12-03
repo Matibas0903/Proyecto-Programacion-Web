@@ -80,12 +80,10 @@
         $stmtPreguntas = $conn->prepare("
             SELECT 
                 p.ID_PREGUNTA,
-                tp.TIPO AS tipo_pregunta,
                 p.NRO_ORDEN,
                 p.ENUNCIADO,
                 p.IMAGEN
             FROM pregunta p
-            INNER JOIN tipo_pregunta tp ON p.ID_TIPO_PREGUNTA = tp.ID_TIPO_PREGUNTA
             WHERE p.ID_VERSION = :idVersion
             ORDER BY p.NRO_ORDEN
         ");

@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-//EPA ESTE ES NUEVO, NO?, SI!
+
 require("../BaseDeDatos/conexion.php");
 header("Content-Type: application/json");
 

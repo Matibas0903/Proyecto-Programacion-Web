@@ -12,10 +12,11 @@ function generarPreguntas() {
     const contenedor = document.getElementById("contenedor-juego");
     const preguntas = version.preguntas;
 
+    
     preguntas.forEach((pregunta, index) => {
         const card = document.createElement("div");
         card.classList.add("card-preguntas", "d-none");
-
+    
         let opcionesHTML = "";
         pregunta.opciones.forEach(opcion => {
             opcionesHTML += `
@@ -114,6 +115,10 @@ function mostrarPreguntas() {
         if (auxContador < -1) {
             clearInterval(auxintervalo);
             contador.classList.add("d-none");
+            if (!cards[preguntaNum]) {
+                console.error("La card", preguntaNum, "no existe");
+                return;
+            }
             cards[preguntaNum].classList.remove("d-none");
 
             // Guardar tiempo de inicio

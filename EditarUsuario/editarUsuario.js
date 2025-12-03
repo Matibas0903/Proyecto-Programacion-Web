@@ -18,11 +18,17 @@ function validarNombre(input) {
 }
 function validarEmail(input) {
   const valorEmail = input.value.trim();
-  const valido = valor === "" || /^[A-Za-z0-9._%+-]+@gmail\.com$/.test(valor);
-  input.classList.toggle("is-invalid", !valido && valor !== "");
-  input.classList.toggle("is-valid", valido && valor !== "");
+
+  const valido =
+    valorEmail === "" ||
+    /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(valorEmail);
+
+  input.classList.toggle("is-invalid", !valido && valorEmail !== "");
+  input.classList.toggle("is-valid", valido && valorEmail !== "");
+
   return valido;
 }
+
 function validarContrasena(input) {
   const valor = input.value.trim();
   const valido = valor === "" || /^[A-Za-z0-9_]{6,8}$/.test(valor);
@@ -83,6 +89,7 @@ function cargarDatosInput() {
         if (preview) preview.src = data.FOTO_PERFIL;
 
         fotoInicial = data.FOTO_PERFIL; // guardamos la foto inicial
+          console.log("FOTO_PERFIL recibido:", data.FOTO_PERFIL);
       } else {
         fotoInicial = fotoSelect.value; // si no hay foto guardada
       }
@@ -131,13 +138,14 @@ function guardarCambios() {
 
     // Armar objeto con los campos modificados
     const datos = {};
-    if (nombre) datos.nombre = nombre;
-    if (email) datos.mail = email;
-    if (pass1) datos.contrasena = pass1;
-    if (fecha) datos.fechaNacimiento = fecha;
-   if (fotoSelect.value !== fotoInicial) {
-     datos.fotoPerfil = fotoSelect.value; 
-    }
+   if (nombre !== "") datos.nombre = nombre;
+    if (email !== "") datos.mail = email;
+    if (pass1 !== "") datos.contrasena = pass1;
+    if (fecha !== "") datos.fechaNacimiento = fecha;
+
+    // SIEMPRE ENVIAR LA FOTO:
+    datos.fotoPerfil = fotoSelect.value;
+
 
     try {
       const res = await fetch("GuardarDatosNuevos.php", {

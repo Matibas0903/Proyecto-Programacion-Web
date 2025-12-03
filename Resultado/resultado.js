@@ -212,9 +212,6 @@ window.onload = async function() {
         }
     });
 
-    //Boton volver
-    const btnSalir = document.getElementById("btnSalir");
-    btnSalir.addEventListener("click", volverAParticipante);
 }
 
 async function cargarRanking(idVersion, idParticipacion, esInvitado){

@@ -3,7 +3,7 @@ window.onload = function() {
     const spinnerContainer = document.getElementById("spinnerContainer");
     const miForm = document.getElementById("miform");
 
-    // cuando se ingresa el codigo,y si es valido, muestro el cargando...
+    // cuando se ingresa el codigo,y si es valido, muestro el cargando
     botonIngresar.addEventListener("click", async function() {
         if (validarCodigo()) { 
             mostrarSpinner();

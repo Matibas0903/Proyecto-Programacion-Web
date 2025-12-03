@@ -29,7 +29,7 @@ session_start();
   <div class="container mt-5 flex-column justify-content-center align-items-center">
     <div class="card m-5">
         <div class="text-center" >
-            <img src="" id="icono" class="img-fluid mx-auto d-block" alt="Imagen no encontrada"><br>
+            <img src="<?= $_SESSION['foto_perfil'] ?>" id="icono" class="img-fluid mx-auto d-block" alt="Imagen no encontrada"><br>
         </div>
       <div class="card-body">
          <h1>Editar Usuario</h1>
@@ -79,7 +79,7 @@ session_start();
               </div>
           
               <div class="text-center mb-3">
-                <img id="vistaPreviaFoto" src="Recursos/icono.png" class="rounded-circle border" width="100" height="100" alt="Vista previa">
+                <img id="vistaPreviaFoto" src="" class="rounded-circle border" width="100" height="100" alt="Vista previa">
               </div>
               <div class="col-12 col-lg-6">
                 <button type="submit" id="validarBoton" class="btn miboton mt-2">Guardar cambios</button><br>

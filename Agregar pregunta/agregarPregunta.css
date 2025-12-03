@@ -2,27 +2,25 @@
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
 }
-#navBarCrearPreg {
-  background-color: #ffd0ae;
-  z-index: 1010;
-  border-right: 2px solid #000000;
-  border-left: 2px solid #000000;
-  border-bottom: 5px solid #000000;
-  position: fixed;
-  width: 100%;
+#navBarCrearPreg{
+    background-color: #ffd0ae;
+    z-index: 1010;
+    border-right: 2px solid #000000;
+    border-left: 2px solid #000000;
+    border-bottom: 5px solid #000000;
+    position: fixed;           
+    width: 100%; 
 }
 
-body {
-  background-color: #fff1be;
-  overflow-x: clip;
+body{
+    background-color: #fff1be;
+    overflow-x: clip;
 }
-
 #panelPrincipal {
   margin-top: 10px;
   border: 2px solid #c5b6a2;
   border-radius: 10px;
 }
-
 #inputIngresarTitulo {
   background-color: #fff6e9;
 }
@@ -36,7 +34,6 @@ body {
   cursor: pointer;
   transition: 0.3s;
 }
-
 #btnConfig:hover {
   color: white;
   transform: scale(1.05);
@@ -92,59 +89,8 @@ body {
   border: solid #748283;
   border-width: 1px 1px 3px 1px;
 }
-<<<<<<< Updated upstream
-#btnTemas:hover{
-    color: white;
-    transform: scale(1.05);
-}
-#btnGuardar{
-    background-color: #a3d6c7;
-    border:solid #64887d;
-    border-width:  1px 1px 3px 1px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-#btnGuardar:hover
-{
-    color: white;
-    transform: scale(1.05);
-}
-#btnSalir{
-    background-color: #ac5e5e;
-    border:solid #5e3232;
-    border-width:  1px 1px 3px 1px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-#btnSalir:hover
-{
-    color: white;
-    transform: scale(1.05);
-}
-#panelIzq{
-    position: relative;
-    bottom: 0;
-    background-color:#c0cfcb;
-    margin-top: 70px;
-    border: 2px solid #798380;
-    border-radius: 10px;
-    overflow-y: auto;  /* activa scroll vertical si hay contenido extra*/
-}
-#btnOpcion{
-    background-color: #ef7131;
-}
-
-#btnAñadirPregunta{
-     background-color: #3e7463;
-    border: solid #748283;
-    border-width: 1px 1px 3px 1px;
-}
-#btnAñadirDiapositiva{
-    background-color: #d8eced;
-=======
 #btnAñadirDiapositiva {
   background-color: #d8eced;
->>>>>>> Stashed changes
 }
 
 #panelDer {
@@ -236,7 +182,6 @@ body {
   background-color: transparent;
   border: none;
 }
-
 .navbar-dropdown-btn:hover .navbar_usuario {
   border: 3px solid #80c4e9;
 }
@@ -267,7 +212,6 @@ body {
 }
 .cardBodyPregun input {
   background-color: #fca493;
-
   margin-bottom: 10px;
   border-radius: 8px;
   border: solid black;

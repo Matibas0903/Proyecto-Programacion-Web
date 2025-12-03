@@ -19,14 +19,17 @@ window.onload = function () {
   const inputTituloconfig = document.getElementById("inputTitulo");
   inputTituloconfig.addEventListener("change", ponerNombre);
 
-  const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
+
+const btnSalirSinGuardar = document.getElementById("btnSalirSinGuardar");
   btnSalirSinGuardar.addEventListener("click", () => {
     window.location.href = "../administrador/administrador.php";
   });
-  /*
+
   const btnGuardarYSalir = this.document.getElementById("btnGuardarYSalir");
-  btnGuardarYSalir.addEventListener("click", guardarCuestionario);
-*/
+  btnGuardarYSalir.addEventListener("click",() => {
+    actualizarPlantilla();
+     window.location.href = "../administrador/administrador.php";
+  } );
   obtenerPlantilla();
   abrirPanelDerecho();
   abrirPanelTemas();
@@ -353,13 +356,6 @@ function añadirPregunta() {
     contenedor.appendChild(crearBotonPregunta(id));
     crearFormularioPregunta(id);
   });
-  btn.addEventListener("click", () => {
-    cantidadPreguntas++;
-    const id = `pregunta-${cantidadPreguntas}`;
-    contenedor.appendChild(crearBotonPregunta(id));
-    crearFormularioPregunta(id);
-  });
-
   return cantidadPreguntas;
 }
 

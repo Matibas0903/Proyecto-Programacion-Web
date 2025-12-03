@@ -10,6 +10,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $input = json_decode(file_get_contents("php://input"), true);
+
 if (!$input) {
     echo json_encode(["exito" => false, "mensaje" => "No se recibieron datos válidos"]);
     exit;
@@ -97,7 +98,7 @@ if (!empty($input['fechaNacimiento'])) {
     $campos[] = "FECHA_NACIMIENTO = :fecha";
     $valores[':fecha'] = $input['fechaNacimiento'];
 }
-if (!empty($input['fotoPerfil'])) {
+if (empty($input['fotoPerfil'])) {
     $campos[] = "FOTO_PERFIL = :foto";
     $valores[':foto'] = $input['fotoPerfil'];
 }

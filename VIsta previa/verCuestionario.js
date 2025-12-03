@@ -93,6 +93,7 @@ async function cargarRanking(version) {
     const res = await fetch(`Comentarios_ranking.php?version=${version}`);
     const data = await res.json();
 
+    
     if (data.error) {
         contRanking.innerHTML = `<p>${data.error}</p>`;
         return;
@@ -104,32 +105,35 @@ async function cargarRanking(version) {
     let htmlRanking = "";
     let htmlComentarios = "";
 
-    ranking.forEach((usuario, index) => {
+    if(!ranking){
+        console.log("Error al cargar el ranking");
+    }else{   
+        ranking.forEach((usuario, index) => {
 
-        const lugar = index + 1;
-        const active = index === 0 ? "active" : "";
+            const lugar = index + 1;
+            const active = index === 0 ? "active" : "";
 
-        const foto = usuario.FOTO_PERFIL && usuario.FOTO_PERFIL !== "" 
-            ? usuario.FOTO_PERFIL
-            : "./Recursos/";
+            const foto = usuario.FOTO_PERFIL && usuario.FOTO_PERFIL !== "" 
+                ? usuario.FOTO_PERFIL
+                : "./Recursos/";
 
-        htmlRanking += `
-            <div class="carousel-item ${active}">
-                <div class="card mx-auto" id="cardUsu" style="width: 280px; border-radius:20px;">
-                    <img src="${foto}" class="card-img-top" style="width:140px; height:140px; margin: 20px auto; border-radius: 50%; object-fit: cover;">
-                    <div class="card-body text-center">
-                        <h5 class="card-title">#${lugar} Lugar 🏆</h5>
-                        <p class="card-text">${usuario.NOMBRE}</p>
-                        <p class="card-text">Respuestas correctas: ${usuario.respuestas_correctas}</p>
-                        <p class="card-text">Puntaje: ${usuario.PUNTAJE}</p>
+            htmlRanking += `
+                <div class="carousel-item ${active}">
+                    <div class="card mx-auto" id="cardUsu" style="width: 280px; border-radius:20px;">
+                        <img src="${foto}" class="card-img-top" style="width:140px; height:140px; margin: 20px auto; border-radius: 50%; object-fit: cover;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">#${lugar} Lugar 🏆</h5>
+                            <p class="card-text">${usuario.NOMBRE}</p>
+                            <p class="card-text">Respuestas correctas: ${usuario.respuestas_correctas}</p>
+                            <p class="card-text">Puntaje: ${usuario.PUNTAJE}</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        `;
-    });
+            `;
+        });
 
-    contRanking.innerHTML = htmlRanking;
-
+        contRanking.innerHTML = htmlRanking;
+    }
     //Comentarios
     if (!comentarios || comentarios.length === 0) {
        contComentarios.innerHTML = `<p>No hay comentarios todavía.</p>`;
