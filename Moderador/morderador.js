@@ -1,15 +1,7 @@
-<<<<<<< Updated upstream
 window.onload = function()
 {
 EnlazarComentariosACuestionarios();
 const btnReportar = document.querySelectorAll(".btn-reportes");
-=======
-window.onload = function () {
-  // Agregar todos los cuestionarios dinámicamente
-  //cuestionarios.forEach((c) => agregarCuestionario(c));
-  EnlazarComentariosACuestionarios();
-  const btnReportar = document.querySelectorAll(".btn-reportes");
->>>>>>> Stashed changes
 
   btnReportar.forEach((boton) => {
     boton.addEventListener("click", () => {
@@ -223,7 +215,7 @@ function advertirComentario(index) {
   alert(`Advertencia para comentario en índice ${index}`);
   //agregar funcionalidad cuando este conectado con bbdd
 }
-/*
+
 function eliminarComentario(index) {
   const contenedor = document.getElementById("contenedorComentarios");
   const comentarioAEliminar = contenedor.children[index]; // Obtén el elemento en ese índice
@@ -234,9 +226,6 @@ function expulsarComentario(index) {
   alert(`Expulsando usuario del comentario en índice ${index}`);
   //agregar funcionalidad cuando este conectado con bbdd
 }
-<<<<<<< Updated upstream
-                            
-=======
 // Función para agregar un cuestionario dinámicamente
 function agregarCuestionario(cuestionario) {
   const contenedor = document.getElementById("custionarios");
@@ -285,20 +274,20 @@ function agregarCuestionario(cuestionario) {
   const botones = document.createElement("div");
   botones.className = "d-flex flex-wrap gap-2";
   botones.innerHTML = `
-        <button class="btn btn-moderar" data-cuestionario="${cuestionario.titulo}">
+        <button class="btn btn-moderar" data-cuestionario="${cuestionario.TITULO}">
             <i class="bi bi-incognito"></i> Modera
         </button>
         <button class="btn btn-detalles"
-            data-titulo="${cuestionario.titulo}"
-            data-admin="${cuestionario.admin}"
-            data-fecha="${cuestionario.fecha}"
-            data-jugadores="${cuestionario.jugadores}"
-            data-estado="${cuestionario.estado}"
-            data-valoracion="${cuestionario.valoracion}"
-            data-descripcion="${cuestionario.descripcion}">
+            data-titulo="${cuestionario.TITULO}"
+            data-admin="${cuestionario.ADMIN}"
+            data-fecha="${cuestionario.FECHA}"
+            data-jugadores="${cuestionario.JUGADORES}"
+            data-estado="${cuestionario.ESTADO}"
+            data-valoracion="${cuestionario.VALORACION}"
+            data-descripcion="${cuestionario.DESCRIPCION}">
             <i class="bi bi-list-columns"></i> Detalles
         </button>
-        <button class="btn btn-reportes">
+        <button id="btnReportes${cuestionario.ID_CUESTIONARIO}" class="btn btn-reportes">
             <i class="bi bi-exclamation-diamond-fill"></i> Reportar
         </button>
     `;
@@ -314,9 +303,52 @@ function agregarCuestionario(cuestionario) {
 
   // Agregar al contenedor
   contenedor.appendChild(col);
+
+  document.getElementById("btnReportes").addEventListener("click", cargarReportes);
 }
 
+async function cargarReportes(){
+  const checkboxs = document.querySelectorAll("input[type='checkbox']");
+    let motivos = [];
+
+    checkboxs.forEach(check => {
+      if(check.checked) motivos.push(check.value);
+    });
+
+    if (motivos.length === 0) {
+        document.querySelector("input[type='checkbox'] .invalid-feedback").style.display = "block";
+        return;
+    }
+
+    const response = await fetch("reportarCuestionario.php", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({
+        ID_CUESTIONARIO: id_cuestionario,
+        MOTIVOS: motivos
+      })
+    })
+
+    const data = await response.json();
+
+    data.forEach(reporte => {
+      if (data.status === "ok") {
+            alert("Reporte enviado con éxito");
+            location.reload();
+        } else {
+            alert("Error: " + data.message);
+        }
+    });
+}
 // Ejemplo de uso con datos
 
-*/
->>>>>>> Stashed changes
+
+
+
+let cuestionarioId = null;
+
+function abrirModalReportes(id){
+  cuestionarioId = id;
+  const modalReporte = new bootstrap.Modal(document.getElementById("modalReportes"));
+  modalReporte.show();
+}

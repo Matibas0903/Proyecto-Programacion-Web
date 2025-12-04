@@ -1,3 +1,10 @@
+<?php
+    require("conexion.php");
+
+    
+
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -194,7 +201,7 @@
                             <!-- Lista de checkboxes -->
                             <label class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="ventas" id="chkNoApropiado">
+                                    <input class="form-check-input" value="Temas no apropiados" type="checkbox" id="chkNoApropiado">
                                     <label class="form-check-label" for="chkNoApropiado">
                                         Temas no apropiados.
                                     </label>
@@ -202,7 +209,7 @@
                             </label>
                             <label class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="chkOfensivo">
+                                    <input class="form-check-input" value="Contenido ofensivo o discriminatorio" type="checkbox" id="chkOfensivo">
                                     <label class="form-check-label" for="chkOfensivo">
                                         Contenido ofensivo o discriminatorio.
                                     </label>
@@ -210,7 +217,7 @@
                             </label>
                             <label class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="chkManipulacion">
+                                    <input class="form-check-input" value="Manipulacion o sesgo" type="checkbox" id="chkManipulacion">
                                     <label class="form-check-label" for="chkManipulacion">
                                         Manipulacion o sesgo.
                                     </label>
@@ -218,7 +225,7 @@
                             </label>
                             <label class="list-group-item d-flex justify-content-between align-items-center">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="chkPrivacidad">
+                                    <input class="form-check-input" value="Violacion de privacidad" type="checkbox" id="chkPrivacidad">
                                     <label class="form-check-label" for="chkPrivacidad">
                                         Violacion de privacidad
                                     </label>
