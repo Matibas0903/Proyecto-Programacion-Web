@@ -67,9 +67,3 @@ function redirigirConError(errorMensaje){
       sessionStorage.setItem('mensajeError', errorMensaje);
       window.location.href = "../Inicio/inicio.php";
 }
-
-
-
-
-
-

@@ -141,7 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $mailError = "Error al guardar: " . $e->getMessage();
     }
   }
-  
 }
 ?>
 
@@ -211,7 +210,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           </div>
 
           <div class="text-center mb-3">
-            <img id="vistaPreviaFoto" src="../EditarUsuario/Recursos/icono.png" class="rounded-circle border" width="100" height="100" alt="Vista previa">
+            <img id="vistaPreviaFoto" src="../Recursos/icono.png" class="rounded-circle border" width="100" height="100" alt="Vista previa">
           </div>
 
           <button type="submit" id="validar" class="btn btn-light w-100">Registrarse</button><br>

@@ -34,6 +34,7 @@ function AbrirMenuReportes() {
   const modalReportes = new bootstrap.Modal("#modalReportes");
   modalReportes.show();
 }
+
 function ValidarReporte() {
   const listaCheckboxes = document.getElementById("checkboxes");
   document.getElementById("btnReportar").addEventListener("click", function () {
@@ -135,6 +136,7 @@ function llenarYmostrarDetalles() {
     });
   });
 }
+
 /* fragmento de codigo html para los select de filtros, por ahora borrado
 "
                             <div class="col-md-3">
@@ -164,6 +166,7 @@ function llenarYmostrarDetalles() {
                                </div>
                             </div>"
  */
+
 function EnlazarComentariosACuestionarios() {
   const comentariosHistoria = [
     { usuario: "Invitado 1", texto: "No entiendo esta pregunta 😕" },
@@ -191,6 +194,7 @@ function EnlazarComentariosACuestionarios() {
     });
   });
 }
+
 function abrirModal(cuestionario, comentarios) {
   const modal = new bootstrap.Modal(document.getElementById("modalModeracion"));
   const contenedor = document.getElementById("contenedorComentarios");
@@ -211,22 +215,27 @@ function abrirModal(cuestionario, comentarios) {
 
   modal.show();
 }
+
 // Funciones para las acciones
 function advertirComentario(index) {
   alert(`Advertencia para comentario en índice ${index}`);
   //agregar funcionalidad cuando este conectado con bbdd
 }
-/*
+
 function eliminarComentario(index) {
   const contenedor = document.getElementById("contenedorComentarios");
   const comentarioAEliminar = contenedor.children[index]; // Obtén el elemento en ese índice
 
-  contenedor.removeChild(comentarioAEliminar); // Elimina el nodo real
+  if (comentarioAEliminar) {
+    contenedor.removeChild(comentarioAEliminar); // Elimina el nodo real
+  }
 }
+
 function expulsarComentario(index) {
   alert(`Expulsando usuario del comentario en índice ${index}`);
   //agregar funcionalidad cuando este conectado con bbdd
 }
+
 // Función para agregar un cuestionario dinámicamente
 function agregarCuestionario(cuestionario) {
   const contenedor = document.getElementById("custionarios");
@@ -329,4 +338,3 @@ const cuestionarios = [
     descripcion: "Cuestionario sobre conceptos básicos de física.",
   },
 ];
-*/

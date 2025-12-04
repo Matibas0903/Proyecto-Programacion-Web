@@ -1,10 +1,4 @@
 <?php
-// actualizarPreguntas.php
-// Este archivo maneja la lógica de actualización de plantillas de cuestionarios.
-// Se basa en los archivos existentes para reutilizar lógica donde sea posible.
-// Código limpiado: Corregidos bugs en inserción de opciones, añadida gestión de errores consistente,
-// transacciones para operaciones críticas, y simplificada la lógica de comparación y actualización.
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -28,11 +22,10 @@ if (!$input) {
 
 // Extraer datos del input
 $idVersion = $input["idVersion"] ?? null;
-$preguntasActuales = $input["preguntas"] ?? []; // Array de preguntas actuales (con opciones, enunciado, etc.)
-$datosCuestionario = $input["cuestionario"] ?? []; // Datos del cuestionario (titulo, descripcion, etc.) si se necesitan actualizar
+$preguntasActuales = $input["preguntas"] ?? []; // Array de preguntas actuales
+$datosCuestionario = $input["cuestionario"] ?? []; // Datos del cuestionario
 
-
-// Obtener el ID del usuario actual de la sesión
+// Obtener el ID del usuario actual de la sesion
 $idUsuarioActual = $_SESSION["usuario_id"] ?? null;
 
 /*
@@ -40,7 +33,7 @@ $idUsuarioActual = $_SESSION["usuario_id"] ?? null;
 $flujo = []; // Inicializamos el flujo de debug
 $flujo["debug_idVersion"] = $idVersion;
 $flujo["debug_numPreguntas"] = count($preguntasActuales);
-$flujo["debug_preguntasActuales"] = $preguntasActuales; // Esto mostrará todo el array de preguntas
+$flujo["debug_preguntasActuales"] = $preguntasActuales; 
 $flujo["debug_datosCuestionario"] = $datosCuestionario;
 
 // Adicional: verificar que cada pregunta tenga opciones y enunciado
@@ -72,7 +65,7 @@ if (!$idVersion || !$idUsuarioActual) {
     exit;
 }
 
-// Paso 1: Verificar si la versión existe y es una plantilla (reutilizar lógica de obtenerPlantillas.php)
+// Paso 1: Verificar si la version existe y es una plantilla (reutilizar lógica de obtenerPlantillas.php)
 $stmtVersion = $conn->prepare("SELECT * FROM version_cuestionario WHERE ID_VERSION = :id");
 $stmtVersion->bindValue(":id", $idVersion, PDO::PARAM_INT);
 $stmtVersion->execute();
@@ -98,7 +91,7 @@ if ($version['PLANTILLA'] != 1) {
     exit;
 }
 
-// Paso 2: Obtener el cuestionario y verificar el autor (reutilizar lógica de obtenerPlantillas.php)
+// Paso 2: Obtener el cuestionario y verificar el autor
 $stmtCuestionario = $conn->prepare("SELECT * FROM cuestionario WHERE ID_CUESTIONARIO = :id");
 $stmtCuestionario->bindValue(":id", $version["ID_CUESTIONARIO"], PDO::PARAM_INT);
 $stmtCuestionario->execute();
@@ -114,16 +107,16 @@ if (!$cuestionario) {
     exit;
 }
 
-$autorCuestionario = $cuestionario['ID_USUARIO']; // Asumiendo que hay una columna ID_USUARIO en cuestionario
+$autorCuestionario = $cuestionario['ID_USUARIO'];
 
 // Paso 3: Comparar autor
 if ($autorCuestionario != $idUsuarioActual) {
-    // Caso B: Autor no coincide, crear un nuevo cuestionario desde cero
-    // Reutilizar lógica de InsertDatosCuestionario.php y InsertPreguntas.php
+    // Autor no coincide, crear un nuevo cuestionario desde cero
+
     try {
         $conn->beginTransaction();
 
-        // Insertar nuevo cuestionario (adaptar de InsertDatosCuestionario.php)
+        // Insertar nuevo cuestionario
         $stmtInsertCuestionario = $conn->prepare("INSERT INTO cuestionario (NOMBRE_CUESTIONARIO, VISIBILIDAD, ID_CATEGORIA, ID_USUARIO) VALUES (:nombre, :visibilidad, :id_categoria, :id_usuario)");
         $stmtInsertCuestionario->execute([
             ':visibilidad' => $datosCuestionario['Visibilidad'],
@@ -133,7 +126,7 @@ if ($autorCuestionario != $idUsuarioActual) {
         ]);
         $idNuevoCuestionario = $conn->lastInsertId();
 
-        // Insertar nueva versión
+        // Insertar nueva version
         $stmtInsertVersion = $conn->prepare("INSERT INTO version_cuestionario (DESCRIPCION, COD_ACCESO, ACTIVO, ID_CUESTIONARIO, PLANTILLA) VALUES (:descripcion, :codAcceso, :activo, :id_cuestionario, :plantilla)");
         $stmtInsertVersion->execute([
             ':activo' => $datosCuestionario["estado"],
@@ -186,7 +179,7 @@ if ($autorCuestionario != $idUsuarioActual) {
         ]);
     }
 } else {
-    // Caso A: Autor coincide, proceder a comparar y actualizar
+    //Autor coincide, proceder a comparar y actualizar
     try {
         $conn->beginTransaction();
 
@@ -202,7 +195,7 @@ if ($autorCuestionario != $idUsuarioActual) {
         $stmtInsertPregunta = $conn->prepare("INSERT INTO pregunta (ID_VERSION, NRO_ORDEN, ENUNCIADO, IMAGEN) VALUES (:idv, :nro, :enun, :img)");
         $stmtInsertOpcion = $conn->prepare("INSERT INTO opcion (ID_PREGUNTA, TEXTO, ES_CORRECTA) VALUES (:idp, :txt, :cor)");
 
-        // Borrar preguntas que ya no están en $preguntasActuales
+        // Borrar preguntas que ya no estan
         $idsActuales = array_map(fn($p) => $p['ID_PREGUNTA'] ?? 0, $preguntasActuales);
         $idsAEliminar = array_diff($idsBD, $idsActuales);
 
@@ -214,7 +207,7 @@ if ($autorCuestionario != $idUsuarioActual) {
         // Insertar o reemplazar todas las preguntas actuales
         foreach ($preguntasActuales as $pregActual) {
 
-            // Si la pregunta ya existía, borrarla antes de insertar
+            // Si la pregunta ya existia, borrarla antes de insertar
             if (!empty($pregActual['ID_PREGUNTA'])) {
                 $stmtDeleteOpciones->execute([":id" => $pregActual['ID_PREGUNTA']]);
                 $stmtDeletePregunta->execute([":id" => $pregActual['ID_PREGUNTA']]);

@@ -176,6 +176,7 @@ async function onloadParticipante(){
         document.getElementById("contenedor_cuest_invitado").classList.add("d-none");
         document.getElementById("listado_total").innerHTML = '<h3 class="text-center">No tienes permisos para jugar cuestionarios</h3>';
     }
+  });
 
     // Botón moderador - solo si es moderador
     const btnModerar = document.getElementById("button-moderador");
@@ -214,11 +215,19 @@ function cuestionarioInvitado() {
             card.innerHTML = `
               <img src="${cuestionario.IMAGEN || '../images/fondo_default.jpg'}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
               <div class="card-header">
-                  <h5 class="card-title text-center card_titulo">${cuestionario.NOMBRE_CUESTIONARIO}</h5>
+                  <h5 class="card-title text-center card_titulo">${
+                    cuestionario.NOMBRE_CUESTIONARIO
+                  }</h5>
               </div>
               <div class="card-body">
-                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.cantidad_preguntas}</p>
-                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.TIEMPO_TOTAL? cuestionario.TIEMPO_TOTAL + ' minutos' : 'Libre'}</p>
+                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${
+                  cuestionario.cantidad_preguntas
+                }</p>
+                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${
+                  cuestionario.TIEMPO_TOTAL
+                    ? cuestionario.TIEMPO_TOTAL + " minutos"
+                    : "Libre"
+                }</p>
                 <div class="rating text-center">
                     <i class="bi bi-star-fill"></i> Valoración: ${estrellas}
                 </div>
@@ -227,13 +236,14 @@ function cuestionarioInvitado() {
 
             card.addEventListener("click", () => participarCuest(cuestionario.ID_VERSION, true));
 
-            colDiv.appendChild(card);
-            contenedor.appendChild(colDiv);
-        });
-    } else {
-        document.getElementById("contenedor_cuest_invitado").classList.add("d-none");
-    }
-            
+      colDiv.appendChild(card);
+      contenedor.appendChild(colDiv);
+    });
+  } else {
+    document
+      .getElementById("contenedor_cuest_invitado")
+      .classList.add("d-none");
+  }
 }
 
 function participarCuest(idVersion, invitacion = false) {
@@ -252,11 +262,11 @@ function listaCuestionarios(arrCuest = null, scroll = true) {
     
     const cuest = arrCuest ? arrCuest : cuestionarios;
 
-    //paginado
-    const totalPaginas = Math.ceil(cuest.length / cuestionariosPorPagina);
-    const inicio = (paginaActual - 1) * cuestionariosPorPagina;
-    const fin = inicio + cuestionariosPorPagina;
-    const cuestionariosPagina = cuest.slice(inicio, fin);
+  //paginado
+  const totalPaginas = Math.ceil(cuest.length / cuestionariosPorPagina);
+  const inicio = (paginaActual - 1) * cuestionariosPorPagina;
+  const fin = inicio + cuestionariosPorPagina;
+  const cuestionariosPagina = cuest.slice(inicio, fin);
 
     const contenedor = document.getElementById("listado_total");
     contenedor.innerHTML = '';
@@ -274,18 +284,28 @@ function listaCuestionarios(arrCuest = null, scroll = true) {
             card.innerHTML = `
               <img src="${cuestionario.IMAGEN || '../images/fondo_default.jpg'}" class="imagen_card img-fluid mx-auto d-block" alt="imagen cuestionario">
               <div class="card-header">
-                  <h5 class="card-title text-center card_titulo">${cuestionario.NOMBRE_CUESTIONARIO}</h5>
+                  <h5 class="card-title text-center card_titulo">${
+                    cuestionario.NOMBRE_CUESTIONARIO
+                  }</h5>
               </div>
               <div class="card-body">
-                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${cuestionario.cantidad_preguntas}</p>
-                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${cuestionario.TIEMPO_TOTAL? cuestionario.TIEMPO_TOTAL + ' minutos' : 'Libre'}</p>
+                <p class="text-center"><i class="bi bi-question-circle"></i> <strong>Preguntas:</strong> ${
+                  cuestionario.cantidad_preguntas
+                }</p>
+                <p class="text-center"><i class="bi bi-alarm"></i> <strong>Tiempo:</strong> ${
+                  cuestionario.TIEMPO_TOTAL
+                    ? cuestionario.TIEMPO_TOTAL + " minutos"
+                    : "Libre"
+                }</p>
                 <div class="rating text-center">
                     <i class="bi bi-star-fill"></i> Valoración: ${estrellas}
                 </div>
               </div>
             `;
 
-            card.addEventListener("click", () => participarCuest(cuestionario.ID_VERSION));
+      card.addEventListener("click", () =>
+        participarCuest(cuestionario.ID_VERSION)
+      );
 
             colDiv.appendChild(card);
             contenedor.appendChild(colDiv);
@@ -312,19 +332,27 @@ function moderarCuestionario(){
     }
 }
 
-function mostrarMensajeError(mensaje){
-    const toastEl = document.getElementById('toast_mensaje_error');
-    const toastBody = document.getElementById('mensaje_error');
-    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
+function moderarCuestionario() {
+  const btnModerar = document.getElementById("button-moderador");
+
+  btnModerar.addEventListener("click", function () {
+    window.location.href = "../Moderador/moderador.php";
+  });
+}
+
+function mostrarMensajeError(mensaje) {
+  const toastEl = document.getElementById("toast_mensaje_error");
+  const toastBody = document.getElementById("mensaje_error");
+  toastBody.innerText = mensaje || "Ups, ocurrio un error inesperado";
+  const toast = new bootstrap.Toast(toastEl);
+  toast.show();
 }
 
 function agregarControlesPaginado(totalPaginas, cuestionariosMostrar) {
     const paginador = document.getElementById("paginador");
     if (!paginador) return;
 
-    paginador.innerHTML = '';
+  paginador.innerHTML = "";
 
     const btnAnterior = document.createElement("button");
     btnAnterior.classList.add("btn", "btn-sm", "me-2", "btn_paginado_color");

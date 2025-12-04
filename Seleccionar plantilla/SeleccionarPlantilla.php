@@ -53,7 +53,7 @@ try {
     ?>
 
     <!-- navbar crear cuestionario -->
-    <nav id="navBarCrearPreg" class="navbar navbar-expand-lg ">
+    <nav id="navBarCrearPreg" class="navbar navbar-expand-md">
         <div class="container-fluid">
             <a class="navbar-brand" href="#" id="tituloCuestionario">Cuestionario</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -63,27 +63,36 @@ try {
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Izquierda -->
-                <form class="d-flex">
-                    <div class="input-group">
-                        <button id="btnConfig" class="btn me-2" type="button">
+                <!-- Izquierda: Configuracion -->
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item mb-2">
+                        <button id="btnConfig" class="btn btn-outline-secondary nav-link" type="button">
                             Configuración
                         </button>
-                    </div>
-                </form>
+                    </li>
+                </ul>
 
-                <!-- Derecha -->
-                <div class="d-flex ms-auto">
-                    <button id="btnTemas" class="btn me-3">
-                        <i class="bi bi-palette-fill"></i>
-                        Temas</button>
-                    <div class="me-3" aria-readonly="true">|</div>
-                    <button id="btnGuardar" class="btn me-2" type="submit">Guardar</button>
-                    <button id="btnSalir" class="btn me-2" type="submit">Salir</button>
-                </div>
+                <!-- Derecha: Temas, Guardar, Salir -->
+                <ul class="navbar-nav">
+                    <li class="nav-item mb-2">
+                        <button id="btnTemas" class="btn btn-outline-primary nav-link me-3" type="button">
+                            <i class="bi bi-palette-fill"></i> Temas
+                        </button>
+                    </li>
+                    <li class="nav-item d-none d-md-inline">
+                        <span class="navbar-text me-3">|</span>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <button id="btnGuardar" class="btn btn-primary nav-link me-3" type="button">Guardar</button>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <button id="btnSalir" class="btn btn-secondary nav-link" type="button">Salir</button>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
+
     <!--Barra lateral izquierda-->
     <div class="container-fluid">
         <div class="row">
@@ -99,7 +108,7 @@ try {
                 </button>
             </div>
 
-            <!-- ÁREA PRINCIPAL -->
+            <!-- AREA PRINCIPAL -->
             <!--Le puse lo del responsive aca y en la del panel izquierdo-->
             <div class="col-12 col-md-8 col-lg-10 p-4 position-relative" id="panelPrincipal">
 
