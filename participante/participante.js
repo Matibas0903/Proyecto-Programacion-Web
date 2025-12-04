@@ -176,7 +176,6 @@ async function onloadParticipante(){
         document.getElementById("contenedor_cuest_invitado").classList.add("d-none");
         document.getElementById("listado_total").innerHTML = '<h3 class="text-center">No tienes permisos para jugar cuestionarios</h3>';
     }
-  });
 
     // Botón moderador - solo si es moderador
     const btnModerar = document.getElementById("button-moderador");

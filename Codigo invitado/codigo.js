@@ -11,7 +11,6 @@ window.onload = function() {
             const inputCodigo = document.getElementById("codigoIngresado");
             const codigo = inputCodigo.value.trim();
             try {
-                console.log('buscando por codigo '+codigo);
                 const response = await fetch(`../BaseDeDatos/controladores/getVersionByCode.php?codigo=${codigo}`);
                 const result = await response.json();
                 if(result.status === 'success'){
