@@ -1,10 +1,14 @@
 <?php
 session_start();
 require('../conexion.php');
+require_once(__DIR__ . '/permisos.php');
 
 header('Content-Type: application/json');
 
 try {
+    if(!Permisos::tienePermiso(['jugar_cuestionario'], $_SESSION['usuario_id'])){
+            throw new Exception('No tienes permiso para jugar el cuestionario.');
+    }
     if (!isset($_SESSION['usuario_id'])) {
         throw new Exception('Usuario no autenticado');
     }
@@ -67,7 +71,34 @@ try {
         $stmtActualizarInvitacion->bindParam(':idInvitacion', $invitacion['ID_INVITACION'], PDO::PARAM_INT);
         $stmtActualizarInvitacion->execute();
     }
+    //Verificamos si tiene invitación pendiente
+    if(isset($body['invitacion']) && $body['invitacion'] === 'true'){
+        $stmtInvitacionC = $conn->prepare("
+                SELECT ID_INVITACION
+                FROM invitacion
+                WHERE ID_VERSION = :idVersion 
+                    AND ID_USUARIO = :idUsuario
+                    AND ESTADO = 'Pendiente'
+                    AND DATE(FECHA_VENCIMIENTO) >= CURDATE()
+                LIMIT 1
+            ");
 
+        $stmtInvitacionC->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+        $stmtInvitacionC->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+        $stmtInvitacionC->execute();
+        $invitacionC = $stmtInvitacionC->fetch(PDO::FETCH_ASSOC);
+        
+        if ($invitacionC) {
+            //Cambiamos estado de invitación
+            $stmtActualizarInvitacionC = $conn->prepare("
+                    UPDATE invitacion 
+                    SET ESTADO = 'Aceptada'
+                    WHERE ID_INVITACION = :idInvitacion
+                ");
+            $stmtActualizarInvitacionC->bindParam(':idInvitacion', $invitacionC['ID_INVITACION'], PDO::PARAM_INT);
+            $stmtActualizarInvitacionC->execute();
+        }
+    }
     //Verificamos si el usuario ya participó en esta versión
     $stmtVerificar = $conn->prepare("
             SELECT ID_PARTICIPACION 

@@ -1,4 +1,11 @@
+let userPermisos = {
+    roles: [],
+    permisos: []
+};
+
 window.onload = async function() {
+    await obtenerPermisosUsuario();
+    
     const invitado = new URLSearchParams(window.location.search).get('invitado') === 'true';
     const idParticipacion = new URLSearchParams(window.location.search).get('participacion');
     let usuario = null;
@@ -47,7 +54,7 @@ window.onload = async function() {
                 
                 let correctas = 0;
                 participacion.respuestas.forEach(respuesta => {
-                    if(respuesta.CORRECTA === '1'){
+                    if(parseInt(respuesta.ES_CORRECTA) === 1){
                         correctas++;
                     }
                 });
@@ -69,138 +76,160 @@ window.onload = async function() {
         }
     }
 
-    // Resto del código de estrellas...
+    // Calificación con estrellas - solo si tiene permiso o es invitado
+    const puedeCalificar = invitado || tienePermiso('calificar_cuestionario');
     const misEstrellas = document.querySelectorAll("#selectEstrellas .estrella");
-    const menErr= document.getElementById("menErr"); 
+    const menErr = document.getElementById("menErr"); 
     const botonCalificar = document.getElementById('btnCalificar');
     const mensaje = document.getElementById("mensaje"); 
     let cantidadEstre = 0;
     let estrellasConfirmadas = false;
 
-    misEstrellas.forEach(star => {
-        star.addEventListener("click", () => {
-            if (estrellasConfirmadas) {
-                return; 
+    if(!puedeCalificar){
+        botonCalificar.disabled = true;
+        botonCalificar.textContent = 'Sin permisos para calificar';
+        misEstrellas.forEach(s => s.classList.add("disabled"));
+    } else {
+        misEstrellas.forEach(star => {
+            star.addEventListener("click", () => {
+                if (estrellasConfirmadas) {
+                    return; 
+                } else {
+                    cantidadEstre = parseInt(star.getAttribute("data-value"));
+                    misEstrellas.forEach(s => {
+                        s.classList.toggle("yellow", s.getAttribute("data-value") <= cantidadEstre);
+                    }); 
+                }
+            });
+        });
+
+        // Botón calificar
+        botonCalificar.addEventListener("click", async() => {
+            if (cantidadEstre > 0) {
+                estrellasConfirmadas = true;
+                try {
+                    let responseCalificacion;
+                    if(invitado){
+                        responseCalificacion = await fetch(`../BaseDeDatos/controladores/putParticipacionInvitado.php?participacion=${idParticipacion}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                calificacion: cantidadEstre
+                            })
+                        });
+                    } else {
+                        responseCalificacion = await fetch(`../BaseDeDatos/controladores/putParticipacion.php?participacion=${idParticipacion}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                calificacion: cantidadEstre
+                            })
+                        });
+                    }
+
+                    const resultCalificacion = await responseCalificacion.json();
+                    if(resultCalificacion.status === 'success'){
+                        mensaje.textContent = "Gracias por calificar el cuestionario!!";
+                        menErr.classList.add("d-none");
+                        botonCalificar.disabled = true;
+                        misEstrellas.forEach(s => {
+                           s.classList.add("disabled");  
+                        })
+                    } else if(resultCalificacion.status === 'error'){
+                        mostrarMensajeError(resultCalificacion.message || 'Error al enviar la calificación');
+                    }
+                } catch (error) {
+                    mostrarMensajeError('Error al enviar la calificación');
+                }
             } else {
-                cantidadEstre = parseInt(star.getAttribute("data-value"));
-                misEstrellas.forEach(s => {
-                    s.classList.toggle("yellow", s.getAttribute("data-value") <= cantidadEstre);
-                }); 
+                mensaje.textContent = "";
+                menErr.classList.remove("d-none");
             }
         });
-    });
+    }
 
-    // Botón calificar
-    botonCalificar.addEventListener("click", async() => {
-        if (cantidadEstre > 0) {
-            estrellasConfirmadas = true;
-            try {
-                let responseCalificacion;
-                if(invitado){
-                    responseCalificacion = await fetch(`../BaseDeDatos/controladores/putParticipacionInvitado.php?participacion=${idParticipacion}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            calificacion: cantidadEstre
-                        })
-                    });
-                } else {
-                    responseCalificacion = await fetch(`../BaseDeDatos/controladores/putParticipacion.php?participacion=${idParticipacion}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            calificacion: cantidadEstre
-                        })
-                    });
-                }
-
-                const resultCalificacion = await responseCalificacion.json();
-                if(resultCalificacion.status === 'success'){
-                    mensaje.textContent = "Gracias por calificar el cuestionario!!";
-                    menErr.classList.add("d-none");
-                    botonCalificar.disabled = true;
-                    misEstrellas.forEach(s => {
-                       s.classList.add("disabled");  
-                    })
-                } else if(resultCalificacion.status === 'error'){
-                    mostrarMensajeError(resultCalificacion.message || 'Error al enviar la calificación');
-                }
-            } catch (error) {
-                mostrarMensajeError('Error al enviar la calificación');
-            }
-        } else {
-            mensaje.textContent = "";
-            menErr.classList.remove("d-none");
-        }
-    });
-
-    // Comentarios
+    // Comentarios - solo si tiene permiso o es invitado
+    const puedeComentary = invitado || tienePermiso('comentar_cuestionario');
     const btnComentar = document.getElementById("btnComentar");
     const comentario = document.getElementById("comentario");
     const contenedorComentarios = document.querySelector(".MiComentario");
 
-    btnComentar.addEventListener("click", async function() {
-        const texto = comentario.value.trim();
+    if(!puedeComentary){
+        btnComentar.disabled = true;
+        btnComentar.textContent = 'Sin permisos para comentar';
+        comentario.disabled = true;
+        comentario.placeholder = 'No tienes permisos para comentar';
+    } else {
+        btnComentar.addEventListener("click", async function() {
+            const texto = comentario.value.trim();
 
-        if (texto === "" || texto.length > 500) {
-            comentario.classList.add("is-invalid");
-        } else {
-            comentario.classList.remove("is-invalid"); 
-            try {
-                let responseComentario;
-                if(invitado){
-                    responseComentario = await fetch(`../BaseDeDatos/controladores/putParticipacionInvitado.php?participacion=${idParticipacion}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            comentario: texto
-                        })
-                    });
-                }else{
-                    responseComentario = await fetch(`../BaseDeDatos/controladores/putParticipacion.php?participacion=${idParticipacion}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            comentario: texto
-                        })
-                    });
+            if (texto === "" || texto.length > 500) {
+                comentario.classList.add("is-invalid");
+            } else {
+                comentario.classList.remove("is-invalid"); 
+                try {
+                    let responseComentario;
+                    if(invitado){
+                        responseComentario = await fetch(`../BaseDeDatos/controladores/putParticipacionInvitado.php?participacion=${idParticipacion}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                comentario: texto
+                            })
+                        });
+                    }else{
+                        responseComentario = await fetch(`../BaseDeDatos/controladores/putParticipacion.php?participacion=${idParticipacion}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                comentario: texto
+                            })
+                        });
+                    }
+
+                    const resultComentario = await responseComentario.json();
+                    if(resultComentario.status === 'success'){
+                        btnComentar.disabled = true; 
+                        
+                        // CORRECCIÓN DEL BUG: Limpiar mensaje "No hay comentarios" antes de agregar
+                        const mensajeSinComentarios = contenedorComentarios.querySelector('p.text-center');
+                        if(mensajeSinComentarios){
+                            mensajeSinComentarios.remove();
+                        }
+                        
+                        const nuevoComentario = document.createElement("div");
+                        nuevoComentario.classList.add("miConmen","mt-2");
+
+                        const fecha = new Date();
+                        const fechaTexto = `${fecha.getDate()} de ${fecha.toLocaleString('es-ES', { month: 'long' })} del ${fecha.getFullYear()}`;
+
+                        let estrellasTexto = estrellasConfirmadas ? "⭐".repeat(cantidadEstre) : "";
+
+                        nuevoComentario.innerHTML = `
+                            <h5 class="mb-1 fw-bold">${nombreUsuario} ${estrellasTexto}</h5>
+                            <p class="fecha">${fechaTexto}</p>
+                            <p class="mb-0">${texto}</p>
+                        `;
+
+                        contenedorComentarios.appendChild(nuevoComentario);
+                        comentario.value = "";
+                    } else if(resultComentario.status === 'error'){
+                        mostrarMensajeError(resultComentario.message || 'Error al enviar el comentario');
+                    }
+                } catch (error) {
+                    mostrarMensajeError('Error al enviar el comentario');
                 }
-
-                const resultComentario = await responseComentario.json();
-                if(resultComentario.status === 'success'){
-                    btnComentar.disabled = true; 
-                    const nuevoComentario = document.createElement("div");
-                    nuevoComentario.classList.add("miConmen","mt-2");
-
-                    const fecha = new Date();
-                    const fechaTexto = `${fecha.getDate()} de ${fecha.toLocaleString('es-ES', { month: 'long' })} del ${fecha.getFullYear()}`;
-
-                    let estrellasTexto = estrellasConfirmadas ? "⭐".repeat(cantidadEstre) : "";
-
-                    nuevoComentario.innerHTML = `
-                        <h5 class="mb-1 fw-bold">${nombreUsuario} ${estrellasTexto}</h5>
-                        <p class="fecha">${fechaTexto}</p>
-                        <p class="mb-0">${texto}</p>
-                    `;
-
-                    contenedorComentarios.appendChild(nuevoComentario);
-                    comentario.value = "";
-                } else if(resultComentario.status === 'error'){
-                    mostrarMensajeError(resultComentario.message || 'Error al enviar el comentario');
-                }
-            } catch (error) {
-                mostrarMensajeError('Error al enviar el comentario');
             }
-        }
-    });
+        });
+    }
 
     // Botón volver
     const btnSalir = document.getElementById("btnSalir");
@@ -321,8 +350,9 @@ async function cargarComentarios(idVersion){
                     contenedorComentarios.appendChild(nuevoComentario);
                 }
             } else {
-                const noComentarios = document.createElement("div");
-                noComentarios.innerHTML = "<p class='text-center'>No hay comentarios</p>";
+                const noComentarios = document.createElement("p");
+                noComentarios.classList.add("text-center");
+                noComentarios.textContent = "No hay comentarios";
                 contenedorComentarios.appendChild(noComentarios);
             }
         } else if(resultComentarios.status === 'error'){
@@ -343,4 +373,34 @@ function mostrarMensajeError(mensaje){
     toastBody.innerText = mensaje || 'Ups, ocurrió un error inesperado';
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
+}
+
+async function obtenerPermisosUsuario() {
+    try {
+        const respuesta = await fetch('../BaseDeDatos/controladores/getPermisosUsuario.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const datos = await respuesta.json();
+        if (datos.status === 'success') {
+            userPermisos.roles = datos.roles;
+            userPermisos.permisos = datos.permisos;
+        }
+    } catch (error) {
+        console.error('Error al obtener permisos:', error);
+    }
+}
+
+function tienePermiso(permiso) {
+    return userPermisos.permisos.includes(permiso);
+}
+
+function tieneAlgunPermiso(permisos) {
+    return permisos.some(p => userPermisos.permisos.includes(p));
+}
+
+function esRol(rol) {
+    return userPermisos.roles.includes(rol);
 }

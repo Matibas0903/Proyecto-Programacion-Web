@@ -1,6 +1,7 @@
 <?php
 session_start();
 require("../BaseDeDatos/conexion.php");
+require("../BaseDeDatos/controladores/permisos.php");
 
 $correo = $contra = "";
 $correoErr = $contraError = "";
@@ -48,11 +49,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
                 $_SESSION['nombre'] = $usuario['NOMBRE'];
                 $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
-                $_SESSION['rol_id'] = $usuario['ID_ROL'];
 
-                //reedirijo a la pagina del admi
-                header("Location: ../administrador/administrador.php");
-                exit;
+                // Obtengo los roles del usuario
+                $roles = Permisos::getRoles($usuario['ID_USUARIO']);
+
+                                if (!empty($roles)) {
+                    // Convertir el array de roles a un array simple de nombres
+                    $nombreRoles = array_column($roles, 'nombre');
+                    
+                    if (in_array('Administrador', $nombreRoles)) {
+                        header("Location: ../administrador/administrador.php");
+                        exit;
+                    } elseif (in_array('Moderador', $nombreRoles)) {
+                        header("Location: ../moderador/moderador.php");
+                        exit;
+                    } elseif (in_array('Participante', $nombreRoles)) {
+                        header("Location: ../participante/participante.php");
+                        exit;
+                    } else {
+                        // Si tiene un rol no contemplado
+                        $mensaje = "No tiene permisos asignados correctamente.";
+                        $mostrarMensaje = true;
+                    }
+                } else {
+                    $mensaje = "Usuario sin roles asignados. Contacte al administrador.";
+                    $mostrarMensaje = true;
+                }
             } else {
                 $mensaje = "Contraseña incorrecta.";
                 $mostrarMensaje = true;

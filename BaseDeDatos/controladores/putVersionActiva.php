@@ -1,9 +1,14 @@
 <?php
+    session_start();
     require('../conexion.php');
+    require_once(__DIR__ . '/permisos.php');
 
     header('Content-Type: application/json');
 
     try {
+        if(!Permisos::tienePermiso(['activar_version'], $_SESSION['usuario_id'])){
+            throw new Exception('No tienes permiso para activar versiones.');
+        }
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             throw new Exception("Método no permitido");
         }

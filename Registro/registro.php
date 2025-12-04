@@ -86,8 +86,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       $hashPassword = password_hash($contraseña, PASSWORD_DEFAULT);
 
-      $stmt = $conn->prepare("INSERT INTO usuario (NOMBRE, EMAIL, CONTRASENA, FECHA_NACIMIENTO, ID_ROL, FOTO_PERFIL) 
-                              VALUES (:nombre, :correo, :contrasena, :fechaNacimiento, 1, :fotoPerfil)");
+      // Obtenemos el ID del rol "Participante"
+      $stmtRol = $conn->prepare("SELECT id FROM roles WHERE nombre = :nombreRol LIMIT 1");
+      $stmtRol->bindValue(':nombreRol', 'Participante');
+      $stmtRol->execute();
+      $rol = $stmtRol->fetch(PDO::FETCH_ASSOC);
+      
+      if (!$rol) {
+          throw new Exception("No se encontró el rol 'Participante'");
+      }
+      
+      $idRolParticipante = $rol['id'];
+
+
+      $stmt = $conn->prepare("INSERT INTO usuario (NOMBRE, EMAIL, CONTRASENA, FECHA_NACIMIENTO, FOTO_PERFIL) 
+                              VALUES (:nombre, :correo, :contrasena, :fechaNacimiento, :fotoPerfil)");
 
       $stmt->bindValue(':nombre', $nombre);
       $stmt->bindValue(':correo', $mail);
@@ -98,6 +111,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt->execute();
       $registroExitoso = "Registro guardado correctamente.";
       $nuevoId = $conn->lastInsertId();
+
+      // Asignamos el rol de "Participante" al usuario
+      $stmtRolUsuario = $conn->prepare("INSERT INTO roles_usuarios (id_usuario, id_rol) VALUES (:idUsuario, :idRol)");
+      $stmtRolUsuario->bindValue(':idUsuario', $nuevoId);
+      $stmtRolUsuario->bindValue(':idRol', $idRolParticipante);
+      $stmtRolUsuario->execute();
+
+      $registroExitoso = "Registro guardado correctamente.";
 
       // Consultar los datos del usuario recién insertado
       $stmt = $conn->prepare("SELECT * FROM usuario WHERE ID_USUARIO = :id");
@@ -110,8 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $_SESSION['fecha_nacimiento'] = $usuario['FECHA_NACIMIENTO'];
       $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
 
-      //reedirijo a la pagina del admi
-      header("Location: ../administrador/administrador.php");
+      //reedirijo a la pagina de participante
+      header("Location: ../participante/participante.php");
       exit;
 
       // Limpiar campos
@@ -207,7 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   ¡Gracias por registrarte! Tu cuenta fue creada correctamente.
                 </div>
                 <div class="modal-footer">
-                  <a href="../administrador/administrador.php" class="btn btn-success">Aceptar</a>
+                  <a href="../participante/participante.php" class="btn btn-success">Aceptar</a>
                 </div>
               </div>
             </div>

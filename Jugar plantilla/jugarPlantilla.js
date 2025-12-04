@@ -224,6 +224,7 @@ async function finalizarJuego(respuestasCorrectas, totalPreguntas) {
                 })
             });
         } else {
+            const invitacion = new URLSearchParams(window.location.search).get('invitacion');
             response = await fetch('../BaseDeDatos/controladores/postParticipacion.php', {
                 method: 'POST',
                 headers: {
@@ -232,7 +233,8 @@ async function finalizarJuego(respuestasCorrectas, totalPreguntas) {
                 body: JSON.stringify({
                     idVersion: idVersion,
                     puntaje: puntajeFinal,
-                    respuestas: respuestasSeleccionadas
+                    respuestas: respuestasSeleccionadas,
+                    invitacion: invitacion || 'false'
                 })
             });
         }
