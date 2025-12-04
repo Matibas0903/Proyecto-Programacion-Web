@@ -46,6 +46,7 @@
         $stmtPreguntas = $conn->prepare("
             SELECT 
                 p.ID_PREGUNTA,
+                tp.ID_TIPO_PREGUNTA,
                 tp.TIPO AS tipo_pregunta,
                 p.NRO_ORDEN,
                 p.ENUNCIADO,

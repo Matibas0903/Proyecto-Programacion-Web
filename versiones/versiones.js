@@ -90,15 +90,15 @@ async function onloadPage(){
             btnHabilitar.style.display = 'none';
         }
 
-        const btnModerador = document.getElementById("button-moderador");
-        if(btnModerador){
-            // Por ahora no hay permiso específico para cambiar moderador, se asume que es función del admin
-            if(esRol('Administrador')){
-                btnModerador.addEventListener("click", () => seleccionarUsuario(null, 'moderador'));
-            } else {
-                btnModerador.style.display = 'none';
-            }
-        }
+        // const btnModerador = document.getElementById("button-moderador");
+        // if(btnModerador){
+        //     // Por ahora no hay permiso específico para cambiar moderador, se asume que es función del admin
+        //     if(esRol('Administrador')){
+        //         btnModerador.addEventListener("click", () => seleccionarUsuario(null, 'moderador'));
+        //     } else {
+        //         btnModerador.style.display = 'none';
+        //     }
+        // }
 
         //buscador participantes - solo si tiene permiso
         if(tienePermiso('agregar_participante')){
@@ -534,7 +534,7 @@ async function activarVersion(idVersion){
     
     const body = {
         idCuestionario: cuestionario.ID_CUESTIONARIO,
-        numVersion: idVersion? idVersion : 'deshabilitar'
+        idVersion: idVersion? parseInt(idVersion) : 'deshabilitar'
     }
     try {
         const response = await fetch('../BaseDeDatos/controladores/putVersionActiva.php', {
@@ -547,7 +547,7 @@ async function activarVersion(idVersion){
         const result = await response.json();
         if(result.status === 'success'){
             versiones.forEach(version => {
-                if(version.NUM_VERSION == idVersion){
+                if(version.ID_VERSION == idVersion){
                     version.ACTIVO = 'Activo';
                 } else {
                     version.ACTIVO = 'Inactivo';

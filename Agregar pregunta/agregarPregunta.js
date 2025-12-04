@@ -478,9 +478,18 @@ function recolectarPreguntas() {
         break;
 
       case 3: // Respuesta abierta
-        opciones = [];
-        opcionesCorrectas = [];
-        break;
+          const inputRespuestaAbierta = form.querySelector(".btnOpciones");
+          if (inputRespuestaAbierta) {
+            const respuestaCorrecta = inputRespuestaAbierta.value.trim();
+            
+            opciones.push({
+              texto: respuestaCorrecta,
+              esCorrecta: 1
+            });
+            
+            opcionesCorrectas.push(respuestaCorrecta);
+          }
+          break;
     }
 
     preguntas.push({

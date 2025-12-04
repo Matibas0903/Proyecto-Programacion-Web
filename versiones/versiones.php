@@ -59,9 +59,9 @@ if (!$esAdministrador) {
       <div class="col-12 col-md-3" id="habilitar_container">
         <button class="button_principal border_cuest" id="button-habilitar"><i class="bi bi-lock-fill"></i> Habilitar version</button>
       </div>
-      <div class="col-12 col-md-3">
+      <!-- <div class="col-12 col-md-3">
         <button class="button_principal border_cuest" id="button-moderador"><i class="bi bi-incognito"></i> Moderador</button>
-      </div>
+      </div> -->
     </div>
     <!--cuerpo -->
     <div class="row my-3" id="version-list">
