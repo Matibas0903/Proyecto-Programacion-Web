@@ -141,3 +141,68 @@
     margin-top: 15px;
     border-radius: 8px;
 }
+
+/* Respuesta abierta */
+.respuesta-abierta {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Respuesta múltiple */
+.opcion-multiple {
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
+}
+
+.opcion-multiple:hover {
+    background-color: #f8f9fa;
+}
+
+.opcion-multiple.correcta {
+    background-color: #d4edda;
+    border-color: #28a745;
+}
+
+.opcion-multiple.incorrecta {
+    background-color: #f8d7da;
+    border-color: #dc3545;
+}
+
+.checkbox-multiple {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.opcion-multiple-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-multiple {
+    position: absolute;
+    left: 10px;
+    z-index: 10;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.opcion-multiple-container label {
+    padding-left: 35px;
+    cursor: pointer;
+}
+
+.opcion-multiple-container label.correcta {
+    background-color: #28a745;
+    color: white;
+}
+
+.opcion-multiple-container label.incorrecta {
+    background-color: #dc3545;
+    color: white;
+}

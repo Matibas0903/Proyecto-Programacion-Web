@@ -9,7 +9,6 @@ window.onload = function()
         const nombre = input.value.trim();
         const valido = await validarNombre(nombre);
         const version = new URLSearchParams(window.location.search).get('version');
-        console.log('version recibida: '+version);
         //si el nombre es valido, voy a jugar
         if(valido && version){
           sessionStorage.setItem('nombreInvitado', nombre);

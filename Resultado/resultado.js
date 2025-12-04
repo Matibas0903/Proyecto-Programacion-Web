@@ -55,9 +55,18 @@ window.onload = async function() {
                 }
                 
                 let correctas = 0;
+                const preguntasRespondidas = new Set();
+
                 participacion.respuestas.forEach(respuesta => {
-                    if(parseInt(respuesta.ES_CORRECTA) === 1){
+                    // ✅ Para respuestas abiertas usar RESPUESTA_ES_CORRECTA
+                    // Para otros tipos usar OPCION_ES_CORRECTA
+                    const esCorrecta = respuesta.TEXTO_RESPUESTA !== null 
+                        ? parseInt(respuesta.RESPUESTA_ES_CORRECTA) === 1 
+                        : parseInt(respuesta.OPCION_ES_CORRECTA) === 1;
+                    
+                    if(esCorrecta && !preguntasRespondidas.has(respuesta.ID_PREGUNTA)){
                         correctas++;
+                        preguntasRespondidas.add(respuesta.ID_PREGUNTA);
                     }
                 });
                 

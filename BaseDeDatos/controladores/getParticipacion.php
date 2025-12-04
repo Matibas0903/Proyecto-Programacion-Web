@@ -35,24 +35,27 @@ try {
     }
 
     //Consultamos las respuestas de esa participación
-    $stmtRespuestas = $conn->prepare("
-            SELECT 
-                r.ID_RESPUESTA,
-                r.ID_OPCION,
-                o.TEXTO,
-                o.ES_CORRECTA,
-                p.ID_PREGUNTA,
-                p.ENUNCIADO,
-                p.NRO_ORDEN
-            FROM respuesta r
-            INNER JOIN opcion o ON r.ID_OPCION = o.ID_OPCION
-            INNER JOIN pregunta p ON o.ID_PREGUNTA = p.ID_PREGUNTA
-            WHERE r.ID_PARTICIPACION = :participacion
-            ORDER BY p.NRO_ORDEN
-        ");
-    $stmtRespuestas->bindParam(':participacion', $participacion, PDO::PARAM_INT);
-    $stmtRespuestas->execute();
-    $respuestas = $stmtRespuestas->fetchAll(PDO::FETCH_ASSOC);
+        $stmtRespuestas = $conn->prepare("
+                SELECT 
+                    r.ID_RESPUESTA,
+                    r.ID_OPCION,
+                    r.TEXTO_RESPUESTA,
+                    r.ES_CORRECTA AS RESPUESTA_ES_CORRECTA,
+                    o.TEXTO AS TEXTO_OPCION,
+                    o.ES_CORRECTA AS OPCION_ES_CORRECTA,
+                    p.ID_PREGUNTA,
+                    p.ENUNCIADO,
+                    p.NRO_ORDEN,
+                    p.ID_TIPO_PREGUNTA
+                FROM respuesta r
+                INNER JOIN opcion o ON r.ID_OPCION = o.ID_OPCION
+                INNER JOIN pregunta p ON o.ID_PREGUNTA = p.ID_PREGUNTA
+                WHERE r.ID_PARTICIPACION = :participacion
+                ORDER BY p.NRO_ORDEN
+            ");
+        $stmtRespuestas->bindParam(':participacion', $participacion, PDO::PARAM_INT);
+        $stmtRespuestas->execute();
+        $respuestas = $stmtRespuestas->fetchAll(PDO::FETCH_ASSOC);
 
     //Agregamos las respuestas a la participación
     $participacionData['respuestas'] = $respuestas;

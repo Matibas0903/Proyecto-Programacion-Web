@@ -140,16 +140,73 @@ try {
 
     $idParticipacion = $conn->lastInsertId();
 
-    //Insertamos las respuestas
-    $stmtRespuesta = $conn->prepare("
-            INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION)
-            VALUES (:idParticipacion, :idOpcion)
-        ");
+    // ✅ NUEVO: Obtener todas las preguntas con sus tipos y opciones correctas
+    $stmtPreguntas = $conn->prepare("
+        SELECT 
+            p.ID_PREGUNTA,
+            p.ID_TIPO_PREGUNTA,
+            o.ID_OPCION,
+            o.TEXTO AS TEXTO_CORRECTO,
+            o.ES_CORRECTA
+        FROM pregunta p
+        LEFT JOIN opcion o ON o.ID_PREGUNTA = p.ID_PREGUNTA
+        WHERE p.ID_VERSION = :idVersion
+    ");
+    $stmtPreguntas->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+    $stmtPreguntas->execute();
+    $preguntasConOpciones = $stmtPreguntas->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($respuestas as $idOpcion) {
-        $stmtRespuesta->bindParam(':idParticipacion', $idParticipacion, PDO::PARAM_INT);
-        $stmtRespuesta->bindParam(':idOpcion', $idOpcion, PDO::PARAM_INT);
-        $stmtRespuesta->execute();
+    // ✅ MODIFICADO: Preparar consultas para diferentes tipos de respuesta
+    $stmtRespuesta = $conn->prepare("
+        INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION)
+        VALUES (:idParticipacion, :idOpcion)
+    ");
+
+    $stmtRespuestaAbierta = $conn->prepare("
+        INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION, TEXTO_RESPUESTA, ES_CORRECTA)
+        VALUES (:idParticipacion, :idOpcion, :textoRespuesta, :esCorrecta)
+    ");
+
+    // ✅ MODIFICADO: Insertar respuestas según su tipo
+    foreach ($respuestas as $respuesta) {
+        // ✅ CASO 1: Respuesta abierta (viene como objeto con idOpcion y textoRespuesta)
+        if (is_array($respuesta) && isset($respuesta['idOpcion']) && isset($respuesta['textoRespuesta'])) {
+            $idOpcion = (int) $respuesta['idOpcion'];
+            $textoRespuesta = trim($respuesta['textoRespuesta']);
+            
+            // Buscar la respuesta correcta en las opciones
+            $opcionCorrecta = null;
+            foreach ($preguntasConOpciones as $po) {
+                if ($po['ID_OPCION'] == $idOpcion) {
+                    $opcionCorrecta = $po;
+                    break;
+                }
+            }
+            
+            if ($opcionCorrecta) {
+                // Normalizar textos para comparación (sin importar mayúsculas/minúsculas y espacios)
+                $textoEsperado = mb_strtolower(trim($opcionCorrecta['TEXTO_CORRECTO']), 'UTF-8');
+                $textoIngresado = mb_strtolower($textoRespuesta, 'UTF-8');
+                
+                // ✅ Validación: comparar si la respuesta es correcta
+                // Puedes hacer esta comparación más sofisticada (similitud, sinónimos, etc.)
+                $esCorrecta = ($textoEsperado === $textoIngresado) ? 1 : 0;
+                
+                // Insertar respuesta abierta con validación
+                $stmtRespuestaAbierta->bindParam(':idParticipacion', $idParticipacion, PDO::PARAM_INT);
+                $stmtRespuestaAbierta->bindParam(':idOpcion', $idOpcion, PDO::PARAM_INT);
+                $stmtRespuestaAbierta->bindParam(':textoRespuesta', $textoRespuesta, PDO::PARAM_STR);
+                $stmtRespuestaAbierta->bindParam(':esCorrecta', $esCorrecta, PDO::PARAM_INT);
+                $stmtRespuestaAbierta->execute();
+            }
+        } 
+        // ✅ CASO 2: Respuestas normales (Verdadero/Falso, única, múltiple)
+        else {
+            $idOpcion = (int) $respuesta;
+            $stmtRespuesta->bindParam(':idParticipacion', $idParticipacion, PDO::PARAM_INT);
+            $stmtRespuesta->bindParam(':idOpcion', $idOpcion, PDO::PARAM_INT);
+            $stmtRespuesta->execute();
+        }
     }
 
     $conn->commit();
@@ -174,3 +231,4 @@ try {
         "message" => $e->getMessage()
     ]);
 }
+?>
