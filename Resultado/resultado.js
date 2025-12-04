@@ -4,10 +4,12 @@ let userPermisos = {
 };
 
 window.onload = async function() {
-    await obtenerPermisosUsuario();
     
     const invitado = new URLSearchParams(window.location.search).get('invitado') === 'true';
     const idParticipacion = new URLSearchParams(window.location.search).get('participacion');
+    if(!invitado){
+        await obtenerPermisosUsuario();
+    }
     let usuario = null;
     let nombreUsuario = '';
     let fotoUsuario = '';
@@ -38,7 +40,7 @@ window.onload = async function() {
                 }
             }
 
-            const responseParticipacion = await fetch(`../BaseDeDatos/controladores/getParticipacion.php?participacion=${idParticipacion}`);
+            const responseParticipacion = await fetch(`../BaseDeDatos/controladores/getParticipacion.php?participacion=${idParticipacion}&invitado=${invitado ? 'true' : 'false'}`);
             const resultParticipacion = await responseParticipacion.json();
             
             if(resultParticipacion.status === 'success'){
