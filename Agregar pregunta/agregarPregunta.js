@@ -341,7 +341,7 @@ function crearPregunta(preguntaId) {
     }
   });
 }
-
+//checkear jquery
 //Consume la API
 //API
 // ========== UNSPLASH API ==========
@@ -455,9 +455,8 @@ function recolectarPreguntas() {
     let opciones = [];
     let opcionesCorrectas = [];
 
-    // -----------------------------------
     // Recolectar segun tipo de pregunta
-    // -----------------------------------
+
     switch (tipoPregunta) {
       case 1:
       case 2:
