@@ -51,6 +51,7 @@ try {
     <?php
     require('../includesPHP/navGeneral.php');
     ?>
+
     <!-- navbar crear cuestionario -->
     <nav id="navBarCrearPreg" class="navbar navbar-expand-md">
         <div class="container-fluid">
@@ -127,21 +128,9 @@ try {
 
         <!-- PANEL DERECHO -->
         <div id="panelDer" class="col-12 col-md-4 col-lg-3 p-3 vh-100">
-            <h5>
-                <i class="bi bi-question-square-fill"></i>
-                Tipo de pregunta
-            </h5>
-            <div class="mb-5">
-                <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
-                    <option class="dropdown-item" value>Tipo de pregunta</option>
-                    <option class="dropdown-item" value="1">Opcion multiple</option>
-                    <option class="dropdown-item" value="2">Opcion unica</option>
-                    <option class="dropdown-item" value="3">Verdadero o falso</option>
-                </select>
-            </div>
-            <h5>
-                <i class="bi bi-stopwatch-fill"></i>
-                Tiempo de respuesta
+
+            <i class="bi bi-stopwatch-fill"></i>
+            Tiempo de respuesta
             </h5>
             <div class="mb-5">
                 <select class="form-select" name="selectTiempoRespuesta" id="selectTiempoRespuesta">
@@ -152,20 +141,7 @@ try {
                     <option class="dropdown-item" value="3" disabled>20 segundos(Proximamente)</option>
                 </select>
             </div>
-            <h5>
 
-                Categoria de la pregunta
-            </h5>
-            <div class="mb-5">
-                <select class="form-select" name="selectCategoria" id="selectCategoria">
-                    <option class="dropdown-item" value>Categorias</option>
-                    <option class="dropdown-item" value="1">Geografía</option>
-                    <option class="dropdown-item" value="2">Historia</option>
-                    <option class="dropdown-item" value="3">Programación</option>
-                    <option class="dropdown-item" value="4">Matemática</option>
-                    <option class="dropdown-item" value="5">Biología</option>
-                </select>
-            </div>
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
 
@@ -184,7 +160,7 @@ try {
                 </div>
             </div>
         </div>
-
+        <!-- Modal Salir-->
     </div>
     <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
         <div class="modal-dialog">
@@ -197,8 +173,8 @@ try {
                     <p>¿Está seguro que desea salir sin guardar?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
-                    <button type="button" class="btn btn-primary">Guardar cambios</button>
+                    <button type="button" id="btnSalirSinGuardar" class="btn btn-secondary" data-bs-dismiss="modal">Salir sin guardar</button>
+                    <button type="button" id="btnGuardarYSalir" class="btn btn-primary">Guardar cambios</button>
                 </div>
             </div>
         </div>
@@ -215,7 +191,6 @@ try {
                     <h4 class="modal-title"><i class="bi bi-gear"></i> Configuracion</h4>
                     <div class="ms-auto">
                         <button type="button" class="btn btn-danger m-2" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-outline-primary" id="btnListo" data-bs-dismiss="modal">Listo</button>
                     </div>
 
                 </div>
@@ -311,6 +286,12 @@ try {
                                                 <div class="form-check form-switch mb-5">
                                                     <label class="fw-bold fs-6 form-check-label" for="SwitchEstado">Activar Cuestionario</label>
                                                     <input class="form-check-input" type="checkbox" role="switch" id="SwitchEstado" name="estado" value="Activo" checked>
+                                                    <div class="invalid-feedback"></div>
+
+                                                </div>
+                                                <div class="form-check form-switch mb-5">
+                                                    <label class="fw-bold fs-6 form-check-label" for="SwitchPlantilla">Habilitar como plantilla</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="SwitchPlantilla" name="plantilla" value="1" checked>
                                                     <div class="invalid-feedback"></div>
 
                                                 </div>

@@ -21,6 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $categoria    = trim($_POST["selectCategoria"] ?? "");
     $visibilidad  = trim($_POST["Visibilidad"] ?? "");
     $activo       = trim($_POST["estado"] ?? "");
+    $plantilla       = trim($_POST["plantilla"] ?? "");
 
 
     // --- Validación: Título ---
@@ -30,17 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data["titulo"] = htmlspecialchars($titulo);
     }
 
-    // --- Validación: Descripción (opcional) ---
+    // --- Validacion: Descripcion (opcional) ---
     $data["descripcion"] = htmlspecialchars($descripcion);
 
-    // --- Validación: Código de acceso ---
+    // --- Validacion: Código de acceso ---
     if ($visibilidad === "Privado" && empty($cod_acceso)) {
         $errores["inputCodigoAcceso"] = "Un cuestionario privado necesita un código de acceso";
     } else {
         $data["cod_acceso"] = htmlspecialchars($cod_acceso);
     }
 
-    // --- Validación: Categoría ---
+    // --- Validacion: Categoria ---
     if (empty($categoria)) {
         $errores["selectCategoria"] = "Debe seleccionar una categoría";
     } else {
@@ -62,9 +63,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $data["visibilidad"] = htmlspecialchars($visibilidad);
     }
 
-    // --- Validación: Estado ---
+    // --- Validacion: Estado ---
 
     $data["activo"] = htmlspecialchars($activo);
+
+    // --- Validacion: Plantilla ---
+
+    $data["plantilla"] = htmlspecialchars($plantilla);
 
 
     // --- Si hay errores, devolverlos y salir ---

@@ -1,14 +1,29 @@
 <?php
+    session_start();
     require('../conexion.php');
 
     header('Content-Type: application/json');
 
     try {
-        //obtenemos el parametro id de usuario
-        if (!isset($_GET['id'])) {
-            throw new Exception('ID de usuario inválido.');
+        $typeUsuario = '';
+        $idUsuario = null;
+        if (!isset($_GET['type'])) {
+            $typeUsuario = 'byId';
+        } else {
+            $typeUsuario = $_GET['type'];
         }
-        $idUsuario = (int) $_GET['id'];
+        if($typeUsuario === 'byId'){
+            //obtenemos el parametro id de usuario
+            if (!isset($_GET['id'])) {
+                throw new Exception('ID de usuario inválido.');
+            }
+            $idUsuario = (int) $_GET['id'];
+        } else {
+            if(!isset($_SESSION['usuario_id'])){
+                throw new Exception('Usuario no autenticado');
+            }
+            $idUsuario = $_SESSION['usuario_id'];
+        }
         $stmt = $conn->prepare("
             SELECT ID_USUARIO, NOMBRE, EMAIL, FOTO_PERFIL  
             FROM usuario

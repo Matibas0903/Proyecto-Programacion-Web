@@ -1,6 +1,7 @@
 <?php
 session_start();
 require("../BaseDeDatos/conexion.php");
+require("../BaseDeDatos/controladores/permisos.php");
 
 $correo = $contra = "";
 $correoErr = $contraError = "";
@@ -42,17 +43,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //si el usuario existe y la contra sta bien
         if ($usuario) {
-            if (password_verify($contra, $usuario["CONTRASENA"])) {
+            if(password_verify($contra, $usuario["CONTRASENA"])) {
                 //guardo sesion,con los datos del usuario
                 $_SESSION['correo'] = $usuario['EMAIL'];
                 $_SESSION['usuario_id'] = $usuario['ID_USUARIO'];
                 $_SESSION['nombre'] = $usuario['NOMBRE'];
                 $_SESSION['foto_perfil'] = $usuario['FOTO_PERFIL'];
-                $_SESSION['rol_id'] = $usuario['ID_ROL'];
 
-                //reedirijo a la pagina del admi
-                header("Location: ../administrador/administrador.php");
-                exit;
+                // Obtengo los roles del usuario
+                $roles = Permisos::getRoles($usuario['ID_USUARIO']);
+
+                                if (!empty($roles)) {
+                    // Convertir el array de roles a un array simple de nombres
+                    $nombreRoles = array_column($roles, 'nombre');
+                    
+                    if (in_array('Administrador', $nombreRoles)) {
+                        header("Location: ../administrador/administrador.php");
+                        exit;
+                    } elseif (in_array('Moderador', $nombreRoles)) {
+                        header("Location: ../moderador/moderador.php");
+                        exit;
+                    } elseif (in_array('Participante', $nombreRoles)) {
+                        header("Location: ../participante/participante.php");
+                        exit;
+                    } else {
+                        // Si tiene un rol no contemplado
+                        $mensaje = "No tiene permisos asignados correctamente.";
+                        $mostrarMensaje = true;
+                    }
+                } else {
+                    $mensaje = "Usuario sin roles asignados. Contacte al administrador.";
+                    $mostrarMensaje = true;
+                }
             } else {
                 $mensaje = "Contraseña incorrecta.";
                 $mostrarMensaje = true;
@@ -126,19 +148,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="modal fade" id="modalOlvide" tabindex="-1" aria-labelledby="modalOlvideLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalOlvideLabel">Recuperar contraseña</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="btnCerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="email" class="form-control " id="inputCorreo" placeholder="Tu correo">
-                    <div class="valid-feedback mensaje">Revisa tu email. Se ha enviado un enlace para restablecer la contraseña.</div>
-                    <div class="invalid-feedback">Ingrese un correo valido.</div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelar">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnEnviar">Enviar</button>
-                </div>
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalOlvideLabel">Recuperar contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar" id="btnCerrar"></button>
+            </div>
+            <div class="modal-body">
+                <input type="email" class="form-control " id="inputCorreo" placeholder="Tu correo">
+                <div class="valid-feedback d-none">Correo enviado correctamente</div>
+                <div class="invalid-feedback d-none" id="mensajeError"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnCancelar">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnEnviar">Enviar</button>
+            </div>
             </div>
         </div>
     </div>

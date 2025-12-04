@@ -84,6 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $activo = isset($_POST['Activo']) ? 'Activo' : 'Inactivo';
 
+    $plantilla = isset($_POST["plantilla"]) ? 1 : 0;
+
     try {
         // Busco el NUM_VERSION mas alto de la tabla, si da null lo convierte en 0
         $stmt = $conn->prepare("SELECT COALESCE(MAX(NUM_VERSION), 0) AS ultimo_num FROM version_cuestionario WHERE ID_CUESTIONARIO = :id_cuestionario");
@@ -98,13 +100,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     //inserto los datos a Version_cuestionario
-    $stmt = $conn->prepare("INSERT INTO version_cuestionario (DESCRIPCION, COD_ACCESO, ACTIVO, ID_CUESTIONARIO, FECHA_CREACION, NUM_VERSION) VALUES (:descripcion, :codAcceso, :activo, :id_cuestionario, :fecha_creacion, :num_version)");
+    $stmt = $conn->prepare("INSERT INTO version_cuestionario (DESCRIPCION, COD_ACCESO, ACTIVO, ID_CUESTIONARIO, FECHA_CREACION, NUM_VERSION, PLANTILLA) VALUES (:descripcion, :codAcceso, :activo, :id_cuestionario, :fecha_creacion, :num_version, :plantilla)");
     $stmt->bindValue(':activo', $activo);
     $stmt->bindValue(':descripcion', $descripcion);
     $stmt->bindValue(':codAcceso', $cod_acceso);
     $stmt->bindValue(':id_cuestionario', $idCustionario);
     $stmt->bindValue(':fecha_creacion', $fecha_creacion);
     $stmt->bindValue(':num_version', $numVersion);
+    $stmt->bindValue(':plantilla', $plantilla);
     $stmt->execute();
     // Guardo el Id de la version creada
     $idVersion = $conn->lastInsertId();

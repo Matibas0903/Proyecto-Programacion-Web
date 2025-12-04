@@ -13,21 +13,27 @@
 <body>
 
     <?php
-    require('../includesPHP/navGeneral.php');
+        session_start();
+        $invitado = isset($_GET['invitado']) && $_GET['invitado'] === 'true';
+        if($invitado){
+            require('../includesPHP/navInvitado.php');
+        } else {
+            require('../includesPHP/navGeneral.php');
+        }
     ?>
 
     <div class="container micontainer mt-5">
         <div class="row align-items-center" id="contenedorDatos">
             <div class="col-12 col-md-6 imagen" id="imgUsuario">
-                <img src="../Resultado/Recursos/usuario1.png" alt="Usuario" class="img-fluid mx-auto d-block">
-                <p class="fw-bold mb-0">Usuario21</p>
+                <img id="usuarioAvatar" alt="Usuario" class="img-fluid mx-auto d-block">
+                <p id="usuarioNombre" class="fw-bold mb-0"></p>
 
             </div>
 
             <div class="col-12 col-md-6 " id="res">
                 <h2>Resultados</h2>
-                <div class="mb-2 p-2" id="respuestaC">Respuestas correctas: 0</div>
-                <div class="mb-3 p-2" id="Puntuacion">Puntuación total: 0</div>
+                <div class="mb-2 p-2" id="respuestaC">Respuestas correctas: <span id="respCorrectas">-</span></div>
+                <div class="mb-3 p-2" id="Puntuacion">Puntuación total: <span id="respPuntuacion">-</span></div>
 
                 <div class="calificar">
                     <p class="fw-semibold mb-0">Calificar Cuestionario:</p>
@@ -69,69 +75,26 @@
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 MiComentario">
                         <div class="mb-3">
-                            <textarea class="form-control" id="comentario" rows="3" placeholder="Escribe un comentario..."></textarea>
+                            <textarea class="form-control" id="comentario" rows="3" placeholder="Escribe un comentario..." maxlength="500"></textarea>
                             <div class="invalid-feedback">Escriba un comentario...</div>
                         </div>
-                        <button class="btn fw-semibold mb-3" id="btnComentar">Comentar</button>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn fw-semibold mb-3" id="btnComentar">Comentar</button>
+                            <button class="btn fw-semibold mb-3" id="btnSalir">Volver</button>
+                        </div>
 
-                        <!-- Comentarios de ejemplo-->
-                        <div class="miConmen">
-                            <h5 class="mb-1 fw-bold">Usuario1 ⭐⭐⭐</h5>
-                            <p class="fecha">18 de mayo del 2025</p>
-                            <p class="mb-0">Buenas preguntas</p>
-                        </div>
-                        <div class="miConmen mt-2">
-                            <h5 class="mb-1 fw-bold">Usuario2 </h5>
-                            <p class="fecha">18 de mayo del 2025</p>
-                            <p class="mb-0">Preguntas Muy faciles</p>
-                        </div>
                     </div>
                 </div>
             </div>
             <!--Ver ranking, ejemplo-->
+
+
             <div id="ranking" class="container tab-pane fade"><br>
                 <div class="container py-5">
                     <h2 class="text-center mb-4">🏆 Ranking de Participantes 🏆</h2>
                     <div id="rankingCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-                        <div class="carousel-inner">
-                            <!-- Usuario 1 -->
-                            <div class="carousel-item active">
-                                <div class="card mx-auto" id="cardUsu">
-                                    <img src="../Resultado/Recursos/usuario1.png" class="card-img-top" alt="Valentina">
-                                    <div class="card-body">
-                                        <h5 class="card-title">#1 Lugar 🏆</h5>
-                                        <p class="card-text">Valentina</p>
-                                        <p class="card-text">Respuestas correctas: 10</p>
-                                        <p class="card-text">Puntaje : 321</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Usuario 2 -->
-                            <div class="carousel-item">
-                                <div class="card mx-auto" id="cardUsu">
-                                    <img src="../Resultado/Recursos/usuario2.png" class="card-img-top" alt="Invitado">
-                                    <div class="card-body">
-                                        <h5 class="card-title">#2 Lugar 🏆</h5>
-                                        <p class="card-text">Invitado</p>
-                                        <p class="card-text">Respuestas correctas: 7</p>
-                                        <p class="card-text">Puntaje: 234</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Usuario 3 -->
-                            <div class="carousel-item">
-                                <div class="card mx-auto" id="cardUsu">
-                                    <img src="../Resultado/Recursos/usuario3.png" class="card-img-top" alt="Araceli">
-                                    <div class="card-body">
-                                        <h5 class="card-title">#3 Lugar 🏆</h5>
-                                        <p class="card-text">Araceli</p>
-                                        <p class="card-text">Respuestas correctas: 5</p>
-                                        <p class="card-text">Puntaje: 130</p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="carousel-inner" id="carouselRankingBody">
+                            <!-- Se carga dinámicamente -->
                         </div>
 
                         <!-- Controles -->
@@ -142,11 +105,17 @@
                             <span class="carousel-control-next-icon"></span>
                         </button>
                     </div>
+                    <div id="puestoParticipante"></div>
+                    <p id="sinRankingResultado" class="text-center d-none">No hay participantes en el ranking</p>
                 </div>
             </div>
+
         </div>
     </div>
 
+    <?php
+        include('../mensajeError/mensajeError.php');
+    ?>
 </body>
 
 </html>

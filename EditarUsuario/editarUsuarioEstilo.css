@@ -1,11 +1,8 @@
-
 body {
 
     justify-content: center; 
     align-items: center;     
     background-color:#fdecd7;
-
-
 }
 h1{
   text-align: center;
@@ -29,6 +26,29 @@ h1{
   padding: 2rem;
 }
 
+/*BOTON VALIDAR*/
+.btn.miboton{
+    background-color: #4f9d86;
+    width: 100%;
+    color:#fdf8f8;
+    font-weight: bold;     
+    font-size:larger;
+}
+.btn.miboton:hover {
+   background-color: #3a7060; 
+   border-color: #3a7060;
+}
+
+/*boton cancelar*/
+.btn.botonCancelar{
+
+    background-color: #964f4f;
+    width: 100%;
+    color:#ffefef;
+    font-weight: bold;     
+    font-size:larger;
+}
+
 #validar{
   background-color: #4f9d86;
   text-align: center;
@@ -40,6 +60,7 @@ h1{
     border-right: 2px solid #000000;
     border-left: 2px solid #000000;
     border-bottom: 5px solid #000000;
+    width: 100%;
 }
 .navbar_usuario {
     width: 50px;

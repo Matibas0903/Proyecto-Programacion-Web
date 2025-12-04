@@ -1,9 +1,14 @@
 <?php
+    session_start();
     require('../conexion.php');
+    require_once(__DIR__ . '/permisos.php');
 
     header('Content-Type: application/json');
 
     try {
+        if(!Permisos::tienePermiso(['ver_versiones'], $_SESSION['usuario_id'])){
+            throw new Exception('No tienes permiso para ver las versiones de este cuestionario.');
+        }
         //obtenemos el parametro cuestionario
         if (!isset($_GET['cuestionario'])) {
             throw new Exception('ID de cuestionario inválido.');
@@ -12,13 +17,13 @@
         $stmt = $conn->prepare("
             SELECT v.*,
             COALESCE(( SELECT COUNT(*) 
-                FROM pregunta p 
+                FROM pregunta p
                 WHERE p.ID_VERSION = v.ID_VERSION
             ), 0) AS cantidad_preguntas,
             COALESCE((SELECT AVG(pa.VALORACION_CUESTIONARIO) 
-                FROM participacion pa 
-                WHERE pa.ID_VERSION = v.ID_VERSION 
-                  AND pa.VALORACION_CUESTIONARIO IS NOT NULL
+                FROM participacion pa
+                WHERE pa.ID_VERSION = v.ID_VERSION
+                  AND pa.VALORACION_CUESTIONARIO > 0
             ), 0) AS promedio_calificacion
             FROM version_cuestionario v
             WHERE ID_CUESTIONARIO = :idCuestionario

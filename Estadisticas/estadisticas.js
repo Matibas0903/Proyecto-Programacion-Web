@@ -1,4 +1,4 @@
-//Datos de muestra-cantidad de usuarios
+/*
 const cuestionarios = ['Cuestionario 1', 'Cuestionario 2', 'Cuestionario 3', 'Cuestionario 4'];
 const jugadores = [10, 20, 30, 15];
 //Datos de muestra-valoracion promedio
@@ -60,5 +60,105 @@ new Chart(document.getElementById('graficoCantRespuestas'), {
         ]
         }]
     }
-});
+});*/
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const res = await fetch("getDatos.php");
+        const data = await res.json();
 
+        console.log(data); // Para verificar que llega bien
+        if(data.completados){
+            if(document.getElementById("promedioCorrectas")){
+                document.getElementById("promedioCorrectas").innerText =
+                    (data.completados.promedio_correctas ?? 0) + "%";
+            }
+            if(document.getElementById("cantidadCuestionarios")){
+                document.getElementById("cantidadCuestionarios").innerText =
+                    data.completados.cantidad_resueltos ?? 0;
+            }
+
+            if(document.getElementById("categoria")){
+                document.getElementById("categoria").innerText =
+                    data.completados.categoria_mas_correctas ?? "Sin datos";
+            }
+        }
+        if(data.creados){
+            // Nombres de cuestionarios
+            const cuestionarios = data.creados.jugadores.map(q => q.NOMBRE_CUESTIONARIO);
+
+            // Cantidad de usuarios por cuestionario
+            const cantUsuarios = data.creados.jugadores.map(q => parseInt(q.jugadores));
+
+            // Cantidad de respuestas por cuestionario
+            const cantRespuestas = data.creados.respuestas.map(r => parseInt(r.total_respuestas));
+
+            // Valoraciones por estrellas
+            const valoraciones = [0, 0, 0, 0, 0]; // índice 0 = 1 estrella, índice 4 = 5 estrellas
+            data.creados.valoraciones.forEach(v => {
+                const index = parseInt(v.valor) - 1;
+                valoraciones[index] = parseInt(v.cantidad);
+            });
+
+            // respuestas 
+            new Chart(document.getElementById('graficoCantRespuestas'), {
+                type: 'pie',
+                data: {
+                    labels: cuestionarios,
+                    datasets: [{
+                        data: cantRespuestas,
+                        backgroundColor: [
+                            '#4f9d86',
+                            '#edb51a',
+                            '#f7705c',
+                            '#964f4f',
+                            '#ef7131',
+                            '#b682d9'
+                        ]
+                    }]
+                }
+            });
+
+            //  Cantidad de usuarios
+            new Chart(document.getElementById('graficoCantUsuarios'), {
+                type: 'bar',
+                data: {
+                    labels: cuestionarios,
+                    datasets: [{
+                        label: 'Cantidad de usuarios',
+                        data: cantUsuarios,
+                        backgroundColor: '#f4d4ca'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    }
+                }
+            });
+
+            
+            new Chart(document.getElementById('graficoValoracion'), {
+                type: 'pie',
+                data: {
+                    labels: ['1 Estrella','2 Estrellas','3 Estrellas','4 Estrellas','5 Estrellas'],
+                    datasets: [{
+                        data: valoraciones,
+                        backgroundColor: [
+                            '#edb51a',
+                            '#4f9d86',
+                            '#ef7131',
+                            '#964f4f',
+                            '#f7705c'
+                        ]
+                    }]
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Error cargando estadísticas:", error);
+    }
+});

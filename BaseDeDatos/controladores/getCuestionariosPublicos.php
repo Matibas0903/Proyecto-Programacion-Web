@@ -11,17 +11,19 @@
         }
         $idUsuario = $_SESSION['usuario_id'];
         $stmt = $conn->prepare("
-            SELECT c.*, v.ID_VERSION, v.TIEMPO_TOTAL, v.DESCRIPCION, v.ACTIVO, v.IMAGEN, cat.NOMBRE AS CATEGORIA_NOMBRE,
-            COALESCE(( SELECT COUNT(*) 
+            SELECT c.*, v.ID_VERSION, v.TIEMPO_TOTAL, v.DESCRIPCION, v.ACTIVO, v.IMAGEN, 
+                   cat.NOMBRE AS CATEGORIA_NOMBRE,
+            COALESCE((SELECT COUNT(*) 
                 FROM pregunta p
                 WHERE p.ID_VERSION = v.ID_VERSION
             ), 0) AS cantidad_preguntas,
             COALESCE((SELECT AVG(pa.VALORACION_CUESTIONARIO) 
                 FROM participacion pa 
                 WHERE pa.ID_VERSION = v.ID_VERSION
+                AND pa.VALORACION_CUESTIONARIO > 0
             ), 0) AS promedio_calificacion
             FROM cuestionario c
-            LEFT JOIN version_cuestionario v 
+            INNER JOIN version_cuestionario v 
                 ON c.ID_CUESTIONARIO = v.ID_CUESTIONARIO
                 AND v.ACTIVO = 'Activo'
             LEFT JOIN categoria cat

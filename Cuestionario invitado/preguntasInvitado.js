@@ -4,88 +4,58 @@ window.onload = function()
     const botonNombre = document.getElementById("btnJugar");
     const cardNombre = document.getElementById("micardNombre");
 
-    botonNombre.addEventListener("click", function(){
-        const valido =validarNombre();
-        //si el nombre es valido, muestro las preguntas
-        if(valido)
-        {    cardNombre.classList.add("d-none");
-             mostrarPreguntas();
+    botonNombre.addEventListener("click", async function(){
+        const input = document.getElementById("nombreIngresado"); 
+        const nombre = input.value.trim();
+        const valido = await validarNombre(nombre);
+        const version = new URLSearchParams(window.location.search).get('version');
+        console.log('version recibida: '+version);
+        //si el nombre es valido, voy a jugar
+        if(valido && version){
+          sessionStorage.setItem('nombreInvitado', nombre);
+          window.location.href = `../jugar plantilla/jugarPlantilla.php?version=${version}&invitado=true`;
         }
     })
 
 }
 
 //valido el nombre ingresado
-function validarNombre() {
+async function validarNombre(nombre) {
     const input = document.getElementById("nombreIngresado"); 
-    const nombre = input.value.trim();
-
+    const mensajeError = document.getElementById("mensajeError");
     const regex = /^[A-Za-z0-9_]+$/;
-
-    if (!regex.test(nombre)) {
+    if (!regex.test(nombre) || nombre.length < 5 || nombre.length > 14) {
         input.classList.add("is-invalid");
         input.classList.remove("is-valid");
+        mensajeError.textContent = 'El nombre debe tener entre 5 y 14 caracteres y solo puede contener letras, números y guiones bajos.';
         return false;
     } else {
-        input.classList.remove("is-invalid");
-        input.classList.add("is-valid");
-        return true;
+        try {
+            const response = await fetch(`../BaseDeDatos/controladores/verificarNombreInvitado.php?nombre=${nombre}`);
+            const result = await response.json();
+
+            if (result.status === 'success' && result.disponible) {
+                input.classList.remove("is-invalid");
+                input.classList.add("is-valid");
+                mensajeError.textContent = '';
+                return true;
+            } else {
+                input.classList.add("is-invalid");
+                input.classList.remove("is-valid");
+                mensajeError.textContent = 'El nombre ya está en uso. Por favor, elija otro.';
+                return false;
+            }
+        } catch (error) {
+            mostrarMensajeError('Error al verificar el nombre');
+            return false;
+        }
     }
 }
 
-//muestro las preguntas
-function mostrarPreguntas() {
-  const cards = document.querySelectorAll(".card-preguntas");
-  const correctas = ["Amazonas", "Rusia", "África", "Canberra"];
-  let preguntaNum= 0;
-  let respuestasCorrectas = 0;
-
-  const nombreIngresado = document.getElementById("nombreIngresado");
-  const nom = nombreIngresado.value.trim();
-
-  // Contador dentro del div #contador
-  const contador = document.getElementById("contador");
-  contador.classList.remove("d-none");
-
-  let auxContador = 3;
-  const auxintervalo = setInterval(() => {
-    contador.textContent = auxContador > 0 ? auxContador : "¡A jugar! " + nom;
-    auxContador--;
-    if (auxContador < -1) {
-      clearInterval(auxintervalo);
-      contador.classList.add("d-none");
-      cards[preguntaNum].classList.remove("d-none");
-    }
-  }, 1000);
-
-  // Recorro cada card
-  cards.forEach((card, index) => {
-    card.querySelectorAll(".btnRespuestas").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const esCorrecta = btn.textContent.trim() === correctas[index];
-
-        // marco correcta o incorrecta
-        btn.classList.add(esCorrecta ? "correcta" : "incorrecta");
-
-        if (esCorrecta) {
-          respuestasCorrectas++;
-        }
-
-        // Deshabilito todos los botones
-        card.querySelectorAll(".btnRespuestas").forEach(b => b.disabled = true);
-
-        setTimeout(() => {
-          card.classList.add("d-none");
-          preguntaNum++;
-          if (preguntaNum < cards.length) {
-            cards[preguntaNum].classList.remove("d-none");
-          } else {
-            setTimeout(() => {
-              window.location.href = "../Resultado invitado/invitadoResultado.html"
-            }, 300);
-          }
-        }, 1000);
-      });
-    });
-  });
+function mostrarMensajeError(mensaje){
+    const toastEl = document.getElementById('toast_mensaje_error');
+    const toastBody = document.getElementById('mensaje_error');
+    toastBody.innerText = mensaje || 'Ups, ocurrió un error inesperado';
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
 }

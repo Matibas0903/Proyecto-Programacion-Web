@@ -173,7 +173,7 @@ try {
                 </div>
             </div>
         </div>
-
+        <!-- Modal Salir-->
     </div>
     <div class="modal" id="modalSalirSinGuardar" tabindex="-1">
         <div class="modal-dialog">
@@ -288,12 +288,17 @@ try {
                                                     <div class="invalid-feedback"></div>
 
                                                 </div>
+
+                                                <div class="form-check form-switch mb-5">
+                                                    <label class="fw-bold fs-6 form-check-label" for="SwitchPlantilla">Habilitar como plantilla</label>
+                                                    <input class="form-check-input" type="checkbox" role="switch" id="SwitchPlantilla" name="plantilla" value="1" checked>
+                                                    <div class="invalid-feedback"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
                     </form>
                 </div>

@@ -28,13 +28,14 @@ if (!isset($_SESSION['usuario_id'])) {
   <?php
   require('../includesPHP/navGeneral.php');
   ?>
-  <div class="container vh-100 flex-column justify-content-center align-items-center">
+
+  <div class="container mt-5 flex-column justify-content-center align-items-center">
     <div class="card m-5">
       <div class="text-center">
         <img src="<?= $_SESSION['foto_perfil'] ?>" id="icono" class="img-fluid mx-auto d-block" alt="Imagen no encontrada"><br>
       </div>
       <div class="card-body">
-        <h1>Editar Usuario</h1>
+         <h1>Editar Usuario</h1>
 
         <form id="editarForm" class="form-floating">
           <div class="row">
@@ -113,8 +114,10 @@ if (!isset($_SESSION['usuario_id'])) {
               <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
               </div>
-            </div>
-          </div>
+              <div class="col-12 col-lg-6">
+                <a href="../administrador/administrador.php" class="btn botonCancelar mt-2">Cancelar</a>
+              </div>
+              <div id="mensajeBackend" class="mt-1"></div>
         </div>
 
 
