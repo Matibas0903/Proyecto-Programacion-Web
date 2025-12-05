@@ -374,6 +374,7 @@ async function guardarCuestionario() {
 
   if (!esValido) {
     console.log("Hay errores, no guardo nada");
+    mostrarMensajeError("Hay errores, no se ha guardado el cuetionario");
     return;
   }
 
@@ -396,7 +397,7 @@ async function guardarCuestionario() {
     //procedo a enviar las preguntas para guardarlas
     EnviarPreguntas(idVersionGlobal);
   } catch (error) {
-      mostrarMensajeError(error);
+    mostrarMensajeError(error);
   }
 }
 
@@ -421,7 +422,7 @@ async function EnviarPreguntas(version) {
     const responseText = await response.text();
 
     const data = JSON.parse(responseText);
-    mostrarMensajeError(data.message); 
+    mostrarMensajeError(data.message);
     console.log("llenando campos");
     llenarCampos(idVersionGlobal);
   } catch (error) {
@@ -478,18 +479,18 @@ function recolectarPreguntas() {
         break;
 
       case 3: // Respuesta abierta
-          const inputRespuestaAbierta = form.querySelector(".btnOpciones");
-          if (inputRespuestaAbierta) {
-            const respuestaCorrecta = inputRespuestaAbierta.value.trim();
-            
-            opciones.push({
-              texto: respuestaCorrecta,
-              esCorrecta: 1
-            });
-            
-            opcionesCorrectas.push(respuestaCorrecta);
-          }
-          break;
+        const inputRespuestaAbierta = form.querySelector(".btnOpciones");
+        if (inputRespuestaAbierta) {
+          const respuestaCorrecta = inputRespuestaAbierta.value.trim();
+
+          opciones.push({
+            texto: respuestaCorrecta,
+            esCorrecta: 1,
+          });
+
+          opcionesCorrectas.push(respuestaCorrecta);
+        }
+        break;
     }
 
     preguntas.push({
@@ -748,10 +749,10 @@ function CrearOpciones(preguntaId) {
   return row;
 }
 
-function mostrarMensajeError(mensaje){
-    const toastEl = document.getElementById('toast_mensaje_error');
-    const toastBody = document.getElementById('mensaje_error');
-    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
+function mostrarMensajeError(mensaje) {
+  const toastEl = document.getElementById("toast_mensaje_error");
+  const toastBody = document.getElementById("mensaje_error");
+  toastBody.innerText = mensaje || "Ups, ocurrio un error inesperado";
+  const toast = new bootstrap.Toast(toastEl);
+  toast.show();
 }

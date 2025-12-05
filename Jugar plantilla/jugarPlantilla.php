@@ -1,9 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <?php
+    require('../includesPHP/head.php');
     require('../includesPHP/head.php');
     ?>
     <link rel="stylesheet" href="./jugarPlantilla.css">
@@ -13,12 +13,12 @@
 
 <body>
     <?php
-        $invitado = isset($_GET['invitado']) && $_GET['invitado'] === 'true';
-        if($invitado){
-            require('../includesPHP/navInvitado.php');
-        } else {
-            require('../includesPHP/navGeneral.php');
-        }
+    $invitado = isset($_GET['invitado']) && $_GET['invitado'] === 'true';
+    if ($invitado) {
+        require('../includesPHP/navInvitado.php');
+    } else {
+        require('../includesPHP/navGeneral.php');
+    }
     ?>
     <!-- Juego -->
     <div id="contenedor-juego">
@@ -29,7 +29,7 @@
     </div>
 
     <?php
-      include('../mensajeError/mensajeError.php');
+    include('../mensajeError/mensajeError.php');
     ?>
 </body>
 
