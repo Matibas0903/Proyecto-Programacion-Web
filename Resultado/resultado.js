@@ -58,8 +58,6 @@ window.onload = async function() {
                 const preguntasRespondidas = new Set();
 
                 participacion.respuestas.forEach(respuesta => {
-                    // ✅ Para respuestas abiertas usar RESPUESTA_ES_CORRECTA
-                    // Para otros tipos usar OPCION_ES_CORRECTA
                     const esCorrecta = respuesta.TEXTO_RESPUESTA !== null 
                         ? parseInt(respuesta.RESPUESTA_ES_CORRECTA) === 1 
                         : parseInt(respuesta.OPCION_ES_CORRECTA) === 1;
@@ -75,7 +73,6 @@ window.onload = async function() {
                 
                 const idVersion = participacion.ID_VERSION;
                 if(idVersion){
-                    // Pasar ID_PARTICIPACION para ranking (funciona para ambos)
                     cargarRanking(idVersion, idParticipacion, invitado);
                     cargarComentarios(idVersion);
                 }
@@ -210,7 +207,6 @@ window.onload = async function() {
                     if(resultComentario.status === 'success'){
                         btnComentar.disabled = true; 
                         
-                        // CORRECCIÓN DEL BUG: Limpiar mensaje "No hay comentarios" antes de agregar
                         const mensajeSinComentarios = contenedorComentarios.querySelector('p.text-center');
                         if(mensajeSinComentarios){
                             mensajeSinComentarios.remove();
@@ -271,7 +267,6 @@ async function cargarRanking(idVersion, idParticipacion, esInvitado){
                 for (let index = 0; index < ranking.length; index++) {
                     const participantePuesto = ranking[index];
                     
-                    // Buscar por ID_PARTICIPACION en lugar de ID_USUARIO
                     if(participantePuesto.ID_PARTICIPACION == idParticipacion){
                         puestoParticipante.puesto = index + 1;
                         puestoParticipante.datos = participantePuesto;

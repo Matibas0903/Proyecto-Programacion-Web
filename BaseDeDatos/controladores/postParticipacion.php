@@ -140,7 +140,6 @@ try {
 
     $idParticipacion = $conn->lastInsertId();
 
-    // ✅ NUEVO: Obtener todas las preguntas con sus tipos y opciones correctas
     $stmtPreguntas = $conn->prepare("
         SELECT 
             p.ID_PREGUNTA,
@@ -156,7 +155,6 @@ try {
     $stmtPreguntas->execute();
     $preguntasConOpciones = $stmtPreguntas->fetchAll(PDO::FETCH_ASSOC);
 
-    // ✅ MODIFICADO: Preparar consultas para diferentes tipos de respuesta
     $stmtRespuesta = $conn->prepare("
         INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION)
         VALUES (:idParticipacion, :idOpcion)
@@ -167,9 +165,7 @@ try {
         VALUES (:idParticipacion, :idOpcion, :textoRespuesta, :esCorrecta)
     ");
 
-    // ✅ MODIFICADO: Insertar respuestas según su tipo
     foreach ($respuestas as $respuesta) {
-        // ✅ CASO 1: Respuesta abierta (viene como objeto con idOpcion y textoRespuesta)
         if (is_array($respuesta) && isset($respuesta['idOpcion']) && isset($respuesta['textoRespuesta'])) {
             $idOpcion = (int) $respuesta['idOpcion'];
             $textoRespuesta = trim($respuesta['textoRespuesta']);
@@ -184,12 +180,9 @@ try {
             }
             
             if ($opcionCorrecta) {
-                // Normalizar textos para comparación (sin importar mayúsculas/minúsculas y espacios)
                 $textoEsperado = mb_strtolower(trim($opcionCorrecta['TEXTO_CORRECTO']), 'UTF-8');
                 $textoIngresado = mb_strtolower($textoRespuesta, 'UTF-8');
                 
-                // ✅ Validación: comparar si la respuesta es correcta
-                // Puedes hacer esta comparación más sofisticada (similitud, sinónimos, etc.)
                 $esCorrecta = ($textoEsperado === $textoIngresado) ? 1 : 0;
                 
                 // Insertar respuesta abierta con validación

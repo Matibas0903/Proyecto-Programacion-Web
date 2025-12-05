@@ -207,7 +207,6 @@ function mostrarPreguntas() {
     });
 }
 
-// ✅ NUEVO: Función para respuesta única (V/F y única)
 function manejarRespuestaUnica(card, onContinuar) {
     card.querySelectorAll(".btnRespuestas").forEach(btn => {
         btn.addEventListener("click", () => {
@@ -231,9 +230,8 @@ function manejarRespuestaUnica(card, onContinuar) {
     });
 }
 
-// ✅ NUEVO: Función para respuesta abierta
 function manejarRespuestaAbierta(card, onContinuar) {
-    const btnEnviar = card.querySelector("#btnEnviarAbierta"); // ✅ Cambiar a ID
+    const btnEnviar = card.querySelector("#btnEnviarAbierta");
     const textarea = card.querySelector(".respuesta-abierta");
     
     btnEnviar.addEventListener("click", () => {
@@ -266,7 +264,6 @@ function manejarRespuestaAbierta(card, onContinuar) {
     });
 }
 
-// ✅ NUEVO: Función para respuesta múltiple
 function manejarRespuestaMultiple(card, onContinuar) {
     const btnConfirmar = card.querySelector(".btnConfirmarMultiple");
     const checkboxes = card.querySelectorAll(".checkbox-multiple");
@@ -297,7 +294,6 @@ function manejarRespuestaMultiple(card, onContinuar) {
                 respuestasSeleccionadas.push(idOpcion);
             }
             
-            // ✅ Marcar visualmente el label
             const label = cb.nextElementSibling;
             if (esCorrecta) {
                 label.classList.add("correcta");
@@ -320,7 +316,6 @@ function manejarRespuestaMultiple(card, onContinuar) {
     });
 }
 
-// ✅ NUEVO: Función auxiliar para avanzar preguntas
 function avanzarPregunta(cards, preguntaNum, respuestasCorrectas) {
     if (preguntaNum < cards.length) {
         cards[preguntaNum].classList.remove("d-none");

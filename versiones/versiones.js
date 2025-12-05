@@ -164,7 +164,7 @@ async function onloadPage(){
                         }
                     } else if(actionVersionesModal === 'nueva'){
                         if(tienePermiso('crear_cuestionario')){
-                            editar(selectVersion);
+                            editar(selectVersion, 'nueva_version');
                         } else {
                             mostrarMensajeError('No tienes permisos para crear cuestionarios');
                         }
@@ -296,7 +296,7 @@ function ver(version){
     window.location.href = `../Vista previa/verCuestionario.php?version=${version}`;
 }
 
-function editar(version){
+function editar(version, accion ="editar_version"){
     if(!tienePermiso('editar_cuestionario') && !tienePermiso('crear_cuestionario')){
         mostrarMensajeError('No tienes permisos para editar cuestionarios');
         return;
@@ -305,7 +305,7 @@ function editar(version){
         window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.ID_CUESTIONARIO}`;
         return;
     }
-    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${version}`;
+    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${version}&accion=${accion}`;
 }
 
 function compartir(idVersion){
@@ -413,7 +413,6 @@ async function agregarParticipante(idUsuario, idVersion){
         id_version: idVersion,
         fecha_vencimiento: fechaVencimiento
     };
-    console.log(body);
     const modalParticipantesEl = document.getElementById('modalParticipantes');
     const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
     if(idUsuario !== cuestionario.ID_MODERADOR && idUsuario !== cuestionario.ID_USUARIO){

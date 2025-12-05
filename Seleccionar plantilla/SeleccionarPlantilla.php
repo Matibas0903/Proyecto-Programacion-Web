@@ -142,6 +142,26 @@ try {
                 </select>
             </div>
 
+            <h5>
+                <i class="bi bi-question-square-fill"></i>
+                Tipo de pregunta
+            </h5>
+            <div class="mb-5">
+                <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
+                    <option class="dropdown-item" value>Tipo de pregunta</option>
+                    <?php //llenar el select
+                    foreach ($tipoPreguntas as $cat): ?>
+                        <option value="<?= htmlspecialchars($cat['ID_TIPO_PREGUNTA']) ?>">
+                            <?= htmlspecialchars($cat['TIPO']) ?>
+
+                        </option>
+                    <?php endforeach;
+                    ?>
+                </select>
+                <div class="invalid-feedback"></div>
+            </div>
+
+
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
 
