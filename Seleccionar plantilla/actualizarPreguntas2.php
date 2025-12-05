@@ -67,7 +67,7 @@ function obtenerAutorCuestionario($conn, $idVersion)
 }
 
 if ($action == "crear_cuestionario") {
-    if(!Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuarioActual);){
+    if(!Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuarioActual)){
         echo json_encode([
             "status" => "error",
             "message" => "No tienes permisos para crear cuestionarios"
@@ -88,25 +88,32 @@ if ($action == "crear_cuestionario") {
         $existe = $stmtCheck->fetch(PDO::FETCH_ASSOC)["existe"];
 
         if ($existe > 0) {
-            // Preferencia: combinación lógica
-            $codigoGenerado = $ver["ID_CUESTIONARIO"] . $nuevoNumVersion;
-
-            // verificar que no exista tampoco
-            $stmtCheck2 = $conn->prepare("
-                SELECT COUNT(*) AS existe
-                FROM version_cuestionario
-                WHERE COD_ACCESO = :c
-            ");
-            $stmtCheck2->execute([":c" => $codigoGenerado]);
-            $existe2 = $stmtCheck2->fetch(PDO::FETCH_ASSOC)["existe"];
-
+            // Generar código aleatorio de 6 a 9 dígitos hasta encontrar uno único
+            $codigoGenerado = null;
+            $intentos = 0;
+            $maxIntentos = 10;
+            
+            do {
+                // Generar número aleatorio de 6 a 9 dígitos (entre 100000 y 999999999)
+                $codigoGenerado = random_int(100000, 999999999);
+                
+                // Verificar si existe
+                $stmtCheck2 = $conn->prepare("
+                    SELECT COUNT(*) AS existe
+                    FROM version_cuestionario
+                    WHERE COD_ACCESO = :c
+                ");
+                $stmtCheck2->execute([":c" => $codigoGenerado]);
+                $existe2 = $stmtCheck2->fetch(PDO::FETCH_ASSOC)["existe"];
+                
+                $intentos++;
+                
+            } while ($existe2 > 0 && $intentos < $maxIntentos);
+            
             if ($existe2 > 0) {
-                // último recurso: número aleatorio de 7 a 9 dígitos
-                $codigoGenerado = random_int(1000000, 999999999);
-            }
-
+                $codigoGenerado = random_int(100000, 999999) . time();
+            }        
             $codAccesoFinal = $codigoGenerado;
-
         } else {
             $codAccesoFinal = $codAccesoIngresado;
         }
@@ -136,7 +143,7 @@ if ($action == "crear_cuestionario") {
             ":code" => $codAccesoFinal,
             ":a" => $datosCuestionario["estado"],
             ":idc" => $idCuest,
-            ":p" => $datosCuestionario["plantilla"]
+            ":p" => $datosCuestionario["plantilla"],
             ":fc" => $fechaCreacion
         ]);
         $idVersionNueva = $conn->lastInsertId();
@@ -163,7 +170,7 @@ if ($action == "crear_cuestionario") {
 }
 
 if ($action == "editar_version") {
-    if(!Permisos::tieneAlgunPermiso(['editar_cuestionario'], $idUsuarioActual);){
+    if(!Permisos::tieneAlgunPermiso(['editar_cuestionario'], $idUsuarioActual)){
         echo json_encode([
             "status" => "error",
             "message" => "No tienes permisos para editar cuestionarios"
@@ -257,7 +264,7 @@ if ($action == "editar_version") {
 }
 
 if ($action == "nueva_version") {
-    if(!Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuarioActual);){
+    if(!Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuarioActual)){
         echo json_encode([
             "status" => "error",
             "message" => "No tienes permisos para crear versiones"
