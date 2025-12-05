@@ -51,6 +51,9 @@ try {
     <?php
 
     require('../includesPHP/navGeneral.php');
+
+    include('../mensajeError/mensajeError.php');
+
     ?>
 
     <!-- navbar crear cuestionario -->
