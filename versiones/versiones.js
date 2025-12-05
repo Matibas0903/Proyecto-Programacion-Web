@@ -23,7 +23,7 @@ async function onloadPage(){
         //redireccionar a pantalla administrador si no hay cuestionario seleccionado
         window.location.href = "../administrador/administrador.php";
     } else {
-        try {
+         try {
             const response = await fetch(`../BaseDeDatos/controladores/getCuestionario.php?cuestionario=${idCuestionario}`);
             const result = await response.json();
             if(result.status === 'success' && result.data.ID_CUESTIONARIO){
@@ -35,6 +35,20 @@ async function onloadPage(){
                 //redireccionamos a pantalla administrador si el cuestionario no existe o no pertenece al admin
                 window.location.href = "../administrador/administrador.php";
             } 
+
+            if (cuestionario.ID_MODERADOR) {
+                //traer usuario moderador
+                const responseUsuario = await fetch(`../BaseDeDatos/controladores/getUsuario.php?type=byId&id=${cuestionario.ID_MODERADOR}`);
+                const resultUsuario = await responseUsuario.json();
+                if(resultUsuario.status === 'success' && resultUsuario.data.ID_USUARIO){
+                    mostrarModerador(resultUsuario.data.NOMBRE, resultUsuario.data.FOTO_PERFIL);
+                } else {
+                    mostrarModerador(null); 
+                }
+            } else {
+                mostrarModerador(null);
+            }
+
             //versiones - solo si tiene permiso
             if(tienePermiso('ver_versiones')){
                 const responseVersiones = await fetch(`../BaseDeDatos/controladores/getVersiones.php?cuestionario=${idCuestionario}`);
@@ -55,7 +69,10 @@ async function onloadPage(){
                 }
             } else {
                 document.getElementById("version-list").innerHTML = '<h3 class="text-center">No tienes permisos para ver las versiones</h3>';
-            }         
+            }
+
+            await cargarReportes(idCuestionario);
+
         } catch (error) {
             mostrarMensajeError('Error al obtener el cuestionario');
         }
@@ -90,15 +107,14 @@ async function onloadPage(){
             btnHabilitar.style.display = 'none';
         }
 
-        // const btnModerador = document.getElementById("button-moderador");
-        // if(btnModerador){
-        //     // Por ahora no hay permiso específico para cambiar moderador, se asume que es función del admin
-        //     if(esRol('Administrador')){
-        //         btnModerador.addEventListener("click", () => seleccionarUsuario(null, 'moderador'));
-        //     } else {
-        //         btnModerador.style.display = 'none';
-        //     }
-        // }
+        const btnModerador = document.getElementById("button-moderador");
+        if(btnModerador){
+            if(esRol('Administrador')){
+                btnModerador.addEventListener("click", () => seleccionarUsuario(null, 'moderador'));
+            } else {
+                btnModerador.style.display = 'none';
+            }
+        }
 
         //buscador participantes - solo si tiene permiso
         if(tienePermiso('agregar_participante')){
@@ -274,22 +290,24 @@ function cargarVersiones(){
         
 }
 
-function mostrarModerador(nombre, avatar=null){
-    if(!nombre){
-        document.getElementById("moderador_nombre").classList.add('d-none');
-        document.getElementById("moderador_avatar").classList.add('d-none');
+function mostrarModerador(nombre, avatar = null) {
+
+    const card = document.getElementById("moderador_card");
+    const avatarImg = document.getElementById("moderador_avatar");
+    const nombreTxt = document.getElementById("moderador_nombre");
+
+    // Si no hay moderador → ocultar card
+    if (!nombre) {
+        card.classList.add('d-none');
         return;
     }
-    document.getElementById("moderador_nombre").innerText = nombre;
-    const imagenAvatar = document.getElementById("moderador_avatar");
-    if(avatar){
-        imagenAvatar.src = avatar;
-    }else{
-        //ESTABLECER UNA IMAGEN POR DEFECTO
-        imagenAvatar.src = "../administrador/images/invitado.png";
-    }
-    document.getElementById("moderador_nombre").classList.remove('d-none');
-    document.getElementById("moderador_avatar").classList.remove('d-none');
+
+    // Mostrar card
+    card.classList.remove('d-none');
+
+    // Cargar datos
+    nombreTxt.innerText = nombre;
+    avatarImg.src = avatar ? avatar : "../administrador/images/invitado.png";
 }
 
 function ver(version){
@@ -388,7 +406,7 @@ function mostrarParticipantes(participantes){
             lista_participantes.appendChild(divParticipante);
             document.getElementById('addParticipante_'+participante.ID_USUARIO).addEventListener("click", () => {
                 if(tipoUsuario === 'moderador'){
-                    // cambiarModerador(participante.ID_USUARIO);
+                    cambiarModerador(participante.ID_USUARIO);
                 } else {
                     agregarParticipante(participante.ID_USUARIO, idVersion);
                 }
@@ -453,50 +471,52 @@ async function agregarParticipante(idUsuario, idVersion){
     document.getElementById("formParticipante").reset();
 }
 
-// async function cambiarModerador(idUsuario){
-//     if(!esRol('Administrador')){
-//         mostrarMensajeError('No tienes permisos para cambiar el moderador');
-//         return;
-//     }
+async function cambiarModerador(idUsuario){
+    if(!esRol('Administrador')){
+        mostrarMensajeError('No tienes permisos para cambiar el moderador');
+        return;
+    }
     
-//     const body = {
-//         idCuestionario: cuestionario.ID_CUESTIONARIO,
-//         idModerador: idUsuario
-//     };
-//     try {
-//         const response = await fetch('../BaseDeDatos/controladores/putModerador.php', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json'
-//           },
-//           body: JSON.stringify(body)
-//         })
-//         const result = await response.json();
-//         if(result.status === 'success'){
-//             const usuario = usuariosTotales.find(usuario => usuario.ID_USUARIO === idUsuario);
-//             // mostrarModerador(usuario.NOMBRE, usuario.FOTO_PERFIL);
-//             const modalParticipantesEl = document.getElementById('modalParticipantes');
-//             const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
-//             if (modalParticipantes) {
-//                 modalParticipantes.hide();
-//             }
-//             const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-//             modalConfirmacion.show();
-//             cuestionario.ID_MODERADOR = idUsuario;
-//         } else if(result.status === 'error'){
-//             mostrarMensajeError(result.message || 'Error al cambiar el moderador');
-//             if (modalParticipantes) {
-//                 modalParticipantes.hide();
-//             }
-//         }
-//     } catch (error) {
-//         mostrarMensajeError('Error al cambiar el moderador');
-//         if (modalParticipantes) {
-//             modalParticipantes.hide();
-//         }
-//     }
-//     document.getElementById("formParticipante").reset();
-// }
+    const body = {
+        idCuestionario: cuestionario.ID_CUESTIONARIO,
+        idModerador: idUsuario
+    };
+    try {
+        const response = await fetch('../BaseDeDatos/controladores/putModerador.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
+        })
+        const result = await response.json();
+        if(result.status === 'success'){
+            const usuario = usuariosTotales.find(usuario => usuario.ID_USUARIO === idUsuario);
+
+            mostrarModerador(usuario.NOMBRE, usuario.FOTO_PERFIL);
+
+            const modalParticipantesEl = document.getElementById('modalParticipantes');
+            const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
+            if (modalParticipantes) modalParticipantes.hide();
+
+            const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
+            modalConfirmacion.show();
+
+            cuestionario.ID_MODERADOR = idUsuario;
+        } else if(result.status === 'error'){
+            mostrarMensajeError(result.message || 'Error al cambiar el moderador');
+            if (modalParticipantes) {
+                modalParticipantes.hide();
+            }
+        }
+    } catch (error) {
+        mostrarMensajeError('Error al cambiar el moderador');
+        if (modalParticipantes) {
+            modalParticipantes.hide();
+        }
+    }
+    document.getElementById("formParticipante").reset();
+}
   
 function seleccionarVersion(action){
     if(action === 'habilitar' && !tienePermiso('activar_version')){
@@ -637,4 +657,96 @@ function tieneAlgunPermiso(permisos) {
 
 function esRol(rol) {
     return userPermisos.roles.includes(rol);
+}
+
+async function cargarReportes(idCuestionario) {
+    try {
+        const response = await fetch(`../BaseDeDatos/controladores/getReportes.php?cuestionario=${idCuestionario}`);
+        const result = await response.json();
+        
+        const contenedorReportes = document.getElementById("reportes");
+        
+        if (!contenedorReportes) {
+            console.warn("No se encontró el contenedor de reportes");
+            return;
+        }
+
+        if (result.status === 'success' && result.data.length > 0) {
+            contenedorReportes.innerHTML = '';
+            
+            // Crear título de sección
+            const titulo = document.createElement('h4');
+            titulo.className = 'mb-3';
+            titulo.innerHTML = '<i class="bi bi-exclamation-triangle-fill text-warning"></i> Reportes del Cuestionario';
+            contenedorReportes.appendChild(titulo);
+
+            // Crear cards de reportes
+            result.data.forEach(reporte => {
+                const card = crearCardReporte(reporte);
+                contenedorReportes.appendChild(card);
+            });
+        } else if (result.status === 'success' && result.data.length === 0) {
+            contenedorReportes.innerHTML = `
+                <div class="alert alert-info" role="alert">
+                    <i class="bi bi-info-circle"></i> No hay reportes para este cuestionario
+                </div>
+            `;
+        } else {
+            contenedorReportes.innerHTML = `
+                <div class="alert alert-warning" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i> ${result.message || 'No se pudieron cargar los reportes'}
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error al cargar reportes:', error);
+        const contenedorReportes = document.getElementById("reportes");
+        if (contenedorReportes) {
+            contenedorReportes.innerHTML = `
+                <div class="alert alert-danger" role="alert">
+                    <i class="bi bi-exclamation-circle"></i> Error al cargar los reportes
+                </div>
+            `;
+        }
+    }
+}
+
+function crearCardReporte(reporte) {
+    const card = document.createElement('div');
+    card.className = 'card mb-3 shadow-sm';
+    
+    const fechaFormateada = new Date(reporte.FECHA_REPORTE).toLocaleString('es-AR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    // Foto de perfil por defecto si no tiene
+    const fotoPerfil = reporte.FOTO_PERFIL || '../assets/img/default-avatar.png';
+
+    card.innerHTML = `
+        <div class="card-body">
+            <div class="d-flex align-items-start">
+                <img src="${fotoPerfil}" 
+                     alt="${reporte.NOMBRE}" 
+                     class="rounded-circle me-3" 
+                     style="width: 50px; height: 50px; object-fit: cover;"
+                     onerror="this.src='../assets/img/default-avatar.png'">
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-0">${reporte.NOMBRE}</h6>
+                        <small class="text-muted">${fechaFormateada}</small>
+                    </div>
+                    <p class="mb-2 text-muted"><small>${reporte.EMAIL}</small></p>
+                    <div class="alert alert-warning mb-0" role="alert">
+                        <strong>Motivo:</strong> ${reporte.MOTIVO}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    return card;
 }

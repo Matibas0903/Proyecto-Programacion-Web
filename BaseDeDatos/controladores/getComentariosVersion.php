@@ -13,6 +13,7 @@ try {
                 p.COMENTARIO,
                 p.VALORACION_CUESTIONARIO,
                 p.FECHA_PARTICIPACION,
+                p.ID_PARTICIPACION,
                 p.INVITADO,
                 u.ID_USUARIO,
                 CASE 
