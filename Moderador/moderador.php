@@ -1,5 +1,5 @@
 <?php
-    require("conexion.php");
+    require("../BaseDeDatos/conexion.php");
 
     
 

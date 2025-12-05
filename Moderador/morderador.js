@@ -1,5 +1,6 @@
 window.onload = function()
 {
+  obtenerCuestionarios();
 EnlazarComentariosACuestionarios();
 const btnReportar = document.querySelectorAll(".btn-reportes");
 
@@ -274,12 +275,12 @@ function agregarCuestionario(cuestionario) {
   const botones = document.createElement("div");
   botones.className = "d-flex flex-wrap gap-2";
   botones.innerHTML = `
-        <button class="btn btn-moderar" data-cuestionario="${cuestionario.TITULO}">
+        <button class="btn btn-moderar" data-cuestionario="${cuestionario.NOMBRE_CUESTIONARIO}">
             <i class="bi bi-incognito"></i> Modera
         </button>
         <button class="btn btn-detalles"
-            data-titulo="${cuestionario.TITULO}"
-            data-admin="${cuestionario.ADMIN}"
+            data-titulo="${cuestionario.NOMBRE_CUESTIONARIO}"
+            data-admin="${cuestionario.ID_USUARIO}"
             data-fecha="${cuestionario.FECHA}"
             data-jugadores="${cuestionario.JUGADORES}"
             data-estado="${cuestionario.ESTADO}"
@@ -304,9 +305,14 @@ function agregarCuestionario(cuestionario) {
   // Agregar al contenedor
   contenedor.appendChild(col);
 
-  document.getElementById("btnReportes").addEventListener("click", cargarReportes);
+  const botonReportar = col.querySelector(".btn-reportes");
+
+  botonReportar.addEventListener("click", () => {
+      abrirModalReportes(cuestionario.ID_CUESTIONARIO);
+  });
 }
 
+//toda esta funcion y su php la hice pensando qeu duncionaba con los cuestionarios que habia pero nho sabia que estaban hardcodeados
 async function cargarReportes(){
   const checkboxs = document.querySelectorAll("input[type='checkbox']");
     let motivos = [];
@@ -340,15 +346,33 @@ async function cargarReportes(){
         }
     });
 }
-// Ejemplo de uso con datos
-
-
-
-
 let cuestionarioId = null;
 
 function abrirModalReportes(id){
   cuestionarioId = id;
   const modalReporte = new bootstrap.Modal(document.getElementById("modalReportes"));
   modalReporte.show();
+}
+
+
+//tengo problemas para cargar los cuestionarios moderados, porque no puedo mandar "dinamicamente" las cards cargaadas 
+async function obtenerCuestionarios(){
+  try{
+    const response = await fetch("obtenerCuestionariosMederados.php",{
+      method:"POST",
+      headers:{"Content-Type": "application/json"},
+      body: JSON.stringify({})
+    });
+
+    const data = await response.json();
+
+    if(data.status === "error"){
+      console.error("Error: ", data.message);
+    }
+
+    console.log("Datos enviados", data);
+
+  }catch(error){
+    console.log("error al enviar los cuestionarios", error);
+  }
 }
