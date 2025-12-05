@@ -251,7 +251,7 @@ function usarPlantilla(idVersion){
         mostrarMensajeError('No tienes permisos para crear cuestionarios');
         return;
     }
-    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${idVersion}`;
+    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${idVersion}&accion=crear_cuestionario`;
 }
 function jugarPlantilla(idVersion){
     if (!tienePermiso('jugar_cuestionario')) {

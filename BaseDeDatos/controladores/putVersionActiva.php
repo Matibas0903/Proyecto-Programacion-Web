@@ -22,7 +22,6 @@
         $cuestionario = (int) $body['idCuestionario'];
         $version = $body['idVersion'];
 
-        // ✅ Iniciar transacción
         $conn->beginTransaction();
 
         // Si es "deshabilitar", solo desactivamos todas
@@ -40,7 +39,6 @@
             exit();
         }
 
-        // ✅ VALIDACIÓN 1: Verificar que la versión existe
         $stmtVerificar = $conn->prepare("
             SELECT ID_VERSION, ACTIVO
             FROM version_cuestionario
@@ -55,7 +53,6 @@
             throw new Exception("La versión $version no existe para este cuestionario");
         }
 
-        // ✅ VALIDACIÓN 2: Verificar que la versión tiene preguntas
         $stmtPreguntas = $conn->prepare("
             SELECT COUNT(*) as total
             FROM pregunta
@@ -69,7 +66,6 @@
             throw new Exception("No se puede activar una versión sin preguntas. Agrega preguntas primero.");
         }
 
-        // ✅ VALIDACIÓN 3: Verificar que todas las preguntas tienen opciones
         $stmtOpcionesFaltantes = $conn->prepare("
             SELECT p.ID_PREGUNTA, p.ENUNCIADO
             FROM pregunta p
@@ -86,7 +82,6 @@
             throw new Exception("Hay preguntas sin opciones de respuesta. Completa todas las preguntas antes de activar.");
         }
 
-        // ✅ VALIDACIÓN 4: Verificar que hay al menos una opción correcta por pregunta
         $stmtSinCorrectas = $conn->prepare("
             SELECT p.ID_PREGUNTA, p.ENUNCIADO, p.ID_TIPO_PREGUNTA
             FROM pregunta p
@@ -107,7 +102,6 @@
             throw new Exception("Hay preguntas sin respuesta correcta marcada. Marca al menos una opción correcta en cada pregunta.");
         }
 
-        // ✅ TODO OK: Desactivar todas las versiones del cuestionario
         $stmt = $conn->prepare("
             UPDATE version_cuestionario
             SET ACTIVO = 'Inactivo'
@@ -116,7 +110,6 @@
         $stmt->bindParam(':idCuestionario', $cuestionario, PDO::PARAM_INT);
         $stmt->execute();
 
-        // ✅ Activar la versión seleccionada
         $stmt1 = $conn->prepare("
             UPDATE version_cuestionario
             SET ACTIVO = 'Activo'

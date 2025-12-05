@@ -1,7 +1,10 @@
 let cantidadPreguntas = 0;
-let preguntaActivaId = null; /*NUEVO*/
-let preguntasData = {}; /*NUEVO*/
+let preguntaActivaId = null;
+let preguntasData = {};
+let accion = null;
+
 window.onload = function () {
+  accion = new URLSearchParams(window.location.search).get('accion')
   obtenerPlantilla();
   abrirPanelDerecho();
   abrirPanelTemas();
@@ -11,28 +14,20 @@ window.onload = function () {
   ponerNombre();
   añadirPregunta();
 
-// Nuevo: Event listener para el select de tipo de pregunta
-
-  /* NUEVO */
+  // Event listener para el select de tipo de pregunta
   const selectTipoPregunta = document.getElementById("selectTipoPregunta");
-  /*NUEVO*/
   selectTipoPregunta.addEventListener("change", () => {
-    if (!preguntaActivaId) return; // Si no hay pregunta activa, no hacer nada
+    if (!preguntaActivaId) return;
 
-    // Guardar el tipo en preguntasData
     preguntasData[preguntaActivaId].tipo = selectTipoPregunta.value;
 
     const form = document.getElementById(`form-${preguntaActivaId}`);
     if (!form) return;
 
-    // Eliminar las opciones anteriores
     const existingRow = form.querySelector(".row.g-3");
     if (existingRow) existingRow.remove();
 
-    // Crear opciones nuevas segun el tipo seleccionado
     const newRow = CrearOpciones(preguntaActivaId);
-
-    // Agregar al formulario
     if (newRow) {
       form.querySelector(".cardPregunta").appendChild(newRow);
     }
@@ -41,10 +36,11 @@ window.onload = function () {
   const btnGuardar = document.getElementById("btnGuardar");
   btnGuardar.addEventListener("click", () => {
     const idVersion = document.body.dataset.idversion;
-    if (idVersion) {
+    
+    if (idVersion && accion) {
       actualizarPlantilla();
     } else {
-      console.log("algo falló en el envio de id version");
+      console.log("algo falló en el envio de id version o action");
     }
   });
 
@@ -56,7 +52,9 @@ window.onload = function () {
   const btnGuardarYSalir = document.getElementById("btnGuardarYSalir");
   btnGuardarYSalir.addEventListener("click", () => {
     actualizarPlantilla();
-    window.location.href = "../administrador/administrador.php";
+    setTimeout(() => {
+      window.location.href = "../administrador/administrador.php";
+    }, 1000);
   });
 };
 
@@ -201,17 +199,61 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
     e.stopPropagation();
     div.remove();
     document.getElementById(`form-${preguntaId}`)?.remove();
+    delete preguntasData[preguntaId];
   });
 
   div.addEventListener("click", () => {
     document.querySelectorAll(".form-pregunta").forEach((f) => (f.style.display = "none"));
     const form = document.getElementById(`form-${preguntaId}`);
-    if (form) form.style.display = "block";
-
-  // Nuevo: Asignar pregunta activa y sincronizar tipo con el select
-  preguntaActivaId = preguntaId;
-  const selectTipo = document.getElementById("selectTipoPregunta");
-  if (selectTipo) selectTipo.value = preguntasData[preguntaId].tipo;
+    if (form) {
+      form.style.display = "block";
+      preguntaActivaId = preguntaId;
+      
+      // Actualizar el select de tipo de pregunta
+      const selectTipo = document.getElementById("selectTipoPregunta");
+      if (selectTipo && preguntasData[preguntaId]) {
+        selectTipo.value = preguntasData[preguntaId].tipo || "";
+        
+        // Si la pregunta tiene tipo pero no tiene opciones visibles, crearlas
+        const tipoActual = preguntasData[preguntaId].tipo;
+        if (tipoActual) {
+          const existingRow = form.querySelector(".row.g-3");
+          const tieneOpciones = existingRow && existingRow.children.length > 0;
+           
+          if (!tieneOpciones) {
+            if (existingRow) existingRow.remove();
+            const newRow = CrearOpciones(preguntaId);
+            if (newRow) {
+              form.querySelector(".cardPregunta").appendChild(newRow);
+            }
+          } else {
+            // Las opciones ya existen, rellenarlas con los datos guardados si existen
+            if (preguntasData[preguntaId].opciones) {
+              const opcionesDivs = form.querySelectorAll(".btnOpciones");
+              const inputs = form.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+              
+              preguntasData[preguntaId].opciones.forEach((opcion, index) => {
+                if (opcionesDivs[index]) {
+                  // Para input type text (respuesta abierta)
+                  if (opcionesDivs[index].tagName === 'INPUT') {
+                    opcionesDivs[index].value = opcion.TEXTO || opcion.texto || "";
+                  } else {
+                    // Para divs editables
+                    opcionesDivs[index].textContent = opcion.TEXTO || opcion.texto || "";
+                  }
+                }
+                
+                // Marcar como correcta si corresponde
+                const esCorrecta = opcion.ES_CORRECTA == 1 || opcion.esCorrecta == 1;
+                if (esCorrecta && inputs[index]) {
+                  inputs[index].checked = true;
+                }
+              });
+            }
+          }
+        }
+      }
+    }
   });
 
   div.appendChild(pTitulo);
@@ -219,25 +261,20 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
   return div;
 }
 
-function crearFormularioPregunta(preguntaId, titulo , opciones) {
-  //Crea el cuerpo de la pregunta editable
+function crearFormularioPregunta(preguntaId, titulo = "Pregunta") {
   const panelPrincipal = document.getElementById("panelPrincipal");
 
   const container = document.createElement("div");
   container.classList.add("container", "mt-4", "form-pregunta");
   container.id = `form-${preguntaId}`;
   container.style.display = "none";
-
   container.dataset.id = preguntaId;
 
   const card = document.createElement("div");
   card.classList.add("card", "mb-4", "cardPregunta");
 
-  // Card body con input
   const cardBody = document.createElement("div");
   cardBody.classList.add("card-body", "text-center", "cardBodyPregun");
-
-  const inputPregunta = document.createElement("input");
 
   // Buscador de imagen Unsplash
   const divBusqueda = document.createElement("div");
@@ -282,71 +319,52 @@ function crearFormularioPregunta(preguntaId, titulo , opciones) {
       contenedorImagenes.appendChild(imgEl);
     });
   });
-  //
-  //CrearOpciones
-  inputPregunta.value= titulo;
+
+  const inputPregunta = document.createElement("input");
+  inputPregunta.value = titulo;
   inputPregunta.type = "text";
-  inputPregunta.classList.add(
-    "form-control",
-    "text-center",
-    "fw-bold",
-    "input-pregunta"
-  );
+  inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
   inputPregunta.placeholder = "Escribe aquí la pregunta...";
   inputPregunta.id = `pregunta-${preguntaId}`;
 
   cardBody.appendChild(inputPregunta);
-  /*NUEVO*/
-  const row = CrearOpciones(preguntaId);
-  if (row) {
-    // Solo appendear si row existe
-    card.appendChild(cardBody);
-    card.appendChild(row);
-  } else {
-    card.appendChild(cardBody); // Si no hay row, al menos appendear el body
-  }
 
+  // Crear el row vacío para las opciones
+  const row = document.createElement("div");
+  row.classList.add("row", "g-3");
+
+  card.appendChild(cardBody);
+  card.appendChild(row);
   container.appendChild(card);
   panelPrincipal.appendChild(container);
 
   inputPregunta.addEventListener("input", () => {
-    const tituloPregunta = document.getElementById(
-      `tituloPregunta-${preguntaId}`
-    );
+    const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
     tituloPregunta.innerText = inputPregunta.value;
     if (tituloPregunta.innerText.trim() === "") {
       tituloPregunta.innerText = "Pregunta";
     }
   });
-
 }
 
 function añadirPregunta() {
-  // Agrega una diapositiva en el panel izquierdo
   const btn = document.getElementById("btnAñadirPregunta");
   const contenedor = document.getElementById("divPreguntas");
-  const selectTipo = document.getElementById("selectTipoPregunta");
 
   btn.addEventListener("click", () => {
     cantidadPreguntas++;
     const id = `pregunta-${cantidadPreguntas}`;
     
-    // Inicializar datos para la nueva pregunta (nuevo: movido dentro del listener y usando 'id')
     preguntasData[id] = {
-      tipo: "",
+      tipo: ""
     };
     
-    // Crear boton y formulario (manteniendo modularidad)
     contenedor.appendChild(crearBotonPregunta(id));
     crearFormularioPregunta(id);
-    
-    // Resetear el select de tipo (nuevo)
-    if (selectTipo) selectTipo.value = "";
   });
 
   return cantidadPreguntas;
 }
-
 
 // API UNSPLASH
 const UNSPLASH_ACCESS_KEY = "lDb4UKPmw_gnTXieod-jR_pWtDpRszsGNSuPlOpyudc";
@@ -376,7 +394,6 @@ async function obtenerPlantilla() {
 
   if (version === null) {
     console.error("No se proporcionó ID de versión");
-    mostrarMensajeError("No se proporcionó ID de versión");
     return;
   }
 
@@ -390,20 +407,19 @@ async function obtenerPlantilla() {
     const data = await response2.json();
     
     if (data.status === "error") {
-      mostrarMensajeError(data.message);
+      alert(data.message);
       return;
     }
 
     if (data.status === "warning") {
       console.warn(data.message);
-      mostrarMensajeError(data.message);
+      alert(data.message);
       window.location.href = "../administrador/administrador.php";
       return;
     }
 
     if (data === null) {
       console.error("No se recibieron datos");
-      mostrarMensajeError("No se recibieron datos");
       return;
     }
 
@@ -411,7 +427,6 @@ async function obtenerPlantilla() {
     llenarCampos(data);
   } catch (error) {
     console.error("Error al enviar id version:", error);
-    mostrarMensajeError("Error al enviar id version:");
   }
 }
 
@@ -457,7 +472,6 @@ async function cargarPreguntasDesdeBD(version) {
 
     if (data === null) {
       console.error("No se recibieron preguntas");
-      mostrarMensajeError("No se recibieron preguntas");
       return;
     }
 
@@ -469,130 +483,156 @@ async function cargarPreguntasDesdeBD(version) {
       console.log(`--- Procesando pregunta #${idxPregunta + 1} ---`);
       console.log("ID formulario:", id);
       console.log("Enunciado:", p.ENUNCIADO);
+      console.log("Tipo pregunta:", p.ID_TIPO_PREGUNTA);
       console.log("Opciones recibidas:", p.opciones);
-      console.log("Tipo pregunta:", p.ID_TIPO_PREGUNTA)
+
+      // Guardar el tipo de pregunta en preguntasData ANTES de crear el formulario
+      preguntasData[id] = {
+        tipo: p.ID_TIPO_PREGUNTA || "",
+        opciones: p.opciones // Guardar también las opciones
+      };
 
       const btn = crearBotonPregunta(id, p.ENUNCIADO);
       document.getElementById("divPreguntas").appendChild(btn);
 
-      // Convertir opciones a texto
-      const opcionesTexto = p.opciones.map((opt) => opt.TEXTO);
-      console.log("OpcionesTexto:", opcionesTexto);
+      // Crear formulario básico
+      crearFormularioPregunta(id, p.ENUNCIADO);
 
-      // Crear formulario
-      crearFormularioPregunta(id, p.ENUNCIADO, opcionesTexto);
-
-      const selectTipoPregunta = document.getElementById("selectTipoPregunta");
-
-      selectTipoPregunta.value = p.ID_TIPO_PREGUNTA;
-      // Nuevo: Inicializar preguntasData con el tipo (después de crear el formulario)
-      preguntasData[id] = { tipo: p.ID_TIPO_PREGUNTA || "" };
-
-      // Seleccionar el formulario recién creado
+      // Obtener el formulario recién creado
       const form = document.getElementById(`form-${id}`);
-      console.log("Formulario creado:", form);
-      if (form) {
-        const existingRow = form.querySelector(".row.g-3");
-        if (existingRow) existingRow.remove();
-        const newRow = CrearOpciones(id); 
-        if (newRow) {
-          form.querySelector(".cardPregunta").appendChild(newRow);
-        }
+      if (!form) {
+        console.warn("No se encontró el formulario recién creado");
+        return;
       }
-      // Llenar las opciones recién creadas con datos de BD (usando ID local para querySelector)
+
+      // Eliminar las opciones por defecto
+      const existingRow = form.querySelector(".row.g-3");
+      if (existingRow) existingRow.remove();
+
+      // Crear opciones según el tipo de pregunta
+      const newRow = CrearOpciones(id);
+      if (newRow) {
+        form.querySelector(".cardPregunta").appendChild(newRow);
+      }
+
+      // Llenar las opciones con los datos de la BD
       const opcionesDivs = form.querySelectorAll(".btnOpciones");
-      const radios = form.querySelectorAll('input[type="radio"]');  // O checkboxes para tipo 4
+      const inputs = form.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+
       p.opciones.forEach((opcion, index) => {
-      console.log(`Opción ${index}:`, opcion.TEXTO, "Correcta?", opcion.ES_CORRECTA);
+        console.log(`Opción ${index}:`, opcion.TEXTO, "Correcta?", opcion.ES_CORRECTA);
 
-    if (opcionesDivs[index]) {
-      opcionesDivs[index].textContent = opcion.TEXTO;
-    } else {
-      console.warn(`No existe div para opción ${index}`);
-    }
-    if (opcion.ES_CORRECTA == 1) {
-      if (radios[index]) {
-        radios[index].checked = true;
-        console.log(`Marcada como correcta la opción ${index}`);
-      } else {
-        console.warn(`No existe radio para opción ${index}`);
-      }
-    }
-  });
-  console.log(`--- Fin pregunta #${idxPregunta + 1} ---`);
+        if (opcionesDivs[index]) {
+          // Para input type text (respuesta abierta)
+          if (opcionesDivs[index].tagName === 'INPUT') {
+            opcionesDivs[index].value = opcion.TEXTO;
+          } else {
+            // Para divs editables
+            opcionesDivs[index].textContent = opcion.TEXTO;
+          }
+        } else {
+          console.warn(`No existe div para opción ${index}`);
+        }
 
+        if (opcion.ES_CORRECTA == 1) {
+          if (inputs[index]) {
+            inputs[index].checked = true;
+            console.log(`Marcada como correcta la opción ${index}`);
+          } else {
+            console.warn(`No existe input para opción ${index}`);
+          }
+        }
+      });
+
+      console.log(`--- Fin pregunta #${idxPregunta + 1} ---`);
     });
   } catch (error) {
     console.error("Error al cargar preguntas:", error);
-    mostrarMensajeError("Error al cargar preguntas");
   }
 }
 
 function recolectarPreguntas() {
-    /*NUEVO*/
   const preguntas = [];
   const formularios = document.querySelectorAll(".form-pregunta");
 
- formularios.forEach((form, index) => {
+  formularios.forEach((form, index) => {
     const preguntaId = form.dataset.id;
     if (!preguntaId) {
       console.warn("formulario sin data-id encontrado, se saltea", form);
       return;
     }
-    const entry = preguntasData[preguntaId];
-    if (!entry) {
-      console.warn("preguntasData no contiene la clave:", preguntaId);
-      return;
-    }
 
-    const tipoPregunta = parseInt(entry.tipo) || 0;
+    const entry = preguntasData[preguntaId];
+    const tipoPregunta = entry ? parseInt(entry.tipo) || 0 : 0;
 
     const enunciado = form.querySelector(".input-pregunta").value.trim();
-    const imagenSeleccionada =
-      form.querySelector(".imagen-seleccionada")?.src || null;
+    const imagenSeleccionada = form.querySelector(".imagen-seleccionada")?.src || null;
 
     let opciones = [];
     let opcionesCorrectas = [];
 
-    // Recolectar segun tipo de pregunta
+    // Recolectar según tipo de pregunta
+    if (tipoPregunta === 1 || tipoPregunta === 2) {
+      // Verdadero/Falso o Respuesta única
+      const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
+      opcionesDiv.forEach((div) => {
+        const texto = div.querySelector(".btnOpciones").textContent.trim();
+        const inputCorrecto = div.querySelector("input[type='radio']");
+        const esCorrecta = inputCorrecto.checked ? 1 : 0;
 
-    switch (tipoPregunta) {
-      case 1:
-      case 2:
-      case 4:
-        const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
-
-        opcionesDiv.forEach((div) => {
-          const texto = div.querySelector(".btnOpciones").textContent.trim();
-          const inputCorrecto = div.querySelector("input");
-          const esCorrecta = inputCorrecto.checked ? 1 : 0;
-
-          opciones.push({
-            texto: texto,
-            esCorrecta: esCorrecta,
-          });
-
-          if (esCorrecta) opcionesCorrectas.push(texto);
+        opciones.push({
+          texto: texto,
+          esCorrecta: esCorrecta,
         });
-        break;
 
-      case 3: // Respuesta abierta
-          const inputRespuestaAbierta = form.querySelector(".btnOpciones");
-          if (inputRespuestaAbierta) {
-            const respuestaCorrecta = inputRespuestaAbierta.value.trim();
-            
-            opciones.push({
-              texto: respuestaCorrecta,
-              esCorrecta: 1
-            });
-            
-            opcionesCorrectas.push(respuestaCorrecta);
-          }
-          break;
+        if (esCorrecta) opcionesCorrectas.push(texto);
+      });
+    } else if (tipoPregunta === 3) {
+      // Respuesta abierta
+      const inputRespuestaAbierta = form.querySelector(".btnOpciones");
+      if (inputRespuestaAbierta) {
+        const respuestaCorrecta = inputRespuestaAbierta.value.trim();
+        
+        opciones.push({
+          texto: respuestaCorrecta,
+          esCorrecta: 1
+        });
+        
+        opcionesCorrectas.push(respuestaCorrecta);
+      }
+    } else if (tipoPregunta === 4) {
+      // Elección múltiple
+      const opcionesDivMultiple = form.querySelectorAll(".OpcionRespuesta");
+      opcionesDivMultiple.forEach((div) => {
+        const texto = div.querySelector(".btnOpciones").textContent.trim();
+        const inputCorrecto = div.querySelector("input[type='checkbox']");
+        const esCorrecta = inputCorrecto.checked ? 1 : 0;
+
+        opciones.push({
+          texto: texto,
+          esCorrecta: esCorrecta,
+        });
+
+        if (esCorrecta) opcionesCorrectas.push(texto);
+      });
+    } else {
+      // Sin tipo definido o tipo 0 - comportamiento por defecto
+      const opcionesDiv = form.querySelectorAll(".OpcionRespuesta");
+      opcionesDiv.forEach((div) => {
+        const texto = div.querySelector(".btnOpciones").textContent.trim();
+        const inputCorrecto = div.querySelector("input[type='radio']");
+        const esCorrecta = inputCorrecto ? (inputCorrecto.checked ? 1 : 0) : 0;
+
+        opciones.push({
+          texto: texto,
+          esCorrecta: esCorrecta,
+        });
+
+        if (esCorrecta) opcionesCorrectas.push(texto);
+      });
     }
 
     preguntas.push({
-      id: preguntaId,
       nro_orden: index + 1,
       tipo: tipoPregunta,
       enunciado: enunciado,
@@ -602,19 +642,20 @@ function recolectarPreguntas() {
     });
   });
 
+  console.log("Preguntas recolectadas:", preguntas);
   return preguntas;
 }
 
 async function actualizarPlantilla() {
   const idVersion = document.body.dataset.idversion;
-  if (!idVersion) {
-    mostrarMensajeError("No hay una plantilla cargada para actualizar.");
+  
+  if (!idVersion || !accion) {
+    alert("No hay una plantilla cargada o falta el parámetro de acción.");
     return;
   }
 
   const esValido = await ValidarForm();
   if (!esValido) {
-    mostrarMensajeError("Hay errores, no actualizo nada");
     console.log("Hay errores, no actualizo nada");
     return;
   }
@@ -629,7 +670,7 @@ async function actualizarPlantilla() {
   const preguntas = recolectarPreguntas();
 
   try {
-    const response = await fetch("actualizarPreguntas2.php", {
+    const response = await fetch("actualizarPreguntas2.php?action="+accion, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -641,18 +682,21 @@ async function actualizarPlantilla() {
 
     const data = await response.json();
     if (data.status === "success") {
-      mostrarMensajeError(data.message);
+      alert(data.message);
     } else {
-      mostrarMensajeError("Error: " + data.message);
+      alert("Error: " + data.message);
     }
   } catch (error) {
     console.error("Error al actualizar la plantilla:", error);
-    mostrarMensajeError("Error al actualizar la plantilla:",error);
   }
 }
 
 async function ValidarForm() {
-  const formData = new FormData(document.getElementById("cuestionarioData"));
+  const form = document.getElementById("cuestionarioData");
+  const formData = new FormData(form);
+
+  const tipoPregSelect = document.getElementById("selectTipoPregunta");
+  formData.append("selectTipoPregunta", tipoPregSelect.value || "");
 
   try {
     const response = await fetch("validarForm.php", {
@@ -672,7 +716,6 @@ async function ValidarForm() {
     }
   } catch (error) {
     console.error("Error al validar formulario:", error);
-    mostrarMensajeError("Error al validar formulario:");
     return false;
   }
 }
@@ -691,7 +734,7 @@ function mostrarErrores(data) {
 
   Object.keys(data.errors).forEach((campo) => {
     const input = document.getElementById(campo);
-    const divError = input.parentElement.querySelector(".invalid-feedback");
+    const divError = input?.parentElement?.querySelector(".invalid-feedback");
 
     if (input && divError) {
       input.classList.add("is-invalid");
@@ -701,84 +744,51 @@ function mostrarErrores(data) {
   });
 }
 
-/*NUEVO*/
 function CrearOpciones(preguntaId) {
   const tipoOpcion = document.getElementById("selectTipoPregunta").value;
-  const row = document.createElement("div"); // Siempre crear row
+  const row = document.createElement("div");
   row.classList.add("row", "g-3");
 
   if (tipoOpcion == 1) {
-    //Verdareo o Falso
-    {
+    // Verdadero o Falso
+    ["Verdadero", "Falso"].forEach((texto) => {
       const col = document.createElement("div");
       col.classList.add("col-12", "col-md-6");
 
       const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add(
-        "card-body",
-        "d-flex",
-        "flex-row",
-        "mb-3",
-        "OpcionRespuesta"
-      );
+      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "OpcionRespuesta");
 
-      const btnVerdadero = document.createElement("div");
-      btnVerdadero.classList.add("btn", "w-100", "btnOpciones");
-      btnVerdadero.textContent = "Verdadero";
+      const btnOpcion = document.createElement("div");
+      btnOpcion.classList.add("btn", "w-100", "btnOpciones");
+      btnOpcion.textContent = texto;
+
       const radioCorrecta = document.createElement("input");
       radioCorrecta.type = "radio";
-      radioCorrecta.name = `radioCorrecto-${preguntaId}`; // Unique por pregunta
+      radioCorrecta.name = `radioCorrecto-${preguntaId}`;
       radioCorrecta.classList.add("form-check-input");
 
       cardRespuesta.appendChild(radioCorrecta);
-      cardRespuesta.appendChild(btnVerdadero);
+      cardRespuesta.appendChild(btnOpcion);
       col.appendChild(cardRespuesta);
       row.appendChild(col);
-    }
-
-    // Falso
-    {
-      const col = document.createElement("div");
-      col.classList.add("col-12", "col-md-6");
-
-      const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add(
-        "card-body",
-        "d-flex",
-        "flex-row",
-        "mb-3",
-        "OpcionRespuesta"
-      );
-
-      const btnFalso = document.createElement("div");
-      btnFalso.classList.add("btn", "w-100", "btnOpciones");
-      btnFalso.textContent = "Falso";
-      const radioCorrecta = document.createElement("input");
-      radioCorrecta.type = "radio";
-      radioCorrecta.name = `radioCorrecto-${preguntaId}`; // Unique por pregunta
-      radioCorrecta.classList.add("form-check-input");
-
-      cardRespuesta.appendChild(radioCorrecta);
-      cardRespuesta.appendChild(btnFalso);
-      col.appendChild(cardRespuesta);
-      row.appendChild(col);
-    }
+    });
   } else if (tipoOpcion == 2) {
-    // Respuesta unica
+    // Respuesta única
     for (let i = 1; i <= 4; i++) {
       const col = document.createElement("div");
       col.classList.add("col-12", "col-md-6");
+
       const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
-      cardRespuesta.classList.add("OpcionRespuesta");
+      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "OpcionRespuesta");
 
       const btnOpcion = document.createElement("div");
       btnOpcion.classList.add("btn", "w-100", "btnOpciones");
       btnOpcion.contentEditable = true;
       btnOpcion.textContent = `Opción ${i}`;
+
       const radioCorrecta = document.createElement("input");
       radioCorrecta.type = "radio";
-      radioCorrecta.name = `radioCorrecto-${preguntaId}`; // Unique por pregunta
+      radioCorrecta.name = `radioCorrecto-${preguntaId}`;
       radioCorrecta.classList.add("form-check-input");
 
       cardRespuesta.appendChild(radioCorrecta);
@@ -788,58 +798,41 @@ function CrearOpciones(preguntaId) {
     }
   } else if (tipoOpcion == 3) {
     // Respuesta abierta
-
     const cardRespuesta = document.createElement("div");
-    cardRespuesta.classList.add(
-      "card-body",
-      "d-flex",
-      "flex-row",
-      "justify-content-center",
-      "align-items-center",
-      "mb-3"
-    );
-    cardRespuesta.classList.add("OpcionRespuesta");
+    cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "justify-content-center", "align-items-center", "mb-3", "OpcionRespuesta");
+
     const btnOpcion = document.createElement("input");
-    btnOpcion.classList.add("btnOpciones");
+    btnOpcion.classList.add("btnOpciones", "form-control");
     btnOpcion.type = "text";
     btnOpcion.style.width = "800px";
-    btnOpcion.placeholder = "Escribe la opción aquí";
-    cardRespuesta.appendChild(btnOpcion);
+    btnOpcion.placeholder = "Escribe la respuesta correcta aquí";
 
+    cardRespuesta.appendChild(btnOpcion);
     row.appendChild(cardRespuesta);
   } else if (tipoOpcion == 4) {
-    // Eleccion multiple
+    // Elección múltiple
     for (let i = 1; i <= 4; i++) {
       const col = document.createElement("div");
       col.classList.add("col-12", "col-md-6");
+
       const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3");
-      cardRespuesta.classList.add("OpcionRespuesta");
+      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "OpcionRespuesta");
 
       const btnOpcion = document.createElement("div");
       btnOpcion.classList.add("btn", "w-100", "btnOpciones");
       btnOpcion.contentEditable = true;
       btnOpcion.textContent = `Opción ${i}`;
-      const radioCorrecta = document.createElement("input");
-      radioCorrecta.type = "radio";
-      radioCorrecta.classList.add("form-check-input");
 
-      cardRespuesta.appendChild(radioCorrecta);
+      const checkCorrecta = document.createElement("input");
+      checkCorrecta.type = "checkbox";
+      checkCorrecta.classList.add("form-check-input");
+
+      cardRespuesta.appendChild(checkCorrecta);
       cardRespuesta.appendChild(btnOpcion);
       col.appendChild(cardRespuesta);
       row.appendChild(col);
     }
-  } else {
-    /*NUEVO*/
   }
 
   return row;
-}
-
-function mostrarMensajeError(mensaje){
-    const toastEl = document.getElementById('toast_mensaje_error');
-    const toastBody = document.getElementById('mensaje_error');
-    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
-    const toast = new bootstrap.Toast(toastEl);
-    toast.show();
 }

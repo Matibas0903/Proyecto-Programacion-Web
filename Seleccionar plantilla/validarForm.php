@@ -52,9 +52,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($tipoPregunta)) {
         $errores["selectTipoPregunta"] = "Seleccione un tipo de pregunta";
     } else {
-        if ($tipoPregunta !== "2") {
-            $errores["selectTipoPregunta"] = "Ese tipo de pregunta no esta disponible en esta version";
-        }
         $data["tipoPregunta"] = htmlspecialchars($tipoPregunta);
     }
 

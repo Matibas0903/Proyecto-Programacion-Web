@@ -164,7 +164,7 @@ async function onloadPage(){
                         }
                     } else if(actionVersionesModal === 'nueva'){
                         if(tienePermiso('crear_cuestionario')){
-                            editar(selectVersion);
+                            editar(selectVersion, 'nueva_version');
                         } else {
                             mostrarMensajeError('No tienes permisos para crear cuestionarios');
                         }
@@ -247,7 +247,7 @@ function cargarVersiones(){
             const btnEditar = div.querySelector("#button_editar");
             if(btnEditar){
                 btnEditar.addEventListener("click", () => {
-                    editar(version.ID_VERSION)
+                    editar(version.ID_VERSION, 'editar_version')
                 });
             }
         }
@@ -296,16 +296,16 @@ function ver(version){
     window.location.href = `../Vista previa/verCuestionario.php?version=${version}`;
 }
 
-function editar(version){
+function editar(version, accion ="editar_version"){
     if(!tienePermiso('editar_cuestionario') && !tienePermiso('crear_cuestionario')){
         mostrarMensajeError('No tienes permisos para editar cuestionarios');
         return;
     }
-    if(!version){
-        window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.ID_CUESTIONARIO}`;
-        return;
-    }
-    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${version}`;
+    // if(!version){
+    //     window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.ID_CUESTIONARIO}`;
+    //     return;
+    // }
+    window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${version}&accion=${accion}`;
 }
 
 function compartir(idVersion){
@@ -413,7 +413,6 @@ async function agregarParticipante(idUsuario, idVersion){
         id_version: idVersion,
         fecha_vencimiento: fechaVencimiento
     };
-    console.log(body);
     const modalParticipantesEl = document.getElementById('modalParticipantes');
     const modalParticipantes = bootstrap.Modal.getInstance(modalParticipantesEl);
     if(idUsuario !== cuestionario.ID_MODERADOR && idUsuario !== cuestionario.ID_USUARIO){
@@ -520,7 +519,7 @@ function seleccionarVersion(action){
     document.getElementById("tituloVersiones").innerHTML = action==='habilitar'? 'Habilitar Versión': 'Nueva Versión';
     document.getElementById("texto_versiones").innerHTML = action==='habilitar'? 'Selecciona la version a habilitar': 'Selecciona una version de plantilla';
     document.getElementById("seleccionar_versiones").innerHTML = action==='habilitar'? 'Continuar': 'Crear nueva versión';
-    opcion.innerHTML = action==='habilitar'? 'Deshabilitar todas': 'Ninguna (Crear desde cero)';
+   
     const modal = new bootstrap.Modal(document.getElementById('modalVersiones'));
     modal.show();
     actionVersionesModal = action;

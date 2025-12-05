@@ -111,7 +111,7 @@
             $pregunta['opciones'] = $stmtOpciones->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        // 4. Agregar preguntas al cuestionario
+        //Agregar preguntas al cuestionario
         $cuestionario['preguntas'] = $preguntas;
 
         echo json_encode(["status" => "success", "data" => $cuestionario]);

@@ -4,6 +4,30 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $idUsuario = $_SESSION["usuario_id"];
 require("../BaseDeDatos/conexion.php");
+require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
+//roles del usuario
+$esAdministrador = Permisos::esRol('Administrador', $idUsuario);
+$esParticipante = Permisos::esRol('Participante', $idUsuario);
+$esModerador = Permisos::esRol('Moderador', $idUsuario);
+
+$puedeCrearCuestionario = Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuario);
+$puedeEditarCuestionario = Permisos::tieneAlgunPermiso(['editar_cuestionario'], $idUsuario);
+
+if(!$puedeCrearCuestionario && !$puedeEditarCuestionario){
+    if($esAdministrador){
+        header("Location: ../administrador/administrador.php");
+        exit;
+    } else if ($esModerador) {
+        header("Location: ../moderador/moderador.php");
+        exit;
+    } else if ($esParticipante) {
+        header("Location: ../participante/participante.php");
+        exit;
+    } else {
+        header("Location: ../Inicio/inicio.php");
+        exit;
+    }
+}
 
 
 $idVersion = $_GET['id_version'] ?? null;
@@ -162,6 +186,8 @@ try {
                 </select>
                 <div class="invalid-feedback"></div>
             </div>
+
+
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
 
