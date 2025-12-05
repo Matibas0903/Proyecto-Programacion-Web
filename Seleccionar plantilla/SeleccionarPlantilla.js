@@ -4,7 +4,7 @@ let preguntasData = {};
 let accion = null;
 
 window.onload = function () {
-  accion = new URLSearchParams(window.location.search).get('accion')
+  accion = new URLSearchParams(window.location.search).get("accion");
   obtenerPlantilla();
   abrirPanelDerecho();
   abrirPanelTemas();
@@ -36,7 +36,7 @@ window.onload = function () {
   const btnGuardar = document.getElementById("btnGuardar");
   btnGuardar.addEventListener("click", () => {
     const idVersion = document.body.dataset.idversion;
-    
+
     if (idVersion && accion) {
       actualizarPlantilla();
     } else {
@@ -67,7 +67,10 @@ function abrirPanelDerecho() {
     panelDer.classList.toggle("active");
     btnPanelDer.classList.toggle("open");
 
-    if (panelDer.classList.contains("active") && main.classList.contains("col-9")) {
+    if (
+      panelDer.classList.contains("active") &&
+      main.classList.contains("col-9")
+    ) {
       main.classList.remove("col-9");
       main.classList.add("col-7");
     } else {
@@ -162,7 +165,7 @@ function mostrarConfiguracion() {
 function ponerNombre() {
   const titulo = document.getElementById("tituloCuestionario");
   const inputTituloconfig = document.getElementById("inputTitulo");
-  
+
   inputTituloconfig.addEventListener("change", () => {
     titulo.innerHTML = inputTituloconfig.value;
     if (titulo.innerText.trim() === "") {
@@ -185,7 +188,14 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
   div.id = preguntaId;
 
   const pTitulo = document.createElement("p");
-  pTitulo.classList.add("text-center", "text-muted", "mb-0", "fs-6", "fs-md-5", "fs-lg-4");
+  pTitulo.classList.add(
+    "text-center",
+    "text-muted",
+    "mb-0",
+    "fs-6",
+    "fs-md-5",
+    "fs-lg-4"
+  );
   pTitulo.textContent = titulo;
   pTitulo.id = `tituloPregunta-${preguntaId}`;
 
@@ -203,23 +213,25 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
   });
 
   div.addEventListener("click", () => {
-    document.querySelectorAll(".form-pregunta").forEach((f) => (f.style.display = "none"));
+    document
+      .querySelectorAll(".form-pregunta")
+      .forEach((f) => (f.style.display = "none"));
     const form = document.getElementById(`form-${preguntaId}`);
     if (form) {
       form.style.display = "block";
       preguntaActivaId = preguntaId;
-      
+
       // Actualizar el select de tipo de pregunta
       const selectTipo = document.getElementById("selectTipoPregunta");
       if (selectTipo && preguntasData[preguntaId]) {
         selectTipo.value = preguntasData[preguntaId].tipo || "";
-        
+
         // Si la pregunta tiene tipo pero no tiene opciones visibles, crearlas
         const tipoActual = preguntasData[preguntaId].tipo;
         if (tipoActual) {
           const existingRow = form.querySelector(".row.g-3");
           const tieneOpciones = existingRow && existingRow.children.length > 0;
-           
+
           if (!tieneOpciones) {
             if (existingRow) existingRow.remove();
             const newRow = CrearOpciones(preguntaId);
@@ -230,21 +242,26 @@ function crearBotonPregunta(preguntaId, titulo = "Pregunta") {
             // Las opciones ya existen, rellenarlas con los datos guardados si existen
             if (preguntasData[preguntaId].opciones) {
               const opcionesDivs = form.querySelectorAll(".btnOpciones");
-              const inputs = form.querySelectorAll('input[type="radio"], input[type="checkbox"]');
-              
+              const inputs = form.querySelectorAll(
+                'input[type="radio"], input[type="checkbox"]'
+              );
+
               preguntasData[preguntaId].opciones.forEach((opcion, index) => {
                 if (opcionesDivs[index]) {
                   // Para input type text (respuesta abierta)
-                  if (opcionesDivs[index].tagName === 'INPUT') {
-                    opcionesDivs[index].value = opcion.TEXTO || opcion.texto || "";
+                  if (opcionesDivs[index].tagName === "INPUT") {
+                    opcionesDivs[index].value =
+                      opcion.TEXTO || opcion.texto || "";
                   } else {
                     // Para divs editables
-                    opcionesDivs[index].textContent = opcion.TEXTO || opcion.texto || "";
+                    opcionesDivs[index].textContent =
+                      opcion.TEXTO || opcion.texto || "";
                   }
                 }
-                
+
                 // Marcar como correcta si corresponde
-                const esCorrecta = opcion.ES_CORRECTA == 1 || opcion.esCorrecta == 1;
+                const esCorrecta =
+                  opcion.ES_CORRECTA == 1 || opcion.esCorrecta == 1;
                 if (esCorrecta && inputs[index]) {
                   inputs[index].checked = true;
                 }
@@ -290,7 +307,12 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta") {
   btnBuscar.classList.add("btn", "btn-secondary", "mb-3");
 
   const contenedorImagenes = document.createElement("div");
-  contenedorImagenes.classList.add("d-flex", "flex-wrap", "justify-content-center", "gap-2");
+  contenedorImagenes.classList.add(
+    "d-flex",
+    "flex-wrap",
+    "justify-content-center",
+    "gap-2"
+  );
 
   divBusqueda.appendChild(inputBusqueda);
   divBusqueda.appendChild(btnBuscar);
@@ -323,7 +345,12 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta") {
   const inputPregunta = document.createElement("input");
   inputPregunta.value = titulo;
   inputPregunta.type = "text";
-  inputPregunta.classList.add("form-control", "text-center", "fw-bold", "input-pregunta");
+  inputPregunta.classList.add(
+    "form-control",
+    "text-center",
+    "fw-bold",
+    "input-pregunta"
+  );
   inputPregunta.placeholder = "Escribe aquí la pregunta...";
   inputPregunta.id = `pregunta-${preguntaId}`;
 
@@ -339,7 +366,9 @@ function crearFormularioPregunta(preguntaId, titulo = "Pregunta") {
   panelPrincipal.appendChild(container);
 
   inputPregunta.addEventListener("input", () => {
-    const tituloPregunta = document.getElementById(`tituloPregunta-${preguntaId}`);
+    const tituloPregunta = document.getElementById(
+      `tituloPregunta-${preguntaId}`
+    );
     tituloPregunta.innerText = inputPregunta.value;
     if (tituloPregunta.innerText.trim() === "") {
       tituloPregunta.innerText = "Pregunta";
@@ -354,11 +383,11 @@ function añadirPregunta() {
   btn.addEventListener("click", () => {
     cantidadPreguntas++;
     const id = `pregunta-${cantidadPreguntas}`;
-    
+
     preguntasData[id] = {
-      tipo: ""
+      tipo: "",
     };
-    
+
     contenedor.appendChild(crearBotonPregunta(id));
     crearFormularioPregunta(id);
   });
@@ -394,6 +423,7 @@ async function obtenerPlantilla() {
 
   if (version === null) {
     console.error("No se proporcionó ID de versión");
+    mostrarMensajeError("No se obtuvo la version del cuestionario");
     return;
   }
 
@@ -405,21 +435,22 @@ async function obtenerPlantilla() {
     });
 
     const data = await response2.json();
-    
+
     if (data.status === "error") {
-      alert(data.message);
+      mostrarMensajeError(data.message);
       return;
     }
 
     if (data.status === "warning") {
       console.warn(data.message);
-      alert(data.message);
+      mostrarMensajeError(data.message);
       window.location.href = "../administrador/administrador.php";
       return;
     }
 
     if (data === null) {
       console.error("No se recibieron datos");
+      mostrarMensajeError("No se recibieron los datos");
       return;
     }
 
@@ -427,6 +458,7 @@ async function obtenerPlantilla() {
     llenarCampos(data);
   } catch (error) {
     console.error("Error al enviar id version:", error);
+    mostrarMensajeError("Error al enviar id version");
   }
 }
 
@@ -472,6 +504,7 @@ async function cargarPreguntasDesdeBD(version) {
 
     if (data === null) {
       console.error("No se recibieron preguntas");
+      mostrarMensajeError("Error al recibir las preguntas");
       return;
     }
 
@@ -489,7 +522,7 @@ async function cargarPreguntasDesdeBD(version) {
       // Guardar el tipo de pregunta en preguntasData ANTES de crear el formulario
       preguntasData[id] = {
         tipo: p.ID_TIPO_PREGUNTA || "",
-        opciones: p.opciones // Guardar también las opciones
+        opciones: p.opciones, // Guardar también las opciones
       };
 
       const btn = crearBotonPregunta(id, p.ENUNCIADO);
@@ -517,14 +550,21 @@ async function cargarPreguntasDesdeBD(version) {
 
       // Llenar las opciones con los datos de la BD
       const opcionesDivs = form.querySelectorAll(".btnOpciones");
-      const inputs = form.querySelectorAll('input[type="radio"], input[type="checkbox"]');
+      const inputs = form.querySelectorAll(
+        'input[type="radio"], input[type="checkbox"]'
+      );
 
       p.opciones.forEach((opcion, index) => {
-        console.log(`Opción ${index}:`, opcion.TEXTO, "Correcta?", opcion.ES_CORRECTA);
+        console.log(
+          `Opción ${index}:`,
+          opcion.TEXTO,
+          "Correcta?",
+          opcion.ES_CORRECTA
+        );
 
         if (opcionesDivs[index]) {
           // Para input type text (respuesta abierta)
-          if (opcionesDivs[index].tagName === 'INPUT') {
+          if (opcionesDivs[index].tagName === "INPUT") {
             opcionesDivs[index].value = opcion.TEXTO;
           } else {
             // Para divs editables
@@ -548,6 +588,7 @@ async function cargarPreguntasDesdeBD(version) {
     });
   } catch (error) {
     console.error("Error al cargar preguntas:", error);
+    mostrarMensajeError("Error al cargar las preguntas");
   }
 }
 
@@ -566,7 +607,8 @@ function recolectarPreguntas() {
     const tipoPregunta = entry ? parseInt(entry.tipo) || 0 : 0;
 
     const enunciado = form.querySelector(".input-pregunta").value.trim();
-    const imagenSeleccionada = form.querySelector(".imagen-seleccionada")?.src || null;
+    const imagenSeleccionada =
+      form.querySelector(".imagen-seleccionada")?.src || null;
 
     let opciones = [];
     let opcionesCorrectas = [];
@@ -592,12 +634,12 @@ function recolectarPreguntas() {
       const inputRespuestaAbierta = form.querySelector(".btnOpciones");
       if (inputRespuestaAbierta) {
         const respuestaCorrecta = inputRespuestaAbierta.value.trim();
-        
+
         opciones.push({
           texto: respuestaCorrecta,
-          esCorrecta: 1
+          esCorrecta: 1,
         });
-        
+
         opcionesCorrectas.push(respuestaCorrecta);
       }
     } else if (tipoPregunta === 4) {
@@ -648,9 +690,11 @@ function recolectarPreguntas() {
 
 async function actualizarPlantilla() {
   const idVersion = document.body.dataset.idversion;
-  
+
   if (!idVersion || !accion) {
-    alert("No hay una plantilla cargada o falta el parámetro de acción.");
+    mostrarMensajeError(
+      "No hay una plantilla cargada o falta el parámetro de acción."
+    );
     return;
   }
 
@@ -670,7 +714,7 @@ async function actualizarPlantilla() {
   const preguntas = recolectarPreguntas();
 
   try {
-    const response = await fetch("actualizarPreguntas2.php?action="+accion, {
+    const response = await fetch("actualizarPreguntas2.php?action=" + accion, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -682,12 +726,12 @@ async function actualizarPlantilla() {
 
     const data = await response.json();
     if (data.status === "success") {
-      alert(data.message);
     } else {
-      alert("Error: " + data.message);
+      mostrarMensajeError("Error: " + data.message);
     }
   } catch (error) {
     console.error("Error al actualizar la plantilla:", error);
+    mostrarMensajeError("Error al actualizar la plantilla");
   }
 }
 
@@ -716,6 +760,7 @@ async function ValidarForm() {
     }
   } catch (error) {
     console.error("Error al validar formulario:", error);
+    mostrarMensajeError("Error al validar formulario");
     return false;
   }
 }
@@ -756,7 +801,13 @@ function CrearOpciones(preguntaId) {
       col.classList.add("col-12", "col-md-6");
 
       const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "OpcionRespuesta");
+      cardRespuesta.classList.add(
+        "card-body",
+        "d-flex",
+        "flex-row",
+        "mb-3",
+        "OpcionRespuesta"
+      );
 
       const btnOpcion = document.createElement("div");
       btnOpcion.classList.add("btn", "w-100", "btnOpciones");
@@ -779,7 +830,13 @@ function CrearOpciones(preguntaId) {
       col.classList.add("col-12", "col-md-6");
 
       const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "OpcionRespuesta");
+      cardRespuesta.classList.add(
+        "card-body",
+        "d-flex",
+        "flex-row",
+        "mb-3",
+        "OpcionRespuesta"
+      );
 
       const btnOpcion = document.createElement("div");
       btnOpcion.classList.add("btn", "w-100", "btnOpciones");
@@ -799,7 +856,15 @@ function CrearOpciones(preguntaId) {
   } else if (tipoOpcion == 3) {
     // Respuesta abierta
     const cardRespuesta = document.createElement("div");
-    cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "justify-content-center", "align-items-center", "mb-3", "OpcionRespuesta");
+    cardRespuesta.classList.add(
+      "card-body",
+      "d-flex",
+      "flex-row",
+      "justify-content-center",
+      "align-items-center",
+      "mb-3",
+      "OpcionRespuesta"
+    );
 
     const btnOpcion = document.createElement("input");
     btnOpcion.classList.add("btnOpciones", "form-control");
@@ -816,7 +881,13 @@ function CrearOpciones(preguntaId) {
       col.classList.add("col-12", "col-md-6");
 
       const cardRespuesta = document.createElement("div");
-      cardRespuesta.classList.add("card-body", "d-flex", "flex-row", "mb-3", "OpcionRespuesta");
+      cardRespuesta.classList.add(
+        "card-body",
+        "d-flex",
+        "flex-row",
+        "mb-3",
+        "OpcionRespuesta"
+      );
 
       const btnOpcion = document.createElement("div");
       btnOpcion.classList.add("btn", "w-100", "btnOpciones");
@@ -835,4 +906,12 @@ function CrearOpciones(preguntaId) {
   }
 
   return row;
+}
+
+function mostrarMensajeError(mensaje) {
+  const toastEl = document.getElementById("toast_mensaje_error");
+  const toastBody = document.getElementById("mensaje_error");
+  toastBody.innerText = mensaje || "Ups, ocurrio un error inesperado";
+  const toast = new bootstrap.Toast(toastEl);
+  toast.show();
 }
