@@ -223,6 +223,13 @@ body {
   border: solid black;
   border-width: 1px 1px 3px 1px;
 }
+
+.btnOpciones::placeholder {
+  /*NUEVO*/
+  color: #333333;
+  opacity: 1;
+}
+
 .btnOpciones:hover {
   color: white;
   background-color: #f46958;
