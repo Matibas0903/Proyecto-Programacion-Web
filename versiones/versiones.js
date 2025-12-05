@@ -247,7 +247,7 @@ function cargarVersiones(){
             const btnEditar = div.querySelector("#button_editar");
             if(btnEditar){
                 btnEditar.addEventListener("click", () => {
-                    editar(version.ID_VERSION)
+                    editar(version.ID_VERSION, 'editar_version')
                 });
             }
         }
@@ -301,10 +301,10 @@ function editar(version, accion ="editar_version"){
         mostrarMensajeError('No tienes permisos para editar cuestionarios');
         return;
     }
-    if(!version){
-        window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.ID_CUESTIONARIO}`;
-        return;
-    }
+    // if(!version){
+    //     window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?cuestionario=${cuestionario.ID_CUESTIONARIO}`;
+    //     return;
+    // }
     window.location.href = `../Seleccionar Plantilla/SeleccionarPlantilla.php?id_version=${version}&accion=${accion}`;
 }
 
@@ -519,7 +519,7 @@ function seleccionarVersion(action){
     document.getElementById("tituloVersiones").innerHTML = action==='habilitar'? 'Habilitar Versión': 'Nueva Versión';
     document.getElementById("texto_versiones").innerHTML = action==='habilitar'? 'Selecciona la version a habilitar': 'Selecciona una version de plantilla';
     document.getElementById("seleccionar_versiones").innerHTML = action==='habilitar'? 'Continuar': 'Crear nueva versión';
-    opcion.innerHTML = action==='habilitar'? 'Deshabilitar todas': 'Ninguna (Crear desde cero)';
+   
     const modal = new bootstrap.Modal(document.getElementById('modalVersiones'));
     modal.show();
     actionVersionesModal = action;
