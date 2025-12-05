@@ -125,10 +125,9 @@ function guardarCambios() {
     const fechaValida = validarFecha(fechaInput);
     const fotoValida = validarFoto(fotoSelect);
 
-    if (!nombreValido || !emailValido || !contrasenaValida || !fechaValida || !fotoValida) return;
-
-    // Actualizar datos visualmente
-    preview.src = fotoSelect.value;
+    if (!nombreValido || !emailValido || !fechaValida || !fotoValida || !contrasenaValida) {
+      return;
+    }
 
     // Armar objeto con los campos modificados
     const datos = {};

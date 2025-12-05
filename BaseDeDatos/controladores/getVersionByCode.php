@@ -46,10 +46,13 @@
         $stmtPreguntas = $conn->prepare("
             SELECT 
                 p.ID_PREGUNTA,
+                tp.ID_TIPO_PREGUNTA,
+                tp.TIPO AS tipo_pregunta,
                 p.NRO_ORDEN,
                 p.ENUNCIADO,
                 p.IMAGEN
             FROM pregunta p
+            LEFT JOIN tipo_pregunta tp ON p.ID_TIPO_PREGUNTA = tp.ID_TIPO_PREGUNTA
             WHERE p.ID_VERSION = :idVersion
             ORDER BY p.NRO_ORDEN
         ");
@@ -74,7 +77,7 @@
             $pregunta['opciones'] = $stmtOpciones->fetchAll(PDO::FETCH_ASSOC);
         }
 
-        // 4. Agregar preguntas al cuestionario
+        //Agregar preguntas al cuestionario
         $cuestionario['preguntas'] = $preguntas;
 
         echo json_encode(["status" => "success", "data" => $cuestionario]);

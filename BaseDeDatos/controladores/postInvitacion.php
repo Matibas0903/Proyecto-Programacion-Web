@@ -1,10 +1,14 @@
 <?php
     session_start();
     require('../conexion.php');
+    require_once(__DIR__ . '/permisos.php');
 
     header('Content-Type: application/json');
     //OBTENER ID USUARIO DE LA SESSION
     try {
+        if(!Permisos::tienePermiso(['agregar_participante'], $_SESSION['usuario_id'])){
+            throw new Exception('No tienes permiso para enviar invitaciones.');
+        }
         if(!isset($_SESSION['usuario_id'])){
             throw new Exception('Usuario no autenticado');
         }

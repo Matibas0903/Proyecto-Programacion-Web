@@ -2,6 +2,25 @@
 session_start();
 
 require('../BaseDeDatos/conexion.php');
+require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
+$idUsuario = $_SESSION['usuario_id'];
+//roles del usuario
+$esAdministrador = Permisos::esRol('Administrador', $idUsuario);
+$esParticipante = Permisos::esRol('Participante', $idUsuario);
+$esModerador = Permisos::esRol('Moderador', $idUsuario);
+
+if (!$esAdministrador) {
+    if ($esModerador) {
+        header("Location: ../moderador/moderador.php");
+        exit;
+    } elseif ($esParticipante) {
+        header("Location: ../participante/participante.php");
+        exit;
+    } else {
+        header("Location: ../Inicio/inicio.php");
+        exit;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -1,4 +1,9 @@
-window.onload = function(){
+let userPermisos = {
+    roles: [],
+    permisos: []
+};
+window.onload = async function(){
+    await obtenerPermisosUsuario();
     cargarVersion();
     jugarPlantilla();
     salirDePlantilla();
@@ -13,9 +18,15 @@ function jugarPlantilla(){
         window.location.href = "../participante/participante.php";
         return;
     } else {
-        btnJugar.addEventListener("click", function (){
-            window.location.href = `../Jugar plantilla/jugarPlantilla.php?version=${idVersion}`;
+        if(!tienePermiso('jugar_cuestionario')){
+            btnJugar.classList.add('d-none');
+            return;
+        } else {
+            const invitacion = new URLSearchParams(window.location.search).get('invitacion');
+            btnJugar.addEventListener("click", function (){
+            window.location.href = `../Jugar plantilla/jugarPlantilla.php?version=${idVersion}&invitacion=${invitacion || 'false'}`;
         });
+        }
     }
 }
 function salirDePlantilla(){
@@ -118,4 +129,34 @@ function mostrarMensajeError(mensaje){
     toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
+}
+
+async function obtenerPermisosUsuario() {
+    try {
+        const respuesta = await fetch('../BaseDeDatos/controladores/getPermisosUsuario.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const datos = await respuesta.json();
+        if (datos.status === 'success') {
+            userPermisos.roles = datos.roles;
+            userPermisos.permisos = datos.permisos;
+        }
+    } catch (error) {
+        mostrarMensajeError('Error al obtener permisos');
+    }
+}
+
+function tienePermiso(permiso) {
+    return userPermisos.permisos.includes(permiso);
+}
+
+function tieneAlgunPermiso(permisos) {
+    return permisos.some(p => userPermisos.permisos.includes(p));
+}
+
+function esRol(rol) {
+    return userPermisos.roles.includes(rol);
 }

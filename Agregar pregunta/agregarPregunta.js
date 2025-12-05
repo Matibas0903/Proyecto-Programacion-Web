@@ -256,7 +256,6 @@ function crearPregunta(preguntaId) {
 
   const inputPregunta = document.createElement("input");
   //
-
   // --- buscador de imagen Unsplash ---
   const divBusqueda = document.createElement("div");
   divBusqueda.classList.add("mb-3", "card-pregunta");
@@ -283,30 +282,6 @@ function crearPregunta(preguntaId) {
   divBusqueda.appendChild(contenedorImagenes);
   cardBody.appendChild(divBusqueda);
   //
-
-  inputPregunta.type = "text";
-  inputPregunta.classList.add(
-    "form-control",
-    "text-center",
-    "fw-bold",
-    "input-pregunta"
-  );
-  inputPregunta.placeholder = "Escribe aquí la pregunta...";
-  inputPregunta.id = `pregunta-${preguntaId}`;
-
-  cardBody.appendChild(inputPregunta);
-  /*NUEVO*/
-  const row = CrearOpciones(preguntaId);
-  if (row) {
-    // Solo appendear si row existe
-    card.appendChild(cardBody);
-    card.appendChild(row);
-  } else {
-    card.appendChild(cardBody); // Si no hay row, al menos appendear el body
-  }
-
-  container.appendChild(card);
-  panelPrincipal.appendChild(container);
   // Escuchar busquedad
   btnBuscar.addEventListener("click", async () => {
     contenedorImagenes.innerHTML = "Cargando...";
@@ -330,6 +305,30 @@ function crearPregunta(preguntaId) {
     });
   });
   //
+  //Crear Opciones
+  inputPregunta.type = "text";
+  inputPregunta.classList.add(
+    "form-control",
+    "text-center",
+    "fw-bold",
+    "input-pregunta"
+  );
+  inputPregunta.placeholder = "Escribe aquí la pregunta...";
+  inputPregunta.id = `pregunta-${preguntaId}`;
+
+  cardBody.appendChild(inputPregunta);
+  /*NUEVO*/
+  const row = CrearOpciones(preguntaId);
+  if (row) {
+    // Solo appendear si row existe
+    card.appendChild(cardBody);
+    card.appendChild(row);
+  } else {
+    card.appendChild(cardBody); // Si no hay row, al menos appendear el body
+  }
+
+  container.appendChild(card);
+  panelPrincipal.appendChild(container);
 
   inputPregunta.addEventListener("input", () => {
     const tituloPregunta = document.getElementById(
@@ -341,7 +340,7 @@ function crearPregunta(preguntaId) {
     }
   });
 }
-
+//checkear jquery
 //Consume la API
 //API
 // ========== UNSPLASH API ==========
@@ -397,7 +396,7 @@ async function guardarCuestionario() {
     //procedo a enviar las preguntas para guardarlas
     EnviarPreguntas(idVersionGlobal);
   } catch (error) {
-    console.error("Error al guardar el cuestionario:", error);
+      mostrarMensajeError(error);
   }
 }
 
@@ -422,11 +421,12 @@ async function EnviarPreguntas(version) {
     const responseText = await response.text();
 
     const data = JSON.parse(responseText);
-    alert(data.message); //cambiar por una etiqueta que hizo griselda
+    mostrarMensajeError(data.message); 
     console.log("llenando campos");
     llenarCampos(idVersionGlobal);
   } catch (error) {
     console.error("Error al enviar las preguntas:", error);
+    mostrarMensajeError(error);
   }
 }
 function recolectarPreguntas() {
@@ -455,9 +455,8 @@ function recolectarPreguntas() {
     let opciones = [];
     let opcionesCorrectas = [];
 
-    // -----------------------------------
     // Recolectar segun tipo de pregunta
-    // -----------------------------------
+
     switch (tipoPregunta) {
       case 1:
       case 2:
@@ -479,9 +478,18 @@ function recolectarPreguntas() {
         break;
 
       case 3: // Respuesta abierta
-        opciones = [];
-        opcionesCorrectas = [];
-        break;
+          const inputRespuestaAbierta = form.querySelector(".btnOpciones");
+          if (inputRespuestaAbierta) {
+            const respuestaCorrecta = inputRespuestaAbierta.value.trim();
+            
+            opciones.push({
+              texto: respuestaCorrecta,
+              esCorrecta: 1
+            });
+            
+            opcionesCorrectas.push(respuestaCorrecta);
+          }
+          break;
     }
 
     preguntas.push({
@@ -541,6 +549,7 @@ async function llenarCampos(idVersionGlobal) {
     console.log("campos llenos");
   } catch (error) {
     console.error("Error al cargar el cuestionario:", error);
+    mostrarMensajeError(error);
   }
 }
 
@@ -567,6 +576,7 @@ async function ValidarForm() {
   } catch (error) {
     console.log("oh no");
     console.error("Error al registrar inscripción:", error);
+    mostrarMensajeError(error);
     return false;
   }
 }
@@ -736,4 +746,12 @@ function CrearOpciones(preguntaId) {
   }
 
   return row;
+}
+
+function mostrarMensajeError(mensaje){
+    const toastEl = document.getElementById('toast_mensaje_error');
+    const toastBody = document.getElementById('mensaje_error');
+    toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
+    const toast = new bootstrap.Toast(toastEl);
+    toast.show();
 }

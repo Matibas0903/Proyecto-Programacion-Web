@@ -1,10 +1,14 @@
 <?php
 session_start();
 require('../conexion.php');
+require_once(__DIR__ . '/permisos.php');
 
 header('Content-Type: application/json');
 
 try {
+    if(!Permisos::tienePermiso(['jugar_cuestionario'], $_SESSION['usuario_id'])){
+            throw new Exception('No tienes permiso para jugar el cuestionario.');
+    }
     if (!isset($_SESSION['usuario_id'])) {
         throw new Exception('Usuario no autenticado');
     }
@@ -67,7 +71,34 @@ try {
         $stmtActualizarInvitacion->bindParam(':idInvitacion', $invitacion['ID_INVITACION'], PDO::PARAM_INT);
         $stmtActualizarInvitacion->execute();
     }
+    //Verificamos si tiene invitación pendiente
+    if(isset($body['invitacion']) && $body['invitacion'] === 'true'){
+        $stmtInvitacionC = $conn->prepare("
+                SELECT ID_INVITACION
+                FROM invitacion
+                WHERE ID_VERSION = :idVersion 
+                    AND ID_USUARIO = :idUsuario
+                    AND ESTADO = 'Pendiente'
+                    AND DATE(FECHA_VENCIMIENTO) >= CURDATE()
+                LIMIT 1
+            ");
 
+        $stmtInvitacionC->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+        $stmtInvitacionC->bindParam(':idUsuario', $idUsuario, PDO::PARAM_INT);
+        $stmtInvitacionC->execute();
+        $invitacionC = $stmtInvitacionC->fetch(PDO::FETCH_ASSOC);
+        
+        if ($invitacionC) {
+            //Cambiamos estado de invitación
+            $stmtActualizarInvitacionC = $conn->prepare("
+                    UPDATE invitacion 
+                    SET ESTADO = 'Aceptada'
+                    WHERE ID_INVITACION = :idInvitacion
+                ");
+            $stmtActualizarInvitacionC->bindParam(':idInvitacion', $invitacionC['ID_INVITACION'], PDO::PARAM_INT);
+            $stmtActualizarInvitacionC->execute();
+        }
+    }
     //Verificamos si el usuario ya participó en esta versión
     $stmtVerificar = $conn->prepare("
             SELECT ID_PARTICIPACION 
@@ -109,16 +140,66 @@ try {
 
     $idParticipacion = $conn->lastInsertId();
 
-    //Insertamos las respuestas
-    $stmtRespuesta = $conn->prepare("
-            INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION)
-            VALUES (:idParticipacion, :idOpcion)
-        ");
+    $stmtPreguntas = $conn->prepare("
+        SELECT 
+            p.ID_PREGUNTA,
+            p.ID_TIPO_PREGUNTA,
+            o.ID_OPCION,
+            o.TEXTO AS TEXTO_CORRECTO,
+            o.ES_CORRECTA
+        FROM pregunta p
+        LEFT JOIN opcion o ON o.ID_PREGUNTA = p.ID_PREGUNTA
+        WHERE p.ID_VERSION = :idVersion
+    ");
+    $stmtPreguntas->bindParam(':idVersion', $idVersion, PDO::PARAM_INT);
+    $stmtPreguntas->execute();
+    $preguntasConOpciones = $stmtPreguntas->fetchAll(PDO::FETCH_ASSOC);
 
-    foreach ($respuestas as $idOpcion) {
-        $stmtRespuesta->bindParam(':idParticipacion', $idParticipacion, PDO::PARAM_INT);
-        $stmtRespuesta->bindParam(':idOpcion', $idOpcion, PDO::PARAM_INT);
-        $stmtRespuesta->execute();
+    $stmtRespuesta = $conn->prepare("
+        INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION)
+        VALUES (:idParticipacion, :idOpcion)
+    ");
+
+    $stmtRespuestaAbierta = $conn->prepare("
+        INSERT INTO respuesta (ID_PARTICIPACION, ID_OPCION, TEXTO_RESPUESTA, ES_CORRECTA)
+        VALUES (:idParticipacion, :idOpcion, :textoRespuesta, :esCorrecta)
+    ");
+
+    foreach ($respuestas as $respuesta) {
+        if (is_array($respuesta) && isset($respuesta['idOpcion']) && isset($respuesta['textoRespuesta'])) {
+            $idOpcion = (int) $respuesta['idOpcion'];
+            $textoRespuesta = trim($respuesta['textoRespuesta']);
+            
+            // Buscar la respuesta correcta en las opciones
+            $opcionCorrecta = null;
+            foreach ($preguntasConOpciones as $po) {
+                if ($po['ID_OPCION'] == $idOpcion) {
+                    $opcionCorrecta = $po;
+                    break;
+                }
+            }
+            
+            if ($opcionCorrecta) {
+                $textoEsperado = mb_strtolower(trim($opcionCorrecta['TEXTO_CORRECTO']), 'UTF-8');
+                $textoIngresado = mb_strtolower($textoRespuesta, 'UTF-8');
+                
+                $esCorrecta = ($textoEsperado === $textoIngresado) ? 1 : 0;
+                
+                // Insertar respuesta abierta con validación
+                $stmtRespuestaAbierta->bindParam(':idParticipacion', $idParticipacion, PDO::PARAM_INT);
+                $stmtRespuestaAbierta->bindParam(':idOpcion', $idOpcion, PDO::PARAM_INT);
+                $stmtRespuestaAbierta->bindParam(':textoRespuesta', $textoRespuesta, PDO::PARAM_STR);
+                $stmtRespuestaAbierta->bindParam(':esCorrecta', $esCorrecta, PDO::PARAM_INT);
+                $stmtRespuestaAbierta->execute();
+            }
+        } 
+        // ✅ CASO 2: Respuestas normales (Verdadero/Falso, única, múltiple)
+        else {
+            $idOpcion = (int) $respuesta;
+            $stmtRespuesta->bindParam(':idParticipacion', $idParticipacion, PDO::PARAM_INT);
+            $stmtRespuesta->bindParam(':idOpcion', $idOpcion, PDO::PARAM_INT);
+            $stmtRespuesta->execute();
+        }
     }
 
     $conn->commit();
@@ -143,3 +224,4 @@ try {
         "message" => $e->getMessage()
     ]);
 }
+?>

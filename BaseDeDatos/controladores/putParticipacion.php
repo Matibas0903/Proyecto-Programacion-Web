@@ -1,6 +1,7 @@
 <?php
     session_start();
     require('../conexion.php');
+    require_once(__DIR__ . '/permisos.php');
 
     header('Content-Type: application/json');
 
@@ -38,6 +39,9 @@
 
         // Solo calificación
         if (isset($body['calificacion']) && !isset($body['comentario'])) {
+            if(!Permisos::tienePermiso(['calificar_cuestionario'], $_SESSION['usuario_id'])){
+                throw new Exception('No tienes permiso para calificar cuestionario.');
+            }
             $calificacion = (int) $body['calificacion'];
             $stmt = $conn->prepare("
                 UPDATE participacion 
@@ -50,6 +54,9 @@
         }
         // Solo comentario
         else if (!isset($body['calificacion']) && isset($body['comentario'])) {
+            if(!Permisos::tienePermiso(['comentar_cuestionario'], $_SESSION['usuario_id'])){
+                throw new Exception('No tienes permiso para comentar cuestionario.');
+            }
             $comentario = trim($body['comentario']);
             $stmt = $conn->prepare("
                 UPDATE participacion 
@@ -62,6 +69,9 @@
         }
         // Ambos
         else {
+            if(!Permisos::tienePermiso(['comentar_cuestionario', 'calificar_cuestionario'], $_SESSION['usuario_id'])){
+                throw new Exception('No tienes permiso para comentar y calificar cuestionario.');
+            }
             $calificacion = (int) $body['calificacion'];
             $comentario = trim($body['comentario']);
             $stmt = $conn->prepare("

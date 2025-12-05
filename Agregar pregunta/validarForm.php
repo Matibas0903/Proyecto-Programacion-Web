@@ -23,7 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $activo       = trim($_POST["estado"] ?? "");
 
 
-    // --- Validacion: Título ---
+
+    // --- Validación: Título ---
     if (empty($titulo)) {
         $errores["inputTitulo"] = "El título no puede estar vacío";
     } else {

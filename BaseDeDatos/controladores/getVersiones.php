@@ -1,9 +1,14 @@
 <?php
+    session_start();
     require('../conexion.php');
+    require_once(__DIR__ . '/permisos.php');
 
     header('Content-Type: application/json');
 
     try {
+        if(!Permisos::tienePermiso(['ver_versiones'], $_SESSION['usuario_id'])){
+            throw new Exception('No tienes permiso para ver las versiones de este cuestionario.');
+        }
         //obtenemos el parametro cuestionario
         if (!isset($_GET['cuestionario'])) {
             throw new Exception('ID de cuestionario inválido.');

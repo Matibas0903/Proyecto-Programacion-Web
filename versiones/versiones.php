@@ -1,3 +1,25 @@
+<?
+session_start();
+require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
+$idUsuario = $_SESSION['usuario_id'];
+//roles del usuario
+$esAdministrador = Permisos::esRol('Administrador', $idUsuario);
+$esParticipante = Permisos::esRol('Participante', $idUsuario);
+$esModerador = Permisos::esRol('Moderador', $idUsuario);
+
+if (!$esAdministrador) {
+    if ($esModerador) {
+        header("Location: ../moderador/moderador.php");
+        exit;
+    } elseif ($esParticipante) {
+        header("Location: ../participante/participante.php");
+        exit;
+    } else {
+        header("Location: ../Inicio/inicio.php");
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,12 +41,12 @@
       <div class="col-12 col-md-8 my-3 order-2 order-md-1">
         <h1 id="titulo_cuestionario"></h1>
         <!-- <p><strong>Descripción: </strong><span id="descripcion_cuestionario"></span></p> -->
-        <div>
+        <!-- <div>
           <div class="border_cuest d-flex justify-content-between align-items-center p-2 my-3">
             <p class="mb-0"><i class="bi bi-incognito"></i> <strong>Moderador: </strong> <span id="moderador_nombre"></span></p>
             <img src="" alt="moderador" class="moderador_avatar" id="moderador_avatar">
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- <div class="col-12 col-md-4 my-3 order-1 order-md-2">
             <img src="" alt="img-programacion" id="image_cuest" class="img-cuestionario d-block mx-auto">
@@ -37,9 +59,9 @@
       <div class="col-12 col-md-3" id="habilitar_container">
         <button class="button_principal border_cuest" id="button-habilitar"><i class="bi bi-lock-fill"></i> Habilitar version</button>
       </div>
-      <div class="col-12 col-md-3">
+      <!-- <div class="col-12 col-md-3">
         <button class="button_principal border_cuest" id="button-moderador"><i class="bi bi-incognito"></i> Moderador</button>
-      </div>
+      </div> -->
     </div>
     <!--cuerpo -->
     <div class="row my-3" id="version-list">

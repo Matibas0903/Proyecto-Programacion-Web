@@ -14,8 +14,38 @@
 <body>
     <?php
     require('../includesPHP/navGeneral.php');
+    require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
+
+    $idUsuario = $_SESSION['usuario_id'];
+
+    //verificar permisos
+    if (!Permisos::tieneAlgunPermiso([
+        'ver_estadisticas_cuestionario',
+        'ver_estadisticas_participacion'
+    ], $idUsuario)) {
+        //verifico roles para redirigir si no tiene permisos
+        $esAdministrador = Permisos::esRol('Administrador', $idUsuario);
+        $esParticipante = Permisos::esRol('Participante', $idUsuario);
+        $esModerador = Permisos::esRol('Moderador', $idUsuario);
+        if ($esAdministrador) {
+            header("Location: ../administrador/administrador.php");
+            exit;
+        } elseif ($esModerador) {
+            header("Location: ../moderador/moderador.php");
+            exit;
+        } elseif ($esParticipante) {
+            header("Location: ../participante/participante.php");
+            exit;
+        } else {
+            header("Location: ../Inicio/inicio.php");
+            exit;
+        }
+    }
+    $ver_estadisticas_cuestionario = Permisos::tienePermiso('ver_estadisticas_cuestionario', $idUsuario);
+    $ver_estadisticas_participacion = Permisos::tienePermiso('ver_estadisticas_participacion', $idUsuario);
     ?>
     <div class="container mt-4">
+        <?php if ($ver_estadisticas_participacion): ?>
             <div class="col-12 mb-4">
                 <div class="card">
                     <div class="card-header">
@@ -37,6 +67,8 @@
                     </div>
                 </div>
             </div>
+        <?php endif; ?>
+        <?php if ($ver_estadisticas_cuestionario): ?>
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
@@ -59,6 +91,7 @@
                 </div>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </body>
 

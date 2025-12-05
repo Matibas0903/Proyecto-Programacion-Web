@@ -18,10 +18,8 @@ if (!isset($_SESSION['usuario_id'])) {
   ?>
 
 
-  <link rel="stylesheet" href="editarUsuarioEstilo.css">
+  <link rel="stylesheet" href="./editarUsuarioEstilo.css">
 
-
-  <script src="editarUsuario.js" defer></script>
 </head>
 
 <body>
@@ -93,6 +91,9 @@ if (!isset($_SESSION['usuario_id'])) {
             <div id="mensajeBackend" class="mt-1"></div>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
 
         <!--Modal-->
         <div class="modal fade" id="edicionExitosa" tabindex="-1" aria-labelledby="edicionExitosaLabel" aria-hidden="true">
@@ -109,8 +110,8 @@ if (!isset($_SESSION['usuario_id'])) {
 
               <div class="text-center mb-3">
                 <img id="vistaPreviaFoto" src="" class="rounded-circle border" width="100" height="100" alt="Vista previa">
-
               </div>
+              
               <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-bs-dismiss="modal">Aceptar</button>
               </div>
@@ -118,11 +119,7 @@ if (!isset($_SESSION['usuario_id'])) {
           </div>
         </div>
 
-
-
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
-        </script>
-
+        <script src="editarUsuario.js"></script>
 </body>
 
 </html>

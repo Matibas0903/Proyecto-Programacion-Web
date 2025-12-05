@@ -4,6 +4,30 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $idUsuario = $_SESSION["usuario_id"];
 require("../BaseDeDatos/conexion.php");
+require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
+//roles del usuario
+$esAdministrador = Permisos::esRol('Administrador', $idUsuario);
+$esParticipante = Permisos::esRol('Participante', $idUsuario);
+$esModerador = Permisos::esRol('Moderador', $idUsuario);
+
+$puedeCrearCuestionario = Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuario);
+$puedeEditarCuestionario = Permisos::tieneAlgunPermiso(['editar_cuestionario'], $idUsuario);
+
+if(!$puedeCrearCuestionario && !$puedeEditarCuestionario){
+    if($esAdministrador){
+        header("Location: ../administrador/administrador.php");
+        exit;
+    } else if ($esModerador) {
+        header("Location: ../moderador/moderador.php");
+        exit;
+    } else if ($esParticipante) {
+        header("Location: ../participante/participante.php");
+        exit;
+    } else {
+        header("Location: ../Inicio/inicio.php");
+        exit;
+    }
+}
 
 
 $idVersion = $_GET['id_version'] ?? null;
@@ -50,6 +74,8 @@ try {
 <body data-idversion="<?= $idVersion ?>">
     <?php
     require('../includesPHP/navGeneral.php');
+
+    include('../mensajeError/mensajeError.php')
     ?>
 
     <!-- navbar crear cuestionario -->
@@ -141,6 +167,26 @@ try {
                     <option class="dropdown-item" value="3" disabled>20 segundos(Proximamente)</option>
                 </select>
             </div>
+
+            <h5>
+                <i class="bi bi-question-square-fill"></i>
+                Tipo de pregunta
+            </h5>
+            <div class="mb-5">
+                <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
+                    <option class="dropdown-item" value>Tipo de pregunta</option>
+                    <?php //llenar el select
+                    foreach ($tipoPreguntas as $cat): ?>
+                        <option value="<?= htmlspecialchars($cat['ID_TIPO_PREGUNTA']) ?>">
+                            <?= htmlspecialchars($cat['TIPO']) ?>
+
+                        </option>
+                    <?php endforeach;
+                    ?>
+                </select>
+                <div class="invalid-feedback"></div>
+            </div>
+
 
         </div>
         <button id="btnPanelDer"><i class="bi bi-caret-left-fill"></i></button>
@@ -239,25 +285,6 @@ try {
                                                     </select>
                                                     <div class="invalid-feedback"></div>
                                                 </div>
-                                                <h5>
-                                                    <i class="bi bi-question-square-fill"></i>
-                                                    Tipo de pregunta
-                                                </h5>
-                                                <div class="mb-5">
-                                                    <select class="form-select" name="selectTipoPregunta" id="selectTipoPregunta">
-                                                        <option class="dropdown-item" value>Tipo de pregunta</option>
-                                                        <?php //llenar el select
-                                                        foreach ($tipoPreguntas as $cat): ?>
-                                                            <option value="<?= htmlspecialchars($cat['ID_TIPO_PREGUNTA']) ?>">
-                                                                <?= htmlspecialchars($cat['TIPO']) ?>
-
-                                                            </option>
-                                                        <?php endforeach;
-                                                        ?>
-                                                    </select>
-                                                    <div class="invalid-feedback"></div>
-                                                </div>
-                                                <h5>
                                             </div>
                                         </div>
                                     </div>

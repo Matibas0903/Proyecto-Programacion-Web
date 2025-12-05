@@ -20,19 +20,22 @@ function iniciarCarrusel() {
     // Inicializa
     updateCarousel();
 
-<<<<<<< Updated upstream
-// Cambio automático cada 3 segundos
-setInterval(() => {
-  index = (index + 1) % items.length;
-  updateCarousel();
-}, 3000);
-=======
-console.log("Versión recibida:", params.get("version"));
+    // Cambio automático cada 3 segundos
+    setInterval(() => {
+        index = (index + 1) % items.length;
+        updateCarousel();
+    }, 3000);
+}
 
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    const version = params.get("version");
+    
+    console.log("Versión recibida:", version);
+    
+    cargarCuestionario(version);
+    cargarRanking(version);
 });
-
-
-
 
 
 async function cargarCuestionario(version) {
@@ -48,35 +51,34 @@ async function cargarCuestionario(version) {
 
     let html = "";
 
-   data.preguntas.forEach(p => {
+    data.preguntas.forEach(p => {
+        html += `
+            <div class="preguntas">
+                <h3>Pregunta ${p.NRO_ORDEN}</h3>
+                <p class="pregunta-enunciado">${p.ENUNCIADO}</p>
 
-    html += `
-        <div class="preguntas">
-            <h3>Pregunta ${p.NRO_ORDEN}</h3>
-            <p class="pregunta-enunciado">${p.ENUNCIADO}</p>
+                ${p.IMAGEN ? `<img class="pregunta-imagen" src="${p.IMAGEN}" alt="Imagen de la pregunta">` : ""}
 
-            ${p.IMAGEN ? `<img class="pregunta-imagen" src="${p.IMAGEN}" alt="Imagen de la pregunta">` : ""}
+                <div class="opciones-grid">
+        `;
 
-            <div class="opciones-grid">
-    `;
+        p.opciones.forEach(op => {
+            let clase = "opcion";
 
-    p.opciones.forEach(op => {
-        let clase = "opcion";
+            if (op.ES_CORRECTA == 1) {
+                clase += " opcion-correcta"; // respuesta correcta
+            }
 
-        if (op.ES_CORRECTA == 1) {
-            clase += " opcion-correcta"; // respuesta correcta
-        }
+            html += `<div class="${clase}">${op.TEXTO}</div>`;
+        });
 
-        html += `<div class="${clase}">${op.TEXTO}</div>`;
+        html += `
+                </div>
+            </div>
+        `;
     });
 
-    html += `
-            </div>
-        </div>
-    `;
-});
-
-contenedor.innerHTML = html;
+    contenedor.innerHTML = html;
 }
 
 
@@ -87,7 +89,6 @@ async function cargarRanking(version) {
     const res = await fetch(`Comentarios_ranking.php?version=${version}`);
     const data = await res.json();
 
-    
     if (data.error) {
         contRanking.innerHTML = `<p>${data.error}</p>`;
         return;
@@ -99,11 +100,10 @@ async function cargarRanking(version) {
     let htmlRanking = "";
     let htmlComentarios = "";
 
-    if(!ranking){
+    if (!ranking) {
         console.log("Error al cargar el ranking");
-    }else{   
+    } else {
         ranking.forEach((usuario, index) => {
-
             const lugar = index + 1;
             const active = index === 0 ? "active" : "";
 
@@ -127,27 +127,28 @@ async function cargarRanking(version) {
         });
 
         contRanking.innerHTML = htmlRanking;
+        
+        // Iniciar el carrusel después de cargar el contenido
+        iniciarCarrusel();
     }
-    //Comentarios
-    if (!comentarios || comentarios.length === 0) {
-       contComentarios.innerHTML = `<p>No hay comentarios todavía.</p>`;
 
+    // Comentarios
+    if (!comentarios || comentarios.length === 0) {
+        contComentarios.innerHTML = `<p>No hay comentarios todavía.</p>`;
         return;
     }
 
     comentarios.forEach(c => {
-
         htmlComentarios += `
-        <div class="col-12 col-md-10 col-lg-6 mx-auto">
-            <div class="card comentario-card mb-4 p-3">
-
-                <p class="fw-bold nombre">${c.NOMBRE}</p>
-                 <p class="valoracion">${estrellasHTML(c.valoracion)}</p>
-                <p class="fecha">${c.fecha}</p>
-                <p class="comentario-texto">${c.COMENTARIO}</p>
-
+            <div class="col-12 col-md-10 col-lg-6 mx-auto">
+                <div class="card comentario-card mb-4 p-3">
+                    <p class="fw-bold nombre">${c.NOMBRE}</p>
+                    <p class="valoracion">${estrellasHTML(c.valoracion)}</p>
+                    <p class="fecha">${c.fecha}</p>
+                    <p class="comentario-texto">${c.COMENTARIO}</p>
+                </div>
             </div>
-        </div>`;
+        `;
     });
 
     contComentarios.innerHTML = htmlComentarios;
@@ -155,10 +156,9 @@ async function cargarRanking(version) {
 
 
 function estrellasHTML(valor) {
-  let html = "";
-  for (let i = 1; i <= 5; i++) {
-      html += i <= valor ? "★" : "☆";
-  }
-  return html;
+    let html = "";
+    for (let i = 1; i <= 5; i++) {
+        html += i <= valor ? "★" : "☆";
+    }
+    return html;
 }
->>>>>>> Stashed changes

@@ -22,7 +22,7 @@ try {
                     ELSE u.NOMBRE
                 END AS NOMBRE,
                 CASE 
-                    WHEN p.INVITADO = 1 THEN ''
+                    WHEN p.INVITADO = 1 THEN NULL
                     ELSE u.FOTO_PERFIL
                 END AS FOTO_PERFIL
             FROM participacion p

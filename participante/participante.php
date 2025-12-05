@@ -1,3 +1,24 @@
+<?php
+session_start();
+require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
+$idUsuario = $_SESSION['usuario_id'];
+//roles del usuario
+$esAdministrador = Permisos::esRol('Administrador', $idUsuario);
+$esParticipante = Permisos::esRol('Participante', $idUsuario);
+$esModerador = Permisos::esRol('Moderador', $idUsuario);
+if (!$esParticipante) {
+    if($esAdministrador){
+        header("Location: ../administrador/administrador.php");
+        exit;
+    } else if ($esModerador) {
+        header("Location: ../moderador/moderador.php");
+        exit;
+    } else {
+        header("Location: ../Inicio/inicio.php");
+        exit;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,9 +52,9 @@
         <div class="d-flex justify-content-center m-1">
           <button class="button_principal border_cuest py-2" id="button_todos">Mostrar todos</button>
         </div>
-        <div class="d-flex justify-content-center m-1">
+        <!-- <div class="d-flex justify-content-center m-1">
           <button class="button_principal border_cuest" id="button-moderador"><i class="bi bi-incognito"></i> Moderar</button>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- todos los cuestionarios -->

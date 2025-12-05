@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -12,7 +13,6 @@
 
 <body>
     <?php
-        session_start();
         $invitado = isset($_GET['invitado']) && $_GET['invitado'] === 'true';
         if($invitado){
             require('../includesPHP/navInvitado.php');
