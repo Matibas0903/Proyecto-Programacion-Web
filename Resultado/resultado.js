@@ -85,6 +85,7 @@ window.onload = async function() {
     }
 
     // Calificación con estrellas - solo si tiene permiso o es invitado
+    const estado = await verificarEstadoUsuario();
     const puedeCalificar = invitado || tienePermiso('calificar_cuestionario');
     const misEstrellas = document.querySelectorAll("#selectEstrellas .estrella");
     const menErr = document.getElementById("menErr"); 
@@ -161,7 +162,7 @@ window.onload = async function() {
     }
 
     // Comentarios - solo si tiene permiso o es invitado
-    const puedeComentary = invitado || tienePermiso('comentar_cuestionario');
+    const puedeComentary = invitado || (tienePermiso('comentar_cuestionario') && estado !== "silenciado");
     const btnComentar = document.getElementById("btnComentar");
     const comentario = document.getElementById("comentario");
     const contenedorComentarios = document.querySelector(".MiComentario");
@@ -409,4 +410,26 @@ function tieneAlgunPermiso(permisos) {
 
 function esRol(rol) {
     return userPermisos.roles.includes(rol);
+}
+
+async function verificarEstadoUsuario() {
+    const response = await fetch(`../BaseDeDatos/controladores/getEstadoUsuario.php`);
+    const data = await response.json();
+
+    if (data.status !== "success") {
+        console.error("Error al verificar estado:", data.message);
+        return;
+    }
+
+    if (data.baneado) {
+        mostrarMensajeError('No puedes participar porque estás baneado.');
+        return "baneado";
+    }
+
+    if (data.silenciado) {
+        mostrarMensajeError('No puedes comentar porque estás silenciado.');
+        return "silenciado";
+    }
+
+    return "ok";
 }

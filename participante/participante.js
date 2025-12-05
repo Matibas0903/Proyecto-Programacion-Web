@@ -245,12 +245,17 @@ function cuestionarioInvitado() {
   }
 }
 
-function participarCuest(idVersion, invitacion = false) {
+async function participarCuest(idVersion, invitacion = false) {
     if(!tienePermiso('jugar_cuestionario')){
         mostrarMensajeError('No tienes permisos para jugar cuestionarios');
         return;
     }
-    window.location.href = `../Lobby/lobby.php?version=${idVersion}&invitacion=${invitacion}`;
+    const estado = await verificarEstadoUsuario();
+    if (estado === "baneado") {
+        return
+    }else{
+        window.location.href = `../Lobby/lobby.php?version=${idVersion}&invitacion=${invitacion}`;
+    }
 }
 
 function listaCuestionarios(arrCuest = null, scroll = true) {
@@ -406,4 +411,26 @@ function tieneAlgunPermiso(permisos) {
 
 function esRol(rol) {
     return userPermisos.roles.includes(rol);
+}
+
+async function verificarEstadoUsuario() {
+    const response = await fetch(`../BaseDeDatos/controladores/getEstadoUsuario.php`);
+    const data = await response.json();
+
+    if (data.status !== "success") {
+        console.error("Error al verificar estado:", data.message);
+        return;
+    }
+
+    if (data.baneado) {
+        mostrarMensajeError('No puedes participar porque estás baneado.');
+        return "baneado";
+    }
+
+    if (data.silenciado) {
+        mostrarMensajeError('No puedes comentar porque estás silenciado.');
+        return "silenciado";
+    }
+
+    return "ok";
 }

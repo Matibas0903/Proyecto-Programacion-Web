@@ -41,12 +41,13 @@ if (!$esAdministrador) {
       <div class="col-12 col-md-8 my-3 order-2 order-md-1">
         <h1 id="titulo_cuestionario"></h1>
         <!-- <p><strong>Descripción: </strong><span id="descripcion_cuestionario"></span></p> -->
-        <!-- <div>
-          <div class="border_cuest d-flex justify-content-between align-items-center p-2 my-3">
+        <div>
+          <div class="border_cuest d-flex justify-content-between align-items-center p-2 my-3" id="moderador_card">
             <p class="mb-0"><i class="bi bi-incognito"></i> <strong>Moderador: </strong> <span id="moderador_nombre"></span></p>
             <img src="" alt="moderador" class="moderador_avatar" id="moderador_avatar">
           </div>
-        </div> -->
+        </div>
+        <div id="reportes"></div>
       </div>
       <!-- <div class="col-12 col-md-4 my-3 order-1 order-md-2">
             <img src="" alt="img-programacion" id="image_cuest" class="img-cuestionario d-block mx-auto">
@@ -59,9 +60,9 @@ if (!$esAdministrador) {
       <div class="col-12 col-md-3" id="habilitar_container">
         <button class="button_principal border_cuest" id="button-habilitar"><i class="bi bi-lock-fill"></i> Habilitar version</button>
       </div>
-      <!-- <div class="col-12 col-md-3">
+      <div class="col-12 col-md-3">
         <button class="button_principal border_cuest" id="button-moderador"><i class="bi bi-incognito"></i> Moderador</button>
-      </div> -->
+      </div>
     </div>
     <!--cuerpo -->
     <div class="row my-3" id="version-list">

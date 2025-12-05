@@ -5,7 +5,15 @@ let respuestasSeleccionadas = [];
 let tiempoInicio = null;
 let respuestasCorrectas = 0;
 
-window.onload = function(){
+window.onload = async function(){
+    const invitado = new URLSearchParams(window.location.search).get('invitado');
+    if(!invitado){
+        const estado = await verificarEstadoUsuario();
+        if (estado === "baneado") {
+            window.location.href = "../participante/participante.php";
+            return;
+        }
+    }
     cargarVersion();
 }
 
@@ -437,4 +445,26 @@ function mostrarMensajeError(mensaje){
     toastBody.innerText = mensaje || 'Ups, ocurrio un error inesperado';
     const toast = new bootstrap.Toast(toastEl);
     toast.show();
+}
+
+async function verificarEstadoUsuario() {
+    const response = await fetch(`../BaseDeDatos/controladores/getEstadoUsuario.php`);
+    const data = await response.json();
+
+    if (data.status !== "success") {
+        console.error("Error al verificar estado:", data.message);
+        return;
+    }
+
+    if (data.baneado) {
+        mostrarMensajeError('No puedes participar porque estás baneado.');
+        return "baneado";
+    }
+
+    if (data.silenciado) {
+        mostrarMensajeError('No puedes comentar porque estás silenciado.');
+        return "silenciado";
+    }
+
+    return "ok";
 }
