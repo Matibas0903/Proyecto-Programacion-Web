@@ -4,6 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require("../BaseDeDatos/conexion.php");
+require_once(__DIR__ . '/../BaseDeDatos/controladores/permisos.php');
 header("Content-Type: application/json");
 
 $input = json_decode(file_get_contents("php://input"), true);
@@ -66,7 +67,13 @@ function obtenerAutorCuestionario($conn, $idVersion)
 }
 
 if ($action == "crear_cuestionario") {
-
+    if(!Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuarioActual);){
+        echo json_encode([
+            "status" => "error",
+            "message" => "No tienes permisos para crear cuestionarios"
+        ]);
+        exit;
+    }
     try {
         $conn->beginTransaction();
         $codAccesoIngresado = $datosCuestionario["codigoAcceso"];
@@ -156,7 +163,13 @@ if ($action == "crear_cuestionario") {
 }
 
 if ($action == "editar_version") {
-
+    if(!Permisos::tieneAlgunPermiso(['editar_cuestionario'], $idUsuarioActual);){
+        echo json_encode([
+            "status" => "error",
+            "message" => "No tienes permisos para editar cuestionarios"
+        ]);
+        exit;
+    }
     // verificar autor
     $autor = obtenerAutorCuestionario($conn, $idVersion);
 
@@ -244,7 +257,13 @@ if ($action == "editar_version") {
 }
 
 if ($action == "nueva_version") {
-
+    if(!Permisos::tieneAlgunPermiso(['crear_cuestionario'], $idUsuarioActual);){
+        echo json_encode([
+            "status" => "error",
+            "message" => "No tienes permisos para crear versiones"
+        ]);
+        exit;
+    }
     // verificar autor
     $autor = obtenerAutorCuestionario($conn, $idVersion);
 
